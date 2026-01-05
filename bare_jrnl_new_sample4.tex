@@ -13,6 +13,7 @@
 
 %added xcolor for box color
 \usepackage{xcolor}
+
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
 
@@ -69,6 +70,7 @@ $\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ trip
 An SG can be defined as a tuple:
 
 \begin{equation}
+	\label{eq:SG}
 	SG = (\mathcal{O}, R, E)
 \end{equation}
 
@@ -78,6 +80,7 @@ An SG can be defined as a tuple:
 	\item $\mathcal{O} = \{o_1, \ldots, o_n\}$ is the set of objects recognized in the images, 
 	where $n$ is the number of objects. Each object $o_i$ can also be described as a tuple: 
 	\begin{equation}
+		\label{eq:o_i}
 		o_i = (c_i, A_i)
 	\end{equation}
 	where $c_i$ denotes the category (e.g., person, soccer stadium, animal) and 
@@ -92,14 +95,16 @@ An SG can be defined as a tuple:
 	
 \noindent Using the following formulation, scene graphs can be expressed from an image $I$ using SGG methods:
 	\begin{equation}
+		\label{eq:SGG}
 		SG(\mathcal{O}, R, E) = SGG(I)
 	\end{equation}
 	
-\noindent SGG employs diverse models and technologies across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}.
+\noindent SGG employs diverse models and technologies across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
+
 
 	
 
-\begin{table*}[t]
+\begin{table*}[!hb]
 	\centering
 	\caption{Technical Overview of Models and Technologies for 3D Scene Graph Generation, Perception, Navigation and Interfacing}
 	\label{tab:scenegraph_technologies}
@@ -128,13 +133,13 @@ An SG can be defined as a tuple:
 This section presents the developed methods and their implementation. 
 
 \subsection{Overview of Features and Components}
-Our framework pAIrSEEption is a multimodal voice assistance system for environmental detection and navigation with a responsive graphical user interface (GUI) based on PySide6, which serves as the interface between humans and the machine. Fig.\ref{overview_framework} illustrates the features of the user interface. The GUI can be installed across various platforms. In this case, the interface was installed on the Jetson AGX Orin (32GB version), an edge device and on a standard laptop with an integrated Nvidia graphics card. Subsequently, a ZED 2i stereo camera can be connected to these devices. The mobile Husky robot is utilized as the mounting platform for the components as shown in Fig.\ref{husky_robot}.
+Our framework pAIrSEEption is a multimodal voice assistance system for environmental detection and navigation with a responsive graphical user interface (GUI) based on PySide6 (see Fig. \ref{framework_architecture}), which serves as the interface between humans and the machine. Fig.\ref{overview_framework} illustrates the features of the user interface. The GUI can be installed across various platforms. In this case, the interface was installed on the Jetson AGX Orin (32GB version), an edge device and on a standard laptop with an integrated Nvidia graphics card. Subsequently, a ZED 2i stereo camera can be connected to these devices. The mobile Husky robot is utilized as the mounting platform for the components as shown in Fig.\ref{husky_robot}.
 
 
 \begin{figure}[!htpb]
 \centering
-\includegraphics[width=2.5in]{fig1.png}
-\caption{Placeholder for Husky Robot as a mounting platform for the ZED 2i camera.}
+\includegraphics[width=2.5in]{images/husky_zed.jpg}
+\caption{Husky Robot as a mounting platform for the ZED 2i camera.}
 \label{husky_robot}
 \end{figure}
 
@@ -160,26 +165,51 @@ The GUI acts as a visualization and control center for the user. All data stream
 All data and information displayed on the interface, as well as user (voice) input, can be saved locally in common file formats via the GUI, facilitating any necessary fine-tuning or training of the models (YOLO and LLM) in the future.
 
 \subsection{Setup and Applications}
-The interface provides a selection of different versions and sizes of YOLO(e) models for object detection and segmentation as well as LLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The YOLO object detection is leveraged for two functions. First, it is used for data fusion with the ZED 2i depth camera to provide object data (see Fig. \ref{data_fusion_object}), which is then fed to the LLM as a prompt. [The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates (x=0, y=0, z=0). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]
+The interface provides a selection of different versions and sizes of YOLO(e) models for object detection and segmentation as well as LLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The YOLO object detection is leveraged for two functions. First, it is used for data fusion with the ZED 2i depth camera to provide object data (see Fig. \ref{framework_architecture}), which is then fed to the LLM as a prompt. [The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates (x=0, y=0, z=0). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]
 Second, it is used to navigate and follow a recognized object. To this end, the distance from each detected object to the camera and the pairwise inter-object distances within a frame are computed using the 3D Euclidean distance. The selection of the target object is initiated through its unique identification (ID), which is facilitated by either vocal input or interface selection.
 
 In pAIrSEEption, the objects \( \mathcal{O} = \{o_1, \ldots, o_n\} \) in the scene are schematically defined as follows (for example, a recognized person standing still):
 
-\[
-o_1 = \Bigl(\text{person}, \ 
-\left\{
-\begin{aligned}
-	& \text{ID} = 1, \\
-	& \text{confidence value} = 0.95, \\
-	& \text{3D position} = (x, y, z), \\
-	& \text{3D speed} = (v_x = 0, v_y = 0, v_z = 0), \\
-	& \text{speed classification} = \text{static}
-\end{aligned}
-\right\}
-\Bigr)
-\]
+%\[
+%o_1 = \Bigl(\text{person}, \ 
+%\left\{
+%\begin{aligned}
+%	& \text{ID} = 1, \\
+%	& \text{confidence value} = 0.95, \\
+%	& \text{3D position} = (x, y, z), \\
+%	& \text{3D speed} = (v_x = 0, v_y = 0, v_z = 0), \\
+%	& \text{speed classification} = \text{static}
+%\end{aligned}
+%\right\}
+%\Bigr)
+%\]
 
-Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero. Thus, \textit{static} is an attribute derived from velocity, and the attribute set \textit{A} is expanded with this additional information. The selection of LLMs can be divided into two categories: 
+
+\begin{equation}
+	\begin{aligned}
+		o_1 = \Bigl(\text{person},\ 
+		\left\{
+		\begin{aligned}
+			& \text{ID} = 1, \\
+			& \text{confidence value} = 0.95, \\
+			& \text{3D position} = (x, y, z), \\
+			& \text{3D speed} = (v_x = 0, v_y = 0, v_z = 0), \\
+			& \text{speed classification} = \text{static}
+		\end{aligned}
+		\right\}
+		\Bigr)
+	\end{aligned}
+	\label{eq:o1}
+\end{equation}
+
+
+
+
+
+
+
+
+Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero. Thus, \textit{static} is an attribute derived from velocity, and the attribute set \textit{A} (see (\ref{eq:o_i})) is expanded with this additional information. The selection of LLMs can be divided into two categories: 
 
 \begin{figure*}[!t]
 	\centering
@@ -189,13 +219,15 @@ Where the object $o_1$ receives the attributes ID, confidence value, 3D position
 \end{figure*}
 
 
-The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
+The first category is local and offline models from Ollama or other sources such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
 in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot.
-This solution offers the advantage of control and data protection. In addition, quantized models can be used for weaker hardware. The second category is online, hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. In this case, factors such as server availability and data security are not within the user's purview.
+This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
+Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. 
 
+For...
 \begin{figure}[!htpb]
 	\centering
-	\includegraphics[width=2.5in]{images/client_server.png}
+	\includegraphics[width=2.5in]{images/jetson_client_cropped.pdf}
 	\caption{Client-server architecture between application device and Ollama server.}
 	\label{client_server}
 \end{figure}
@@ -252,14 +284,14 @@ The following text-prompt instructs the LLM on processing data. The goal is to e
 \end{center}
 %\vspace{1em} 
 
-The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{} presents a schematic representation of the result of this transformation using the template. The integration of image data with readable object data through the utilization of an LLM (Language Model) facilitates the creation of a comprehensive and cohesive representation of the subject matter. 
+The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{fig:transformation_template} presents a schematic representation of the result of this transformation using the template. The integration of image data with readable object data through the utilization of an LLM facilitates the creation of a comprehensive and cohesive representation of the subject matter. 
 The following description provides a detailed interpretation of a 3D scene that is accessible to humans. The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function.
 
 \begin{figure}[!htpb]
 	\centering
-	\includegraphics[width=2.5in]{fig1.png}
-	\caption{Placeholder.}
-	\label{transformation_template}
+	\includegraphics[width=\columnwidth]{images/transformation_template.png}
+	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input}
+	\label{fig:transformation_template}
 \end{figure}
 
 \subsection{Navigation and motion control}
