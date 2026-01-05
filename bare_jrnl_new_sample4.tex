@@ -101,19 +101,19 @@ An SG can be defined as a tuple:
 
 \begin{table*}[t]
 	\centering
-	\caption{Technical Overview of Models and Technologies for 3D Scene Graph Generation, Perception and Navigation}
+	\caption{Technical Overview of Models and Technologies for 3D Scene Graph Generation, Perception, Navigation and Interfacing}
 	\label{tab:scenegraph_technologies}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{|l|l|l|l|l|}
 			\hline
-			\textbf{System/Framework} & \textbf{\begin{tabular}[c]{@{}l@{}}Detection \& Segmentation \\ (Nodes)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Semantic Features \& \\ Embeddings\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Relation Inference \& \\ Planning (Edges)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Alternatives \& \\ Additional Models\end{tabular}} \\ \hline
-			\textbf{ConceptGraphs} & SAM (Segment Anything) & CLIP, DINO & GPT-4 (LLM), LLaVA & Grounding DINO, RAM \\ \hline
+			\textbf{System/Framework} & \textbf{\begin{tabular}[c]{@{}l@{}}Detection \& Segmentation \\ (Nodes)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Semantic Features \& \\ Embeddings\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Relation Inference \& \\ Planning (Edges)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Alternatives \& \\ Additional Models \& \\ Misc. \end{tabular}}  \\ \hline
+			\textbf{ConceptGraphs} & SAM (Segment Anything) & CLIP, Grounding DINO & GPT-4, LLaVA & RAM \\ \hline
 			\textbf{3DGraphLLM} & Mask3D, OneFormer3D & DINOv2 (2D), Uni3D (3D) & VL-SAT, CLIP & LLaMA3-8B, Vicuna-1.5 \\ \hline
 			\textbf{Graph2Nav} & PSGFormer, Mask2Former & Panoptic Labels & 2D-PSG Inference, GPT-3.5 & LIO-SAM, Whisper \\ \hline
 			\textbf{HOV-SG} & SAM & CLIP & Hierarchical Heuristics & GPT-3.5, GPT-4 \\ \hline
-			\textbf{OpenIN} & CropFormer & SBERT, CLIP & GPT-4o (Commonsense) & Tokenize Anything \\ \hline
-			\textbf{SG-Nav} & Online 3D Instance Seg. & VLMs, LLMs & LLaMA-7B, GPT-4, LLaVA & Fast Marching Method \\ \hline
-			\textbf{Interaction Updates} & Existing 3DSG (e.g., Hydra) & Visual Transformer (ViT) & GPT-4, BLIP-2 & DBSCAN (Denoising) \\ \hline
+			\textbf{OpenIN} & CropFormer & SBERT, CLIP & GPT-4o & Tokenize Anything \\ \hline
+			\textbf{SG-Nav} & SAM & VLMs, LLMs & LLaMA-7B, GPT-4, LLaVA & Fast Marching Method \\ \hline
+			\textbf{Interaction Updates} & Existing 3D SG (e.g., Hydra) & Visual Transformer (ViT) & GPT-4, BLIP-2 & DBSCAN (Denoising) \\ \hline
 			\textbf{VisionGPT} & YOLO-World & Proportional 2D Coordinates & GPT-3.5 Turbo, GPT-4 & H-Pattern Splitter \\ \hline
 			\textbf{LGX} & GLIP, YOLO & BLIP (Captions) & GPT-3 & OWL-ViT, Detectron2 \\ \hline
 			\textbf{VLMaps} & LSeg & CLIP & Codex (Code-writing LLM) & RTAB-Map \\ \hline
@@ -190,8 +190,8 @@ Where the object $o_1$ receives the attributes ID, confidence value, 3D position
 
 
 The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
-in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky UGV Robot (see Fig. \ref{}).
-This solution offers the advantage of control and data protection. The second category is online, hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. In this case, factors such as server availability and data security are not within the user's purview.
+in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot.
+This solution offers the advantage of control and data protection. In addition, quantized models can be used for weaker hardware. The second category is online, hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. In this case, factors such as server availability and data security are not within the user's purview.
 
 \begin{figure}[!htpb]
 	\centering
