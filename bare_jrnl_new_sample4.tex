@@ -100,6 +100,7 @@ An SG can be defined as a tuple:
 	\end{equation}
 	
 \noindent SGG employs diverse models and technologies across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
+[Short summary of table]
 
 
 	
@@ -112,16 +113,16 @@ An SG can be defined as a tuple:
 		\begin{tabular}{|l|l|l|l|l|}
 			\hline
 			\textbf{System/Framework} & \textbf{\begin{tabular}[c]{@{}l@{}}Detection \& Segmentation \\ (Nodes)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Semantic Features \& \\ Embeddings\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Relation Inference \& \\ Planning (Edges)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Alternatives \& \\ Additional Models \& \\ Misc. \end{tabular}}  \\ \hline
-			\textbf{ConceptGraphs} & SAM (Segment Anything) & CLIP, Grounding DINO & GPT-4, LLaVA & RAM \\ \hline
-			\textbf{3DGraphLLM} & Mask3D, OneFormer3D & DINOv2 (2D), Uni3D (3D) & VL-SAT, CLIP & LLaMA3-8B, Vicuna-1.5 \\ \hline
-			\textbf{Graph2Nav} & PSGFormer, Mask2Former & Panoptic Labels & 2D-PSG Inference, GPT-3.5 & LIO-SAM, Whisper \\ \hline
-			\textbf{HOV-SG} & SAM & CLIP & Hierarchical Heuristics & GPT-3.5, GPT-4 \\ \hline
-			\textbf{OpenIN} & CropFormer & SBERT, CLIP & GPT-4o & Tokenize Anything \\ \hline
-			\textbf{SG-Nav} & SAM & VLMs, LLMs & LLaMA-7B, GPT-4, LLaVA & Fast Marching Method \\ \hline
-			\textbf{Interaction Updates} & Existing 3D SG (e.g., Hydra) & Visual Transformer (ViT) & GPT-4, BLIP-2 & DBSCAN (Denoising) \\ \hline
-			\textbf{VisionGPT} & YOLO-World & Proportional 2D Coordinates & GPT-3.5 Turbo, GPT-4 & H-Pattern Splitter \\ \hline
-			\textbf{LGX} & GLIP, YOLO & BLIP (Captions) & GPT-3 & OWL-ViT, Detectron2 \\ \hline
-			\textbf{VLMaps} & LSeg & CLIP & Codex (Code-writing LLM) & RTAB-Map \\ \hline
+			\textbf{ConceptGraphs}\cite{conceptgraphs} & SAM (Segment Anything) & CLIP, Grounding DINO & GPT-4, LLaVA & RAM \\ \hline
+			\textbf{3DGraphLLM}\cite{3dgraphllm} & Mask3D, OneFormer3D & DINOv2 (2D), Uni3D (3D) & VL-SAT, CLIP & LLaMA3-8B, Vicuna-1.5 \\ \hline
+			\textbf{Graph2Nav}\cite{graph2nav} & PSGFormer, Mask2Former & Panoptic Labels & 2D-PSG Inference, GPT-3.5 & LIO-SAM, Whisper \\ \hline
+			\textbf{HOV-SG}\cite{hovsg} & SAM & CLIP & Hierarchical Heuristics & GPT-3.5, GPT-4 \\ \hline
+			\textbf{OpenIN}\cite{openin} & CropFormer & SBERT, CLIP & GPT-4o & Tokenize Anything \\ \hline
+			\textbf{SG-Nav}\cite{sgnav} & SAM & VLMs, LLMs & LLaMA-7B, GPT-4, LLaVA & Fast Marching Method \\ \hline
+			\textbf{Interaction Updates}\cite{interaction} & Existing 3D SG (e.g., Hydra) & Visual Transformer (ViT) & GPT-4, BLIP-2 & DBSCAN (Denoising) \\ \hline
+			\textbf{VisionGPT}\cite{visiongpt} & YOLO-World & Proportional 2D Coordinates & GPT-3.5 Turbo, GPT-4 & H-Pattern Splitter \\ \hline
+			\textbf{LGX}\cite{lgx} & GLIP, YOLO & BLIP (Captions) & GPT-3 & OWL-ViT, Detectron2 \\ \hline
+			\textbf{VLMaps}\cite{vlmaps} & LSeg & CLIP & Codex (Code-writing LLM) & RTAB-Map \\ \hline
 		\end{tabular}%
 	}
 \end{table*}
@@ -808,6 +809,40 @@ You can manually copy in the resultant .bbl file and set second argument of $\ba
 
 \begin{thebibliography}{1}
 \bibliographystyle{IEEEtran}
+
+\bibitem{conceptgraphs}
+Q. Gu et al., "ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning," 2024 IEEE International Conference on Robotics and Automation (ICRA), Yokohama, Japan, 2024, pp. 5021-5028, doi: 10.1109/ICRA57147.2024.10610243.
+
+\bibitem{3dgraphllm}
+Tatiana Zemskova and Dmitry Yudin, "3DGraphLLM: Combining Semantic Graphs and Large Language Models for 3D Scene Understanding," 2025, https://doi.org/10.48550/arXiv.2412.18450
+
+\bibitem{graph2nav}
+T. Shan, A. Rajvanshi, N. Mithun and H. -P. Chiu, "Graph2Nav: 3D Object-Relation Graph Generation to Robot Navigation," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 1646-1652, doi: 10.1109/ICRA55743.2025.11128782. 
+
+\bibitem{hovsg}
+Robotics: Science and Systems 2024, Delft, Netherlands, July 15-July 19, 2024, 
+https://doi.org/10.15607/RSS.2024.XX.077
+
+\bibitem{openin}
+Y. Tang et al., "OpenIN: Open-Vocabulary Instance-Oriented Navigation in Dynamic Domestic Environments," in IEEE Robotics and Automation Letters, vol. 10, no. 9, pp. 9256-9263, Sept. 2025, doi: 10.1109/LRA.2025.3592071.
+
+\bibitem{sgnav}
+H. Yin et al., "SG-Nav: Online 3D Scene Graph Prompting for LLM-based Zero-shot Object Navigation,"
+https://doi.org/10.48550/arXiv.2410.08189
+
+\bibitem{interaction}
+Q. Li, X. Zhang, C. Chen, H. Zhao and J. Niu, "Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 11933-11939, doi: 10.1109/ICRA55743.2025.11128194.
+
+\bibitem{visiongpt}
+H. Wang et al., "VisionGPT: LLM-Assisted Real-Time Anomaly Detection for Safe Visual Navigation,"
+https://doi.org/10.48550/arXiv.2403.12415
+
+\bibitem{lgx}
+V. S. Dorbala, J. F. Mullen and D. Manocha, "Can an Embodied Agent Find Your “Cat-shaped Mug”? LLM-Based Zero-Shot Object Navigation," in IEEE Robotics and Automation Letters, vol. 9, no. 5, pp. 4083-4090, May 2024, doi: 10.1109/LRA.2023.3346800.
+
+\bibitem{vlmaps}
+C. Huang, O. Mees, A. Zeng and W. Burgard, "Visual Language Maps for Robot Navigation," 2023 IEEE International Conference on Robotics and Automation (ICRA), London, United Kingdom, 2023, pp. 10608-10615, doi: 10.1109/ICRA48891.2023.10160969.
+
 
 \bibitem{ref1}
 {\it{Mathematics Into Type}}. American Mathematical Society. [Online]. Available: https://www.ams.org/arc/styleguide/mit-2.pdf
