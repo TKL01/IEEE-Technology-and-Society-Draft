@@ -37,7 +37,7 @@
 \maketitle
 
 \begin{abstract}
-—[Society 5.0/6.0 here?]…This article further describes the design, application and implementation of a multimodal assistance system to support [visually impaired] persons. To this end, a mobile robot is equipped with a depth camera, object detection and large language models (LLMs). The goal is to enable the robot to understand its environment, i.e., to perceive, understand, and respond to it. Additionally, the robot should describe its perceived environment in natural language. A graphical user interface has been developed to bundle all asynchronous processes and act as a central audiovisual control unit. Visual perception is achieved through data fusion of the depth camera and object recognition models. The resulting 3D object data is then used to implement robot navigation. Human-machine interaction takes place via a voice interface that uses speech recognition and a text-to-speech system for speech output. To enrich the scene description, local multimodal LLMs are used. For this purpose, a client-server architecture was established. [mention of results and conducted experiments?] …[reference/benefits to Society 6.0?]…. 
+—[Society 5.0/6.0 here?]…This article further describes the design, application and implementation of a multimodal assistance system to support [visually impaired] persons. To this end, a mobile robot is equipped with a depth camera, object detection and Multimodal Large Language Models (MLLMs). The goal is to enable the robot to understand its environment, i.e., to perceive, understand, and respond to it. Additionally, the robot should describe its perceived environment in natural language. A graphical user interface has been developed to bundle all asynchronous processes and act as a central audiovisual control unit. Visual perception is achieved through data fusion of the depth camera and object recognition models. The resulting 3D object data is then used to implement robot navigation. Human-machine interaction takes place via a voice interface that uses speech recognition and a text-to-speech system for speech output. To enrich the scene description, local multimodal LLMs are used. For this purpose, a client-server architecture was established. [mention of results and conducted experiments?] …[reference/benefits to Society 6.0?]…. 
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -48,19 +48,19 @@ Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesettin
 \IEEEPARstart{T}{he} society of the future will integrate emerging technologies to promote human well-being and enhance quality of life in sustainable and equitable ways. A key objective of this transformation is the establishment of accountable corporate leadership that responsibly affects stakeholders and their environments. Equally important are collective intelligence and the self-determination of individuals in their increasingly mobile professional and social activities. However, the effectiveness of distributed, interconnected, and inclusive autonomy requires perceptual and interactive capacities that extend beyond human limitations, particularly those related to endurance, precision, and feedback in motor skills, vision, and cognition.
 AI-powered technologies are thus designed to integrate data processing, intelligent interfaces, and adaptive actuators to inform, augment, and extend human abilities. These systems enhance situational awareness while reducing cognitive load, strengthen personalized responses to societal challenges, and promote flexible, natural interaction with minimal effort. The use of environmentally sustainable and everyone-accessible technologies—as personal assistants in home care, adaptive interfaces in rehabilitation, and immersive tools in education and training—can mitigate cultural, physical and cognitive barriers while fostering new individual capacities and professional opportunities.
 Service robots constitute a prominent class of such technologies. They increasingly demonstrate their capacity to simplify and streamline daily human activities. Robots can transport heavy or critical payloads at customizable speeds with high precision. These capabilities can be achieved in a climate-friendly manner when powered by renewable energy sources such as solar and wind systems. Despite this societal and environmental potential, robot adoption remains constrained by factors beyond cost and safety. First, current systems lack functionalities that enable a transition from pre-scripted task execution to broader perception, interpretation, and real-time knowledge sharing with humans. Second, non-specialists often face difficulties in translating high-level task intentions into robotic actions. Third, existing designs seldom support synergy and role switching between humans and robots during joint task execution. Fourth, robots typically fail to communicate their internal states and feedback in accessible and intelligible ways.
-To address these limitations, this work presents an AI-driven infrastructure for human–robot teaming across a wide spectrum of societal applications. These include indoor assistance for the elderly—in which case robots act as followers or commissioned agents for payload transport—and outdoor guidance for individuals with visual impairments. Multimodal Large Language Models (MLLMs) are leveraged to establish a bidirectional, natural-language communication between humans and robots. By exploiting linguistic subtleties, the system dynamically acquires contextual understanding and supports high-level task planning in interchangeable languages, thereby fostering and accelerating inclusion, participation, and collective intelligence.
+To address these limitations, this work presents an AI-driven infrastructure for human–robot teaming across a wide spectrum of societal applications. These include indoor assistance for the elderly—in which case robots act as followers or commissioned agents for payload transport—and outdoor guidance for individuals with visual impairments. MLLMs are leveraged to establish a bidirectional, natural-language communication between humans and robots. By exploiting linguistic subtleties, the system dynamically acquires contextual understanding and supports high-level task planning in interchangeable languages, thereby fostering and accelerating inclusion, participation, and collective intelligence.
 The robot operates on a scene graph that delivers a multimodal, structured representation of its environment and internal behavior, encompassing potential obstacles and energy consumption. This comprehensive model enables the robot to explain its decisions and offer quantitative insights into their underlying causes upon request. Such feedback facilitates adaptive task refinement and energy optimization. Furthermore, the robot is equipped with master and follower capabilities that support dynamic role switching. Humans retain strategic decision-making authority, guided by information provided by the robot. The resulting extended machine intelligence demonstrates utility across diverse applications, from assistive domestic environments to outdoor navigation and cooperative task execution.
 
 
 \begin{table*}[!hb]
 	\centering
-	\caption{Technical Overview of Models and Technologies for 3D Scene Graph Generation, Perception, Navigation and Interfacing}
+	\caption{Technical Overview of Frameworks for 3D Scene Graph Generation, Perception, Navigation and Interfacing in Robotics}
 	\label{tab:scenegraph_technologies}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{|l|l|l|l|l|}
 			\hline
 			\textbf{System/Framework} & \textbf{\begin{tabular}[c]{@{}l@{}}Detection \& Segmentation \\ (Nodes)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Semantic Features \& \\ Embeddings\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Relation Inference \& \\ Planning (Edges)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Alternatives \& \\ Additional Models \& \\ Misc. \end{tabular}}  \\ \hline
-			\textbf{ConceptGraphs}\cite{conceptgraphs} & SAM (Segment Anything) & CLIP, Grounding DINO & GPT-4, LLaVA & RAM \\ \hline
+			\textbf{ConceptGraphs}\cite{conceptgraphs} & SAM & CLIP, Grounding DINO & GPT-4, LLaVA & RAM \\ \hline
 			\textbf{3DGraphLLM}\cite{3dgraphllm} & Mask3D, OneFormer3D & DINOv2 (2D), Uni3D (3D) & VL-SAT, CLIP & LLaMA3-8B, Vicuna-1.5 \\ \hline
 			\textbf{Graph2Nav}\cite{graph2nav} & PSGFormer, Mask2Former & Panoptic Labels & 2D-PSG Inference, GPT-3.5 & LIO-SAM, Whisper \\ \hline
 			\textbf{HOV-SG}\cite{hovsg} & SAM & CLIP & Hierarchical Heuristics & GPT-3.5, GPT-4 \\ \hline
@@ -88,7 +88,7 @@ A scene graph (SG) serves to represent a scene with objects,
 their attributes, and relationships between other objects in a structured way.
 Scene graph generation (SGG) can be based on images, text, and videos.
 Such a hierarchical graph data structure consists of nodes (O) and edges (E). Nodes (O) are objects such as persons, animals, places or things (bicycle, car, etc.), but also parts of other objects (e.g., limbs such as a person's arms). Each object node is usually equipped with attributes that describe the state of the object (e.g., colors, size, or pose). The edges (E) represent the relationships between the object pairs. These connections between objects describe actions (man holds cup) or positions (man stands in front of a bench). Typically, such a relationship is expressed as a
-$\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple.
+$\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple. [small SG image excerpt here]
 An SG can be defined as a tuple:
 
 \begin{equation}
@@ -122,7 +122,9 @@ An SG can be defined as a tuple:
 	\end{equation}
 	
 \noindent For SGG, diverse models and technologies are employed across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
-Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g., SAM) and open-vocabulary encoders (e.g., CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision-Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands.
+Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g., Segment Anything Model, SAM) and open-vocabulary encoders (e.g., Contrastive Language–Image Pre-training, CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
+Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware and various sensors.    
+
 
 
 
@@ -159,19 +161,30 @@ The GUI acts as a visualization and control center for the user. All data stream
   \item{In addition, internal robot data such as motor temperatures can be queried via voice input and are displayed in the GUI}
 \end{itemize}
 
-All data and information displayed on the interface, as well as user (voice) input, can be saved locally in common file formats via the GUI, facilitating any necessary fine-tuning or training of the models (YOLO and LLM) in the future.
+All data and information displayed on the interface, as well as user (voice) input, can be saved locally in common file formats via the GUI, facilitating any necessary fine-tuning or training of the models (YOLO and MLLM) in the future.
 
 \subsection{Setup and Applications}
-The interface provides a selection of different versions and sizes of YOLO and YOLOE models for object detection and segmentation as well as LLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The dataflow can be divided into five stages:
+The interface provides a selection of different versions and sizes of YOLO and YOLOE (open prompt) models for object detection and segmentation as well as MLLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The dataflow can be divided into five stages (Fig.\ref{framework_architecture}):
 \begin{enumerate}
 	\item Voice (Speech-To-Text, STT) or text input via the graphical user interface (scene description, navigation goal, robot status or casual chat). 
-	\item Object detection with distance. If casual conversation with the LLM is initiated then this step is skipped. 
-	\item Preprocessing via rule-based intent analyzer depending on the input. This step could potentially be replaced with a small LLM for orchestrating the tasks, but a rule-based approach offers lower latency and is more ressource efficient. In dynamic and critical situations, e.g., in road traffic, fast processing is a top priority.
+	\item Object detection with distance. If casual conversation with the MLLM is initiated then this step is skipped. 
+	\item Preprocessing via rule-based intent analyzer depending on the input. This step could potentially be replaced with a small MLLM for orchestrating the tasks, but a rule-based approach offers lower latency and is more ressource efficient. In dynamic and critical situations, e.g., in road traffic, fast processing is a top priority.
 	\item Depending on the intention, the response is output via MLLM or rule-based text (preconfigured response) if the situation requires it. In any case, the implemented text-to-speech system (TTS) reads out the answer. Complex scene descriptions or casual conversations are forwarded to MLLM, while the robot's status and navigation goals (following an object or simply driving to an object) are rule-based processes.    
 	\item When navigation or system status is requested, the system writes or subscribes to ROS2 topics to control the robot or query its status.
 \end{enumerate}
-The YOLO object detection is leveraged for two functions. First, it is used for data fusion with the ZED 2i depth camera to provide object data (see Fig. \ref{framework_architecture}), which is then fed to the LLM as a prompt. [The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates (x=0, y=0, z=0). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]
-Second, it is used to navigate and follow a recognized object. To this end, the distance from each detected object to the camera and the pairwise inter-object distances within a frame are computed using the 3D Euclidean distance. The selection of the target object is initiated through its unique identification (ID), which is facilitated by either vocal input or interface selection. 
+
+\begin{figure*}[!t]
+	\centering
+	\includegraphics[width=\textwidth]{images/framework_architecture.pdf}
+	\caption{Overview of the system architecture.}
+	\label{framework_architecture}
+\end{figure*}
+
+Efficient YOLO-based object detection serves three purposes in the system. First, YOLO provides real-time 2D detections that are fused with the ZED 2i depth measurements to estimate spatial object data (e.g., distance and 3D localization, see Fig. \ref{framework_architecture}), which are then formatted (Fig. \ref{transformation_template}) and passed to the MLLM as part of the grounded input prompt. Second, although modern MLLMs/VLMs can also produce 2D bounding boxes, YOLO is used as a lightweight preliminary detection layer to reduce MLLM workload and reduce inference latency.
+
+[The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates ($x = 0$, $y = 0$, $z = 0$). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]
+
+Third, it is used to navigate and follow a recognized object. To this end, the distance from each detected object to the camera and the pairwise inter-object distances within a frame are computed using the 3D Euclidean distance. The selection of the target object is initiated through its unique identification (ID), which is facilitated by either vocal input or interface selection. 
 
 
 In pAIrSEEption, the objects \( \mathcal{O} = \{o_1, \ldots, o_n\} \) in the scene are schematically defined as follows (for example, a recognized person standing still):
@@ -209,30 +222,18 @@ In pAIrSEEption, the objects \( \mathcal{O} = \{o_1, \ldots, o_n\} \) in the sce
 \end{equation}
 
 
+Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero. Thus, \textit{static} is an attribute derived from velocity, and the attribute set \textit{A} (see (\ref{eq:o_i})) is expanded with this additional information. The object data is expressed in the depth camera reference frame, i.e., the estimated 3D position ($x$, $y$, $z$) and the velocity ($v_x$, $v_y$, $v_z$) are relative to the camera.
+The GUI offers various selections of MLLMs. These can be divided into two categories: 
 
 
-
-
-
-
-Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero. Thus, \textit{static} is an attribute derived from velocity, and the attribute set \textit{A} (see (\ref{eq:o_i})) is expanded with this additional information. The selection of LLMs can be divided into two categories: 
-
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=\textwidth]{images/framework_architecture.pdf}
-	\caption{Overview of the system architecture.}
-	\label{framework_architecture}
-\end{figure*}
-
-
-The first category is local and offline models from Ollama or other sources such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
+The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
 in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot.
-This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
-Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on Internet availability and costs (resource costs and monetary costs).
+This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
+Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs).
 
-The experiments (in SECTION X) entail the implementation of accessible LLMs and VLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client.
-Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller LLMs.
-\begin{figure}[!htpb]
+The experiments (in SECTION X) entail the implementation of accessible MLLMs and VLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client.
+Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller MLLMs.
+\begin{figure}[!b]
 	\centering
 	\includegraphics[width=2.5in]{images/jetson_client_cropped.pdf}
 	\caption{Client-server architecture between application device and Ollama server.}
@@ -240,7 +241,7 @@ Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also po
 \end{figure}
 
 If a request for a description of the scene is initiated, the Jetson or laptop transmits an image of the current scene to the Ollama server—or, depending on the selection, also to OpenRouter—with the previously merged object data as a prompt to the server for interpretation and evaluation.
-The following text-prompt instructs the LLM on processing data. The goal is to enable safe navigation for a visually impaired person: 
+The following text-prompt instructs the MLLM on processing data. The goal is to enable safe navigation for a visually impaired person: 
 
 
 %\begin{figure}[!htpb]
@@ -291,14 +292,14 @@ The following text-prompt instructs the LLM on processing data. The goal is to e
 \end{center}
 %\vspace{1em} 
 
-The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{fig:transformation_template} presents a schematic representation of the result of this transformation using the template. By combining the image data with the readable object data using the MLLM, an understandable 3D scene is described, which is accessible to humans.
+The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{transformation_template} presents a schematic representation of the result of this transformation using the template. By combining the image data with the readable object data using the MLLM, an understandable 3D scene is described, which is accessible to humans.
 The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function.
 
 \begin{figure}[!b]
 	\centering
 	\includegraphics[width=\columnwidth]{images/transformation_template.png}
 	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input}
-	\label{fig:transformation_template}
+	\label{transformation_template}
 \end{figure}
 
 
