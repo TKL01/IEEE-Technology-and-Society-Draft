@@ -10,7 +10,8 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{cite}
-
+\usepackage{varioref}
+\usepackage{cleveref}
 %added xcolor for box color
 \usepackage{xcolor}
 
@@ -18,39 +19,64 @@
 % updated with editorial comments 8/9/2021
 
 \begin{document}
-
-\title{LLM-based scene graph for Outdoor Human-Robot \\ Teaming in Society 6.0 – Design, applications, and \\ evaluation}
-
-\author{Trung Kien La and Eric Guiffo Kaigom
-        % <-this % stops a space
-\thanks{Trung Kien La was with the Frankfurt Industrial Robotics and Digital Twin Laboratory (FriiDA) at the Frankfurt University of Applied Sciences, Hungener Str. 6 Building C, 60389 Frankfurt am Main, Germany (Orcid: 0009-0007-9239-3268).}% <-this % stops a space
-\thanks{Eric Guiffo Kaigom is with the Frankfurt Industrial Robotics and Digital Twin Laboratory (FriiDA) at the Frankfurt University of Applied Sciences, Hungener Str. 6 Building C, 60389 Frankfurt am Main, Germany (e-mail: kaigom@fra-uas.de).}}
-
-% The paper headers
-\markboth{Replace this line with your manuscript id number}%
-{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
-
-%\IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
-% Remember, if you use this you must call \IEEEpubidadjcol in the second
-% column for its text to clear the IEEEpubid mark.
-
-\maketitle
-
-\begin{abstract}
-—[Society 5.0/6.0 here?]…This article further describes the design, application and implementation of a multimodal assistance system to support [visually impaired] persons. To this end, a mobile robot is equipped with a depth camera, object detection and Multimodal Large Language Models (MLLMs). The goal is to enable the robot to understand its environment, i.e., to perceive, understand, and respond to it. Additionally, the robot should describe its perceived environment in natural language. A graphical user interface has been developed to bundle all asynchronous processes and act as a central audiovisual control unit. Visual perception is achieved through data fusion of the depth camera and object recognition models. The resulting 3D object data is then used to implement robot navigation. Human-machine interaction takes place via a voice interface that uses speech recognition and a text-to-speech system for speech output. To enrich the scene description, local multimodal LLMs are used. For this purpose, a client-server architecture was established. [mention of results and conducted experiments?] …[reference/benefits to Society 6.0?]…. 
-\end{abstract}
-
-\begin{IEEEkeywords}
-Article submission, IEEE, IEEEtran, journal, \LaTeX, paper, template, typesetting.
-\end{IEEEkeywords}
-
-\section{Introduction}
-\IEEEPARstart{T}{he} society of the future will integrate emerging technologies to promote human well-being and enhance quality of life in sustainable and equitable ways. A key objective of this transformation is the establishment of accountable corporate leadership that responsibly affects stakeholders and their environments. Equally important are collective intelligence and the self-determination of individuals in their increasingly mobile professional and social activities. However, the effectiveness of distributed, interconnected, and inclusive autonomy requires perceptual and interactive capacities that extend beyond human limitations, particularly those related to endurance, precision, and feedback in motor skills, vision, and cognition.
-AI-powered technologies are thus designed to integrate data processing, intelligent interfaces, and adaptive actuators to inform, augment, and extend human abilities. These systems enhance situational awareness while reducing cognitive load, strengthen personalized responses to societal challenges, and promote flexible, natural interaction with minimal effort. The use of environmentally sustainable and everyone-accessible technologies—as personal assistants in home care, adaptive interfaces in rehabilitation, and immersive tools in education and training—can mitigate cultural, physical and cognitive barriers while fostering new individual capacities and professional opportunities.
-Service robots constitute a prominent class of such technologies. They increasingly demonstrate their capacity to simplify and streamline daily human activities. Robots can transport heavy or critical payloads at customizable speeds with high precision. These capabilities can be achieved in a climate-friendly manner when powered by renewable energy sources such as solar and wind systems. Despite this societal and environmental potential, robot adoption remains constrained by factors beyond cost and safety. First, current systems lack functionalities that enable a transition from pre-scripted task execution to broader perception, interpretation, and real-time knowledge sharing with humans. Second, non-specialists often face difficulties in translating high-level task intentions into robotic actions. Third, existing designs seldom support synergy and role switching between humans and robots during joint task execution. Fourth, robots typically fail to communicate their internal states and feedback in accessible and intelligible ways.
-To address these limitations, this work presents an AI-driven infrastructure for human–robot teaming across a wide spectrum of societal applications. These include indoor assistance for the elderly—in which case robots act as followers or commissioned agents for payload transport—and outdoor guidance for individuals with visual impairments. MLLMs are leveraged to establish a bidirectional, natural-language communication between humans and robots. By exploiting linguistic subtleties, the system dynamically acquires contextual understanding and supports high-level task planning in interchangeable languages, thereby fostering and accelerating inclusion, participation, and collective intelligence.
-The robot operates on a scene graph that delivers a multimodal, structured representation of its environment and internal behavior, encompassing potential obstacles and energy consumption. This comprehensive model enables the robot to explain its decisions and offer quantitative insights into their underlying causes upon request. Such feedback facilitates adaptive task refinement and energy optimization. Furthermore, the robot is equipped with master and follower capabilities that support dynamic role switching. Humans retain strategic decision-making authority, guided by information provided by the robot. The resulting extended machine intelligence demonstrates utility across diverse applications, from assistive domestic environments to outdoor navigation and cooperative task execution.
-
+	
+	\title{Large Language Model- and YOLO-Driven Scene Graph For Inclusive Human-Robot  Teaming in the Society of the Future}
+	
+	\author{Trung Kien La and Eric Guiffo Kaigom
+		% <-this % stops a space
+		\thanks{Trung Kien La was with the Frankfurt Industrial Robotics and Digital Twin Laboratory (FriiDA) at the Frankfurt University of Applied Sciences, Hungener Str. 6 Building C, 60389 Frankfurt am Main, Germany (Orcid: 0009-0007-9239-3268).}% <-this % stops a space
+		\thanks{Eric Guiffo Kaigom is with the Frankfurt Industrial Robotics and Digital Twin Laboratory (FriiDA) at the Frankfurt University of Applied Sciences, Hungener Str. 6 Building C, 60389 Frankfurt am Main, Germany (e-mail: kaigom@fra-uas.de).}}
+	
+	% The paper headers
+	\markboth{Replace this line with your manuscript id number}%
+	{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+	
+	%\IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+	% Remember, if you use this you must call \IEEEpubidadjcol in the second
+	% column for its text to clear the IEEEpubid mark.
+	
+	\maketitle
+	
+	\begin{abstract}
+		People regularly need to reach and move loads in daily life. Many essential activities in the society build on it.  
+		However, even a short distance and an increased physical exertion make especially people with limited motor and visual abilities refrain from  these activities. Robots can help sustain self-determination and preserve health in this context. However,  robots are mostly developed for scripted motions and subject to programming complexity viewed as a barrier for their adoption. It remains hard to \textit{verbally ask} a robot to reach a previously unseen target object in its workspace or to follow a human operator.  
+		Conversely, robots seldom share their current perception and reasoning about the sensed environment with humans, failing to engage humans in understanding, refining, and adapting their   expectations from a robotic assistance and guidance when approaching or carrying a payload. In this work, we describe the development of an infrastructure that combines an YOLO-driven semantic object detection and Large Language Models to yield a scene graph. The structured and meaningful representation of the operational space enables  a mobile payloaded robot to reach or track a designated target entity, such as a chair or a human. On the other hand, the robot communicates its perception of the environment along with feedback on task execution and its internals to the human operator using a natural language in real-time. Experiment results show that the extended robot intelligence simplifies the penetration of robots in societal applications, facilitates the inclusion  and fosters the self-determination of citizens in societal applications, paving the ground for an enhancement of the perceived usability of robot in the daily life in the society of the future. 
+	\end{abstract}
+	
+	\begin{IEEEkeywords}
+		Society of the Future, Intelligent Robot, Large Language Models, YOLO, Scene Graph,  Extended Robot Intelligence
+	\end{IEEEkeywords}
+	
+	\section{Introduction}
+	\IEEEPARstart{T}{he} society of the future will be enriched with emerging digital technologies that support the well-being of humans by enhancing    their inclusion and self-determination \cite{obrenovic2025generative}. 
+	Learned collective intelligence driven by large language models (LLMs), such as GPT, LLaMA, Gemini and Claude, and generative AI tools like ChatGPT  are increasingly fostering inclusion. For instance, access to globally shared information in a desired spoken natural language is being more and more possible. On the other hand, mechanically assisted motor skills provided by wearable robots are witnessing notable advances for physically demanding tasks. However, there are still   limitations when it comes to carry heavy payloads over a long distance without muscular or ergonomic risks for humans \cite{singh2024pushing}. Furthermore, the integration of  mechanical devices in the  collective intelligence loop  to support the self-determination of humans through natural  interactions with  robots has been overlooked thus far.
+	
+	\begin{figure}[!t]
+		\centering
+		\includegraphics[width=\columnwidth]{pic/movingbox.png}
+		\caption{Healthy payload handling without stress over a long distance using a  mobile robot with extended intelligence. The robot carries the payload, builds and shares a mental scene graph-based model to reason about its environment, autonomously avoids collisions, and  follows the human operator to the intended location while giving contextualized feedback in real-time.}
+		\label{intro}
+	\end{figure}
+	
+	While mobile robots are useful to carry a wide range of payloads without physical stress \cite{gona2024intelligent}, citizens struggle to tell them to move to a target location. A practical societal application is moving a heavy box from a place to another, in which case the robot is steered to a desired location by following a human as shown in \cref{intro}. Observe that the operator  freely and comfortably moves around and the robot tracks the human path while perceiving and avoiding potential collisions. Nevertheless, robots fail to communicate their mental model, i.e., understanding of the operational environment, intended motion, and internal state, to humans in real-time. This bidirectional gap unfortunately prevents citizens to use a desired natural language  to engage in a  dialog with the robot to anticipate events and refine expectations  or adapt  commands to the robot on the fly without writing any line of code.
+	
+	The immediate advantages of doing so are manifold. The communication with the robot can occur in  a desired language supported by an LLM. A technical  background is no longer necessary to use the robot to complete a task. People can translate complex tasks into  sequences of single spoken command primitives to achieve demanding objectives. For example, following a complex path can be broken down into  intermediate motions of the robot that aim to attain the vicinity of perceived objects (see \cref{mental}). Human operators in motion can act as masters followed by the robot operating as a slave to carry a payload to a desired location. Meanwhile, the robot can amend human guidance (e.g., in the case of an imminent collision) and give assistive along with directive feedback about the environment to the operator. This shared autonomy democratizes  access to robots and fosters the  inclusion as well as the self-determination of any operator. 
+	
+	
+	\begin{figure}[!t]
+		\centering
+		\includegraphics[width=\columnwidth]{pic/mental.png}
+		\caption{Semantic understanding of the operational environment by the robot to yield and update its mental model as a scene graph. Here, the robot follows a chair in motion designated by the human operator as target object using LLM. The visual perception is achieved through processing data from a depth camera and YOLO-based object recognition. A structured and meaningful representation of the 3D scene is then used to enable a safe robot navigation and give assistive as well as directive feedback to the human operator.}
+		\label{mental}
+	\end{figure}
+	
+	We describe the development of an infrastructure for code-free teaming between human and mobile robot in societal applications.  Included are indoor assistance, in which case the robot acts as commissioned  agent and follower for synergistic payload transport. Everyone can benefit from this functionality regardless of any technical background. Furthermore, the robot  pro-actively offers outdoor guidance that can be helpful for individuals with e.g. visual impairments. Our main contributions are as follows.% Multimodal Large Language Models (MLLMs) are leveraged to establish a bidirectional, natural-language communication between humans and robots. 
+	\begin{itemize}
+		\item We leverage YOLO to develop a dynamic scene graph that provides a structured and semantic representation of the current workspace as a mental model for mobile robots. 
+		\item We combine the scene graph and an LLM-driven communication to help any citizen intuitively and safely navigate a payloaded mobile robot through its understood environment to the vicinity of any freely designated entity, such as a human or an object, even in motion.
+		\item We demonstrate the usefulness of our extended robot intelligence for cooperative task execution based on a shared autonomy between human and robot in societal applications. 
+	\end{itemize}
+The remainder of this work is organized as follows.
 
 \begin{table*}[!hb]
 	\centering
@@ -357,54 +383,60 @@ You must declare a $\backslash${\tt{section}} before using any $\backslash${\tt{
 
 \section{References Section}
 You can use a bibliography generated by BibTeX as a .bbl file.
- BibTeX documentation can be easily obtained at:
- http://mirror.ctan.org/biblio/bibtex/contrib/doc/
- The IEEEtran BibTeX style support page is:
- http://www.michaelshell.org/tex/ieeetran/bibtex/
- 
- % argument is your BibTeX string definitions and bibliography database(s)
+BibTeX documentation can be easily obtained at:
+http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+The IEEEtran BibTeX style support page is:
+http://www.michaelshell.org/tex/ieeetran/bibtex/
+
+% argument is your BibTeX string definitions and bibliography database(s)
 %\bibliography{IEEEabrv,../bib/paper}
 %
 \section{Simple References}
 You can manually copy in the resultant .bbl file and set second argument of $\backslash${\tt{begin}} to the number of references
- (used to reserve space for the reference number labels box).
+(used to reserve space for the reference number labels box).
 
 \begin{thebibliography}{1}
-\bibliographystyle{IEEEtran}
+	\bibliographystyle{IEEEtran}
+\bibitem{obrenovic2025generative}Obrenovic, B., Gu, X., Wang, G., Godinic, D. \& Jakhongirov, I. Generative AI and human–robot interaction: implications and future agenda for business, society and ethics. {\em AI \& Society}. \textbf{40}, 677-690 (2025)
 
-\bibitem{conceptgraphs}
-Q. Gu et al., "ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning," 2024 IEEE International Conference on Robotics and Automation (ICRA), Yokohama, Japan, 2024, pp. 5021-5028, doi: 10.1109/ICRA57147.2024.10610243.
-
-\bibitem{3dgraphllm}
-Tatiana Zemskova and Dmitry Yudin, "3DGraphLLM: Combining Semantic Graphs and Large Language Models for 3D Scene Understanding," 2025, https://doi.org/10.48550/arXiv.2412.18450
-
-\bibitem{graph2nav}
-T. Shan, A. Rajvanshi, N. Mithun and H. -P. Chiu, "Graph2Nav: 3D Object-Relation Graph Generation to Robot Navigation," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 1646-1652, doi: 10.1109/ICRA55743.2025.11128782. 
-
-\bibitem{hovsg}
-Robotics: Science and Systems 2024, Delft, Netherlands, July 15-July 19, 2024, 
-https://doi.org/10.15607/RSS.2024.XX.077
-
-\bibitem{openin}
-Y. Tang et al., "OpenIN: Open-Vocabulary Instance-Oriented Navigation in Dynamic Domestic Environments," in IEEE Robotics and Automation Letters, vol. 10, no. 9, pp. 9256-9263, Sept. 2025, doi: 10.1109/LRA.2025.3592071.
-
-\bibitem{sgnav}
-H. Yin et al., "SG-Nav: Online 3D Scene Graph Prompting for LLM-based Zero-shot Object Navigation,"
-https://doi.org/10.48550/arXiv.2410.08189
-
-\bibitem{interaction}
-Q. Li, X. Zhang, C. Chen, H. Zhao and J. Niu, "Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 11933-11939, doi: 10.1109/ICRA55743.2025.11128194.
-
-\bibitem{visiongpt}
-H. Wang et al., "VisionGPT: LLM-Assisted Real-Time Anomaly Detection for Safe Visual Navigation,"
-https://doi.org/10.48550/arXiv.2403.12415
-
-\bibitem{lgx}
-V. S. Dorbala, J. F. Mullen and D. Manocha, "Can an Embodied Agent Find Your “Cat-shaped Mug”? LLM-Based Zero-Shot Object Navigation," in IEEE Robotics and Automation Letters, vol. 9, no. 5, pp. 4083-4090, May 2024, doi: 10.1109/LRA.2023.3346800.
-
-\bibitem{vlmaps}
-C. Huang, O. Mees, A. Zeng and W. Burgard, "Visual Language Maps for Robot Navigation," 2023 IEEE International Conference on Robotics and Automation (ICRA), London, United Kingdom, 2023, pp. 10608-10615, doi: 10.1109/ICRA48891.2023.10160969.
-
+	\bibitem{singh2024pushing}
+	Singh, C. and Jayadas, A. Pushing Shopping Cart: An Intentional Exercise for Older Adults. {\em Activities, Adaptation \& Aging}. \textbf{48}, 670-689 (2024)
+	
+	\bibitem{gona2024intelligent}Gona, S. \& Harish, C. Intelligent mobility planning for a cost-effective object follower mobile robotic system with obstacle avoidance using robot vision and deep learning. {\em Evolutionary Intelligence}. \textbf{17}, 1279-1293 (2024)
+	
+	\bibitem{conceptgraphs}
+	Q. Gu et al., "ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning," 2024 IEEE International Conference on Robotics and Automation (ICRA), Yokohama, Japan, 2024, pp. 5021-5028, doi: 10.1109/ICRA57147.2024.10610243.
+	
+	\bibitem{3dgraphllm}
+	Tatiana Zemskova and Dmitry Yudin, "3DGraphLLM: Combining Semantic Graphs and Large Language Models for 3D Scene Understanding," 2025, https://doi.org/10.48550/arXiv.2412.18450
+	
+	\bibitem{graph2nav}
+	T. Shan, A. Rajvanshi, N. Mithun and H. -P. Chiu, "Graph2Nav: 3D Object-Relation Graph Generation to Robot Navigation," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 1646-1652, doi: 10.1109/ICRA55743.2025.11128782. 
+	
+	\bibitem{hovsg}
+	Robotics: Science and Systems 2024, Delft, Netherlands, July 15-July 19, 2024, 
+	https://doi.org/10.15607/RSS.2024.XX.077
+	
+	\bibitem{openin}
+	Y. Tang et al., "OpenIN: Open-Vocabulary Instance-Oriented Navigation in Dynamic Domestic Environments," in IEEE Robotics and Automation Letters, vol. 10, no. 9, pp. 9256-9263, Sept. 2025, doi: 10.1109/LRA.2025.3592071.
+	
+	\bibitem{sgnav}
+	H. Yin et al., "SG-Nav: Online 3D Scene Graph Prompting for LLM-based Zero-shot Object Navigation,"
+	https://doi.org/10.48550/arXiv.2410.08189
+	
+	\bibitem{interaction}
+	Q. Li, X. Zhang, C. Chen, H. Zhao and J. Niu, "Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 11933-11939, doi: 10.1109/ICRA55743.2025.11128194.
+	
+	\bibitem{visiongpt}
+	H. Wang et al., "VisionGPT: LLM-Assisted Real-Time Anomaly Detection for Safe Visual Navigation,"
+	https://doi.org/10.48550/arXiv.2403.12415
+	
+	\bibitem{lgx}
+	V. S. Dorbala, J. F. Mullen and D. Manocha, "Can an Embodied Agent Find Your “Cat-shaped Mug”? LLM-Based Zero-Shot Object Navigation," in IEEE Robotics and Automation Letters, vol. 9, no. 5, pp. 4083-4090, May 2024, doi: 10.1109/LRA.2023.3346800.
+	
+	\bibitem{vlmaps}
+	C. Huang, O. Mees, A. Zeng and W. Burgard, "Visual Language Maps for Robot Navigation," 2023 IEEE International Conference on Robotics and Automation (ICRA), London, United Kingdom, 2023, pp. 10608-10615, doi: 10.1109/ICRA48891.2023.10160969.
+	
 \end{thebibliography}
 
 
@@ -412,25 +444,25 @@ C. Huang, O. Mees, A. Zeng and W. Burgard, "Visual Language Maps for Robot Navig
 
 \section{Biography Section}
 If you have an EPS/PDF photo (graphicx package needed), extra braces are
- needed around the contents of the optional argument to biography to prevent
- the LaTeX parser from getting confused when it sees the complicated
- $\backslash${\tt{includegraphics}} command within an optional argument. (You can create
- your own custom macro containing the $\backslash${\tt{includegraphics}} command to make things
- simpler here.)
- 
+needed around the contents of the optional argument to biography to prevent
+the LaTeX parser from getting confused when it sees the complicated
+$\backslash${\tt{includegraphics}} command within an optional argument. (You can create
+your own custom macro containing the $\backslash${\tt{includegraphics}} command to make things
+simpler here.)
+
 \vspace{11pt}
 
 \bf{If you include a photo:}\vspace{-33pt}
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Michael Shell}
-Use $\backslash${\tt{begin\{IEEEbiography\}}} and then for the 1st argument use $\backslash${\tt{includegraphics}} to declare and link the author photo.
-Use the author name as the 3rd argument followed by the biography text.
+	Use $\backslash${\tt{begin\{IEEEbiography\}}} and then for the 1st argument use $\backslash${\tt{includegraphics}} to declare and link the author photo.
+	Use the author name as the 3rd argument followed by the biography text.
 \end{IEEEbiography}
 
 \vspace{11pt}
 
 \bf{If you will not include a photo:}\vspace{-33pt}
 \begin{IEEEbiographynophoto}{John Doe}
-Use $\backslash${\tt{begin\{IEEEbiographynophoto\}}} and the author name as the argument followed by the biography text.
+	Use $\backslash${\tt{begin\{IEEEbiographynophoto\}}} and the author name as the argument followed by the biography text.
 \end{IEEEbiographynophoto}
 
 
