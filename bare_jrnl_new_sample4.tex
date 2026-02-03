@@ -20,7 +20,7 @@
 
 \begin{document}
 	
-	\title{Large Language Model- and YOLO-Driven Scene Graph For Inclusive Human-Robot  Teaming in the Society of the Future}
+	\title{pAIrSEEption: LLM- and YOLO-Driven Scene Graph for Inclusive Human-Robot  Teaming in the Society of the Future}
 	
 	\author{Trung Kien La and Eric Guiffo Kaigom
 		% <-this % stops a space
@@ -40,7 +40,7 @@
 	\begin{abstract}
 		People regularly need to reach and move loads in daily life. Many essential activities in the society build on it.  
 		However, even a short distance and an increased physical exertion make especially people with limited motor and visual abilities refrain from  these activities. Robots can help sustain self-determination and preserve health in this context. However,  robots are mostly developed for scripted motions and subject to programming complexity viewed as a barrier for their adoption. It remains hard to \textit{verbally ask} a robot to reach a previously unseen target object in its workspace or to follow a human operator.  
-		Conversely, robots seldom share their current perception and reasoning about the sensed environment with humans, failing to engage humans in understanding, refining, and adapting their   expectations from a robotic assistance and guidance when approaching or carrying a payload. In this work, we describe the development of an infrastructure that combines an YOLO-driven semantic object detection and Large Language Models to yield a scene graph. The structured and meaningful representation of the operational space enables  a mobile payloaded robot to reach or track a designated target entity, such as a chair or a human. On the other hand, the robot communicates its perception of the environment along with feedback on task execution and its internals to the human operator using a natural language in real-time. Experiment results show that the extended robot intelligence simplifies the penetration of robots in societal applications, facilitates the inclusion  and fosters the self-determination of citizens in societal applications, paving the ground for an enhancement of the perceived usability of robot in the daily life in the society of the future. 
+		Conversely, robots seldom share their current perception and reasoning about the sensed environment with humans, failing to engage humans in understanding, refining, and adapting their   expectations from a robotic assistance and guidance when approaching or carrying a payload. In this work, we describe the development of an infrastructure that combines an YOLO-driven semantic object detection and Large Language Models (LLMs) to yield a scene graph. The structured and meaningful representation of the operational space enables  a mobile payloaded robot to reach or track a designated target entity, such as a chair or a human. On the other hand, the robot communicates its perception of the environment along with feedback on task execution and its internals to the human operator using a natural language in real-time. Experiment results show that the extended robot intelligence simplifies the penetration of robots in societal applications, facilitates the inclusion  and fosters the self-determination of citizens in societal applications, paving the ground for an enhancement of the perceived usability of robot in the daily life in the society of the future. 
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -66,7 +66,7 @@
 	\begin{figure}[!t]
 		\centering
 		\includegraphics[width=\columnwidth]{pic/mental.png}
-		\caption{Semantic understanding of the operational environment by the robot to yield and update its mental model as a scene graph. Here, the robot follows a chair in motion designated by the human operator as target object using LLM. The visual perception is achieved through processing data from a depth camera and YOLO-based object recognition. A structured and meaningful representation of the 3D scene is then used to enable a safe robot navigation and give assistive as well as directive feedback to the human operator.}
+		\caption{Semantic understanding of the \textit{indoor} operational environment by the robot to yield and update its mental model as a scene graph. Here, the robot follows a chair in motion designated by the human operator as target object using LLM. The visual perception is achieved through processing data from a depth camera and YOLO-based object recognition. A structured and meaningful representation of the 3D scene is then used to enable a safe robot navigation and give assistive as well as directive feedback to the human operator.}
 		\label{mental}
 	\end{figure}
 	
@@ -77,6 +77,13 @@
 		\item We demonstrate the usefulness of our extended robot intelligence for cooperative task execution based on a shared autonomy between human and robot in societal applications. 
 	\end{itemize}
 The remainder of this work is organized as follows.
+
+	\begin{figure}[!t]
+	\centering
+	\includegraphics[width=\columnwidth]{pic/mental2.png}
+	\caption{Semantic understanding of the \textit{outdoor} operational environment by the robot to construct and update its mental model of its workspace as a scene graph. Here, the robot not only follows the human teammate, but also give hints about surrounding objects using YOLO and LLM. Objects are e.g. obstacles or  useful items like a bicycle. Note that the robot is always aware of an estimation of the relative pose  (i.e., position and orientation) and velocity of objects. It uses this information for human guidance, reachability assessment upon LLM-driven request,  and collision avoidance purposes. Hence, the robot employs AI to perceive the scene (we coined it \textit{pAIrception}) for the humans.}
+	\label{mental}
+\end{figure}
 
 \begin{table*}[!hb]
 	\centering
