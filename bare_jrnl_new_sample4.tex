@@ -20,7 +20,7 @@
 
 \begin{document}
 	
-	\title{Large Language Model- and YOLO-Driven Scene Graph For Inclusive Human-Robot Teaming in the Society of the Future}
+	\title{Combining Multimodal Scene Graph and  Large Language Model  for Inclusive Human-Robot  Teaming in the Society of the Future}
 	
 	\author{Trung Kien La and Eric Guiffo Kaigom
 		% <-this % stops a space
@@ -39,17 +39,17 @@
 	
 	\begin{abstract}
 		People regularly need to reach and move loads in daily life. Many essential activities in the society build on it.  
-		However, even a short distance and an increased physical exertion make especially people with limited motor and visual abilities refrain from  these activities. Robots can help sustain self-determination and preserve health in this context. However,  robots are mostly developed for scripted motions and subject to programming complexity viewed as a barrier for their adoption. It remains hard to \textit{verbally ask} a robot to reach a previously unseen target object in its workspace or to follow a human operator.  
-		Conversely, robots seldom share their current perception and reasoning about the sensed environment with humans, failing to engage humans in understanding, refining, and adapting their   expectations from a robotic assistance and guidance when approaching or carrying a payload. In this work, we describe the development of an infrastructure that combines an YOLO-driven semantic object detection and Large Language Models to yield a scene graph. The structured and meaningful representation of the operational space enables  a mobile payloaded robot to reach or track a designated target entity, such as a chair or a human. On the other hand, the robot communicates its perception of the environment along with feedback on task execution and its internals to the human operator using a natural language in real-time. Experiment results show that the extended robot intelligence simplifies the penetration of robots in societal applications, facilitates the inclusion  and fosters the self-determination of citizens in societal applications, paving the ground for an enhancement of the perceived usability of robot in the daily life in the society of the future. 
+		However, even a short distance and an increased physical exertion make especially people with limited motor and low visual abilities refrain from  these activities. Robots can help sustain self-determination and preserve health in this context. However,  robots are mostly developed for scripted motions and subject to a programming complexity, which is a barrier for their adoption. It remains hard to \textit{verbally instruct} a robot to reach a previously unseen target object in its workspace or to follow a human operator who situationally decides on the desired destination of the payload carried by the robot.  
+		Conversely, robots seldom share their current perception and reasoning about the sensed environment with humans, failing to engage humans in understanding their mental models and adapting their   expectations from a robotic assistance or guidance. In this work, we describe the development of an infrastructure that combines a semantic object detection and segmentation based on YOLO to construct a scene graph   with a subsequent interpretation of the structured scene driven by Multimodal Large Language Models  for inclusive human-robot teaming. The meaningful representation of the operational space enables  a mobile payloaded robot to reach or track a designated target entity, such as a  chair or a human in motion. On the other hand, the robot communicates its perception of the environment along with feedback on task execution and its internals to the human operator using a natural language in real-time. Experiment results show that the extended robot intelligence simplifies the penetration of robots, facilitates  inclusion,  and fosters the self-determination of citizens in societal applications, paving the ground for an improved perceived usability and usefulness of robots in the daily life in the society of the future. 
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
-		Society of the Future, Intelligent Robot, Large Language Models, YOLO, Scene Graph,  Extended Robot Intelligence
+		 Intelligent Robot, Multi-modal Large Language Models, YOLO, Scene Graph,  Extended Robot Intelligence, Society of the Future
 	\end{IEEEkeywords}
 	
-	\section{Introduction}
-	\IEEEPARstart{T}{he} society of the future will be enriched with emerging digital technologies that support the well-being of humans by enhancing    their inclusion and self-determination \cite{obrenovic2025generative}. 
-	Learned collective intelligence driven by large language models (LLMs), such as GPT, LLaMA, Gemini and Claude, and generative AI tools like ChatGPT  are increasingly fostering inclusion. For instance, access to globally shared information in a desired spoken natural language is being more and more possible. On the other hand, mechanically assisted motor skills provided by wearable robots are witnessing notable advances for physically demanding tasks. However, there are still   limitations when it comes to carry heavy payloads over a long distance without muscular or ergonomic risks for humans \cite{singh2024pushing}. Furthermore, the integration of  mechanical devices in the  collective intelligence loop  to support the self-determination of humans through natural  interactions with  robots has been overlooked thus far.
+	\section{Introduction}\label{introi}
+	\IEEEPARstart{T}{he} society of the future will be enriched with emerging digital technologies that support the well-being of humans by enhancing    their inclusion and self-determination \cite{obrenovic2025generative,kaigom2023metarobotics}. 
+	Learned collective intelligence driven by large language models (LLMs), such as GPT, LLaMA, Gemini and Claude, together with generative AI tools like ChatGPT  are increasingly fostering inclusion. For instance, access to globally shared information in a desired  natural language is being more and more possible. On the other side, mechanically assisted motor skills provided by e.g. wearable robots  for physically demanding tasks are witnessing notable advances. However, there are    limitations when it comes to carry heavy payloads over a long distance without muscular or ergonomic risks for humans \cite{singh2024pushing}. Furthermore, the integration of  robotic devices in   the collective intelligence loop  to support  self-determination  through natural  interactions between humans and robots (see \cref{intro})  has received little attention. Reasons span from  fundamental automation principles for robots that still require a high programming effort to the lack of intuitive interfaces that bring robots close to citizens in terms of pervasiveness, usability, and augmentation of capacities in societal tasks \cite{kaigom2023metarobotics}.
 	
 	\begin{figure}[!t]
 		\centering
@@ -58,25 +58,62 @@
 		\label{intro}
 	\end{figure}
 	
-	While mobile robots are useful to carry a wide range of payloads without physical stress \cite{gona2024intelligent}, citizens struggle to tell them to move to a target location. A practical societal application is moving a heavy box from a place to another, in which case the robot is steered to a desired location by following a human as shown in \cref{intro}. Observe that the operator  freely and comfortably moves around and the robot tracks the human path while perceiving and avoiding potential collisions. Nevertheless, robots fail to communicate their mental model, i.e., understanding of the operational environment, intended motion, and internal state, to humans in real-time. This bidirectional gap unfortunately prevents citizens to use a desired natural language  to engage in a  dialog with the robot to anticipate events and refine expectations  or adapt  commands to the robot on the fly without writing any line of code.
+	While mobile robots are useful to carry a wide range of payloads without physical stress \cite{gona2024intelligent}, citizens struggle to ask them to move to a target location. Doing so for everyone requires a paradigm shift from programming-based to communication-oriented task achievement that hides the technical complexity and emphasizes  societal opportunities and usefulness. An  application example is to  move a heavy box from a place to another without workspace calibration, in which case the robot is steered to a desired position by following a human operator as shown in \cref{intro}. The operator can freely and comfortably move around and specify the  final position of the payload in motion anywhere. The robot simply tracks the uncertain human path while avoiding  obstacles to reach that position. Nevertheless, most current mobile robots fail to communicate their mental model, i.e., understanding of the operational environment, difficulty to achieve a goal, and internal state, to humans in real-time. This bidirectional gap unfortunately prevents citizens to  engage in a service-oriented dialog with the robot to anticipate events, strategically refine  their expectations in an iterative way,  or adapt  their individual \textit{requests} (instead of hard-coded \textit{commands}) to the robot on the fly without writing any line of code.
 	
-	The immediate advantages of doing so are manifold. The communication with the robot can occur in  a desired language supported by an LLM. A technical  background is no longer necessary to use the robot to complete a task. People can translate complex tasks into  sequences of single spoken command primitives to achieve demanding objectives. For example, following a complex path can be broken down into  intermediate motions of the robot that aim to attain the vicinity of perceived objects (see \cref{mental}). Human operators in motion can act as masters followed by the robot operating as a slave to carry a payload to a desired location. Meanwhile, the robot can amend human guidance (e.g., in the case of an imminent collision) and give assistive along with directive feedback about the environment to the operator. This shared autonomy democratizes  access to robots and fosters the  inclusion as well as the self-determination of any operator. 
+	The immediate advantages of doing so are manifold for a human teammate interaction with the robot. The communication with the robot can occur in  a desired language supported by an LLM. Individual needs can be conveyed more readily.  A technical  background is no longer necessary to prompt the robot to complete a task. People can translate complex tasks into  sequences of single spoken request primitives to achieve specific objectives. For example, following a complex path can be broken down into  intermediate motions of the robot that aim to attain the vicinity of previously unseen objects that suddenly appear in the workspace of the moving robot  (see \cref{mental}). A  human teammate in motion  can act as a guide followed upon invitation by the robot that serves as a assistive device  carrying the payload to a desired location. Meanwhile, the robot can exploit its reasoning about its dynamic and experienced mental model of the environment to amend human guidance (e.g., in the case of events grounded in historical contexts or long-term decisions) and give directive feedback about the environment to human. This shared autonomy democratizes  access to robots and facilitates the  inclusion as well as the self-determination of human operators. 
 	
 	
 	\begin{figure}[!t]
 		\centering
 		\includegraphics[width=\columnwidth]{pic/mental.png}
-		\caption{Semantic understanding of the operational environment by the robot to yield and update its mental model as a scene graph. Here, the robot follows a chair in motion designated by the human operator as target object using LLM. The visual perception is achieved through processing data from a depth camera and YOLO-based object recognition. A structured and meaningful representation of the 3D scene is then used to enable a safe robot navigation and give assistive as well as directive feedback to the human operator.}
+		\caption{Perception of an \textit{indoor} environment by a mobile robot. Semantic detection and segmentation of objects to construct a scene graph as a mental model. The robot reasons on this graph using an MLLM to track a moving chair described by the human-teammate using natural language.}
 		\label{mental}
 	\end{figure}
 	
-	We describe the development of an infrastructure for code-free teaming between human and mobile robot in societal applications.  Included are indoor assistance, in which case the robot acts as commissioned  agent and follower for synergistic payload transport. Everyone can benefit from this functionality regardless of any technical background. Furthermore, the robot  pro-actively offers outdoor guidance that can be helpful for individuals with e.g. visual impairments. Our main contributions are as follows.% Multimodal Large Language Models (MLLMs) are leveraged to establish a bidirectional, natural-language communication between humans and robots. 
+	
+	We describe in this work the development of an infrastructure for code-free teaming between human and mobile robot that helps complete various tasks in societal applications.  Included are indoor assistance, in which case the robot acts as a commissioned  agent and follower for synergistic payload transport. Everyone can  benefit from this functionality and shape it to own specific motor, vision, and communication needs regardless of the technical background. Furthermore, the robot  pro-actively offers outdoor guidance that can be helpful for individuals with e.g. motor or visual impairments. Our main contributions are as follows.% 
 	\begin{itemize}
-		\item We leverage YOLO to develop a dynamic scene graph that provides a structured and semantic representation of the current workspace as a mental model for mobile robots. 
-		\item We combine the scene graph and an LLM-driven communication to help any citizen intuitively and safely navigate a payloaded mobile robot through its understood environment to the vicinity of any freely designated entity, such as a human or an object, even in motion.
-		\item We demonstrate the usefulness of our extended robot intelligence for cooperative task execution based on a shared autonomy between human and robot in societal applications. 
+		\item We integrate a YOLO-driven object inference  from 2D images  together with spatial information from a depth camera sensor and measured data on the robot internals to construct a dynamic multi-modal scene graph. It provides the  mobile robot with a hierarchical,   semantic, and \textit{self-aware} abstract representation of its current workspace and inner processes that it harness as a mental model. 
+		\item The robot then leverages  Multimodal Large Language Models (MLLM) to understand and reason about the scene graph to answer human requests and own thoughts. Any citizen can \textit{tell} the payloaded robot which physical entity  it should follow or which location it should reach. The environment- and self-aware robot makes assistive and directive decisions which are  communicated to the human-teammate using a natural language.
+		\item We demonstrate the usefulness and performance of our extended robot intelligence for cooperative task execution based on a communication-based shared autonomy between human and robot in three societal applications. 
 	\end{itemize}
 The remainder of this work is organized as follows.
+
+	\begin{figure}[!t]
+	\centering
+	\includegraphics[width=\columnwidth]{pic/mental2.png}
+	\caption{Semantic understanding of the \textit{outdoor} operational environment by the robot. In this application, the robot not only follows the human teammate, but also give hints about surrounding objects using a natural language. Objects are e.g. obstacles or  useful items like a bicycle. The robot is  aware of an estimated relative pose  (i.e., position and orientation) and velocity along with the affordance of objects even unseen by humans. It uses this information for human guidance and reachability assessment upon request. Hence, the robot employs AI to perceive the scene (we coined it \textit{pAIrSEEption}) for the humans.}
+	\label{mental}
+\end{figure}
+
+
+
+
+
+\section{Related Work}
+Robotized societal applications are typically characterized by unstructured environments, such as home settings, where scenes exhibit diverse spatial, temporal, and contextual dynamics. These dynamics are shaped by routine human activities as well as irregularities and uncertainties, for example, arising from human intentions \cite{yalcinkaya2024towards}. Constructing a scene graph for such environments requires the identification, localization, and interpretation of entities—termed nodes—along with their attributes and the relationships between them, which are represented as edges \cite{rana2023sayplan}. The ability of statistical methods based on neural networks to handle uncertainty and generalize across scenarios has promoted their use in object detection and scene graph generation for mobile robotics. In the next sections, we provide an overview of related architectures and methods developed to this end.
+ 
+
+
+ 
+\subsection{Layered architecture for scene graph}
+Mobile robots need to reason about contextualized and structured information to plan and achieve goals. Scene graphs have recently been adapted for mobile robots by introducing different layers of abstraction of the real scene. These include the spatial (locations within the scene), semantic (meaning of entities, including their state, affordances, predicates, and further attributes), topological (connectivity between locations), and task-related (robot goals) layers \cite{rana2023sayplan,im2024egtr}. Those layers are populated with nodes and differ in various ways. The update rates of node attributes are one example of such differentiation \cite{rana2023sayplan,im2024egtr}. For instance, while the initial and final positions of the robot may be known in advance and thus fixed, task achievement may be expected within a short time window, which requires fast motions. By contrast, the desired position of the robot varies with time in object-following applications.
+  \begin{table}[!t]
+	\centering
+	\caption{Techniques for scene graph generation and  characteristics.}
+	\label{tab:features}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Contribution} & \textbf{Feature representation} & \textbf{Relation inference method} \\
+		\hline \hline
+		(\cite{kim2025semantic,su2024adopting}) & Box-based &  MPNN    \\
+		\hline
+		(\cite{im2024egtr,hao2025bctr}) & Query-based &  Attention  \\
+		\hline
+		(\cite{liu2021fully,newell2017pixels}) & Point-based &  CNN \\
+		\hline
+	\end{tabular}
+\end{table}
 
 \begin{table*}[!hb]
 	\centering
@@ -100,7 +137,25 @@ The remainder of this work is organized as follows.
 	}
 \end{table*}
 
-\section{Related Work}
+\subsection{Algorithms for the generation of scene graphs}
+Three classes of algorithms emerge for the generation of scene graphs.
+Edge dual scene graph generation has been recently proposed   to capture multi-object relationships for scene graph generation \cite{kim2025semantic}. The approach integrates object detection based on a fast Region-based Convolutional Neural Networks (R-CNN), an edge dual scene graph,  and an object-relation-centric Message Passing Neural Network (MPNN). Rich contextual interactions  between unconstrained objects are retrieved by the object-relation MPNN that learns both object- and relation-centric features to enhance the prediction accuracy and enable  fine-grained and iterative updates between objects. In essence, MPNN aggregates information from neighborhood nodes. This enables the update of the description of the considered node. MPNN finally outputs a feature vector for the entire graph \cite{kim2025semantic,su2024adopting}. Another technique for graph generation leverages the attention mechanism. The  approach for instance connects objects with significant attention weights to edges from the self-attention layers of a pre-trained DEtection TRansformer  \cite{im2024egtr}. In the third Convolutional Scene Graph Generation (CSGG) strategy, objects are encoded as bounding box center points. Relationships are represented e.g. as 2D vector fields, i.e., an integral on a sub-region that points from subject to object \cite{liu2021fully}. Features associated with the MPNN-, attention-, and CSGG-based approach are given in \cite{liu2024repsgg} and extended with inference methods summarized in 	\cref{tab:features}.
+
+
+\subsection{Tools for the genereration of scene graphs}
+
+Different tools have been developed to perform the intermediate operations required to generate scene graphs from sensed data. An overview of these tools is provided in \cref{tab:scenegraph_technologies}. YOLO (You Only Look Once) and SAM (Segment Anything Model) play major roles in object detection and segmentation tasks. SAM is a general-purpose model capable of pixel-level segmentation, whereas YOLO primarily provides bounding-box detection. YOLO is also optimized for low latency, making it suitable for real-time scenarios in dynamic, human-centered environments where rapid collision avoidance is critical. This enables faster collision handling while following human motion paths.
+
+CLIP is widely used for processing semantic features due to its open‑vocabulary capabilities. It supports multi-modal classification at both pixel and bounding‑box levels. The shared semantic embedding space provided by CLIP enables a smooth transition from image-based perception to language‑driven understanding, for example through GPT based prompting.
+
+
+\subsection{Operationalization  of scene graphs}
+Scene graph creation  relies on the detection of objects on images and construction of a structured representation of these objects along with their semantic attributes, and relationships. This is done for different societal purposes \cite{amiri2022reasoning}. Included are  finding someone a place to sit in an indoor environment \cite{ravichandran2025safety}, assistance in cooking \cite{kwon2025large}, and  inspection missions in city-scale outdoor environments \cite{viswanathan2024xflie}. However, human activities are  characterized by a long-term horizon beyond an image.
+
+ Long-term goals in  human-inhabited environments are handled in \cite{ravichandran2025safety} by federating multiple local scene graphs from previous pictures to yield a global scene graph.  In this work, we leverage a multi-modal LLM (MLLM) that exploits the reasoning history and its generalization capability to achieve long term reasoning. Such a contextual grounding is also enabled in \cite{kwon2025large} using the generative capability of an LLM in conjunction with preceding scenarios. We enlarge the scope of this scene-centered contextualization. Our goal is to integrate the mobile robotic device in the collective intelligence loop, as advocated in \cref{introi}. Specifically, internal processes of the robot, such as its energy consumption and motion dynamics, are taken into account. This allows for the management of both the  planning and physical feasibility of tasks. Indeed,  spatial goals specified by a human teammate and requirements on the robot dynamics are considered in the communication, taking care to keep the vocabulary as accessible as possible. A human teammate can thereby ask  the robot whether it has localized the target object in its current mental model and can physically reach that object long before an  attempt to move to the object is started. Visual question-answering queries have been used in \cite{morales2025vqa} to discover relevant events for a safe navigation through a city  and then build a scene graph that structures gained information to assist people with low vision in urban traffics. The device  that supports this assistive capability is a glass \cite{morales2025vqa}. In this work, the mobile robot not only follows  but also informs and guides its teammate from behind with a $360^{\circ}$ perspective on the environment  while dodging obstacles.
+
+
+\section{Section}
 \begin{itemize}
 \item{First short definition of scene graph}
 \item{Comparison with other scene graph generation tools and frameworks such as [Concept Graph, OpenIN, HOVSG, Graph2Nav, 3DGraphLLM, SG-Nav, Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution, VLMaps ]  (need mapping beforehand and/or need powerful and additional hardware for models such as Grounding DINO, CLIP, GLIP, SAM, BLIP-2 and even additional drones for mapping, which does not suit our case [real-time, dynamic and unseen environment, reactive, portable/mobile, cost-effective or free/local models, audio interaction, suitable outdoors]). Nearly all the frameworks are used indoors.}
@@ -399,11 +454,45 @@ You can manually copy in the resultant .bbl file and set second argument of $\ba
 	\bibliographystyle{IEEEtran}
 \bibitem{obrenovic2025generative}Obrenovic, B., Gu, X., Wang, G., Godinic, D. \& Jakhongirov, I. Generative AI and human–robot interaction: implications and future agenda for business, society and ethics. {\em AI \& Society}. \textbf{40}, 677-690 (2025)
 
+\bibitem{kaigom2023metarobotics}Kaigom, E. Metarobotics for industry and society: Vision, technologies, and opportunities. {\em IEEE Transactions On Industrial Informatics}. \textbf{20}, 5725-5736 (2023)
+
 	\bibitem{singh2024pushing}
 	Singh, C. and Jayadas, A. Pushing Shopping Cart: An Intentional Exercise for Older Adults. {\em Activities, Adaptation \& Aging}. \textbf{48}, 670-689 (2024)
-	
+
+
+
 	\bibitem{gona2024intelligent}Gona, S. \& Harish, C. Intelligent mobility planning for a cost-effective object follower mobile robotic system with obstacle avoidance using robot vision and deep learning. {\em Evolutionary Intelligence}. \textbf{17}, 1279-1293 (2024)
-	
+
+\bibitem{yalcinkaya2024towards}Yalcinkaya, B., Couceiro, M., Pina, L., Soares, S., Valente, A. \& Remondino, F. Towards Enhanced Human Activity Recognition for Real-World Human-Robot Collaboration. {\em 2024 IEEE International Conference On Robotics And Automation (ICRA)}. pp. 7909-7915 (2024)
+
+\bibitem{rana2023sayplan}Rana, K., Haviland, J., Garg, S., Abou-Chakra, J., Reid, I. \& Suenderhauf, N. Sayplan: Grounding large language models using 3d scene graphs for scalable robot task planning. {\em ArXiv Preprint ArXiv:2307.06135}. (2023)\\
+
+\bibitem{im2024egtr}Im, J., Nam, J., Park, N., Lee, H. \& Park, S. Egtr: Extracting graph from transformer for scene graph generation. {\em Proceedings Of The IEEE/CVF Conference On Computer Vision And Pattern Recognition}. pp. 24229-24238 (2024)
+
+\bibitem{hao2025bctr}Hao, P., Wang, W., Wang, X., Jiang, Y., Jia, H., Cui, S., Wei, J. \& Hao, X. BCTR: bidirectional conditioning transformer for scene graph generation. {\em Information Fusion}. pp. 103260 (2025)
+
+\bibitem{liu2021fully}Liu, H., Yan, N., Mortazavi, M. \& Bhanu, B. Fully convolutional scene graph generation. {\em Proceedings Of The IEEE/CVF Conference On Computer Vision And Pattern Recognition}. pp. 11546-11556 (2021)
+
+\bibitem{liu2024repsgg}Liu, H. \& Bhanu, B. Repsgg: Novel representations of entities and relationships for scene graph generation. {\em IEEE Transactions On Pattern Analysis And Machine Intelligence}. \textbf{46}, 8018-8035 (2024)
+
+\bibitem{newell2017pixels}Newell, A. \& Deng, J. Pixels to graphs by associative embedding. {\em Advances In Neural Information Processing Systems}. \textbf{30} (2017)
+
+\bibitem{amiri2022reasoning}Amiri, S., Chandan, K. \& Zhang, S. Reasoning with scene graphs for robot planning under partial observability. {\em IEEE Robotics And Automation Letters}. \textbf{7}, 5560-5567 (2022)
+
+\bibitem{ravichandran2025safety}Ravichandran, Z., Robey, A., Kumar, V., Pappas, G. \& Hassani, H. Safety Guardrails for LLM-Enabled Robots. {\em ArXiv Preprint ArXiv:2503.07885}. (2025)
+
+\bibitem{kwon2025large}Kwon, S., Park, J., Jang, H., Roh, C. \& Chang, D. Large Language Model Based Autonomous Task Planning for Abstract Commands. {\em 2025 IEEE International Conference On Robotics And Automation (ICRA)}. pp. 11010-11016 (2025)
+
+
+
+\bibitem{viswanathan2024xflie}Viswanathan, V., Saucedo, M., Satpute, S., Kanellakis, C. \& Nikolakopoulos, G. xFLIE: Leveraging Actionable Hierarchical Scene Representations for Autonomous Semantic-Aware Inspection Missions. {\em ArXiv Preprint ArXiv:2412.19571}. (2026)
+
+\bibitem{morales2025vqa}Morales, J., Gebregziabher, B., Cabañeros, A. \& Sanchez-Riera, J. VQA-Driven Event Maps for Assistive Navigation for People with Low Vision in Urban Environments. {\em 2025 IEEE International Conference On Robotics And Automation (ICRA)}. pp. 12458-12464 (2025)
+
+\bibitem{kim2025semantic}Kim, H. \& Ko, B. Semantic scene graph generation based on an edge dual scene graph and message passing neural network. {\em Image And Vision Computing}. pp. 105572 (2025)\\
+
+\bibitem{su2024adopting}Su, P. \& Chen, D. Adopting graph neural networks to analyze human–object interactions for inferring activities of daily living. {\em Sensors}. \textbf{24}, 2567 (2024)
+
 	\bibitem{conceptgraphs}
 	Q. Gu et al., "ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning," 2024 IEEE International Conference on Robotics and Automation (ICRA), Yokohama, Japan, 2024, pp. 5021-5028, doi: 10.1109/ICRA57147.2024.10610243.
 	
