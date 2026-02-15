@@ -20,7 +20,7 @@
 
 \begin{document}
 	
-	\title{Large Language Model- and YOLO-Driven Scene Graph For Inclusive Human-Robot  Teaming in the Society of the Future}
+	\title{Large Language Model- and YOLO-Driven Scene Graph For Inclusive Human-Robot Teaming in the Society of the Future}
 	
 	\author{Trung Kien La and Eric Guiffo Kaigom
 		% <-this % stops a space
@@ -190,11 +190,11 @@ The GUI acts as a visualization and control center for the user. All data stream
 All data and information displayed on the interface, as well as user (voice) input, can be saved locally in common file formats via the GUI, facilitating any necessary fine-tuning or training of the models (YOLO and MLLM) in the future.
 
 \subsection{Setup and Applications}
-The interface provides a selection of different versions and sizes of YOLO and YOLOE (open prompt) models for object detection and segmentation as well as MLLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The dataflow can be divided into five stages (Fig.\ref{framework_architecture}):
+The interface provides a selection of different versions and sizes of YOLO and YOLOE (open prompt) models for object detection and segmentation as well as MLLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The dataflow can be divided into five layers (Fig.\ref{framework_architecture}):
 \begin{enumerate}
 	\item Voice (Speech-To-Text, STT) or text input via the graphical user interface (scene description, navigation goal, robot status or casual chat). 
 	\item Object detection with distance. If casual conversation with the MLLM is initiated then this step is skipped. 
-	\item Preprocessing via rule-based intent analyzer depending on the input. This step could potentially be replaced with a small MLLM for orchestrating the tasks, but a rule-based approach offers lower latency and is more ressource efficient. In dynamic and critical situations, e.g., in road traffic, fast processing is a top priority.
+	\item Preprocessing via rule-based intent analyzer depending on the input. This step could potentially be replaced with a small LLM for orchestrating the tasks, but a rule-based approach offers lower latency and is more ressource efficient. In dynamic and critical situations, e.g., in road traffic, fast processing is a top priority.
 	\item Depending on the intention, the response is output via MLLM or rule-based text (preconfigured response) if the situation requires it. In any case, the implemented text-to-speech system (TTS) reads out the answer. Complex scene descriptions or casual conversations are forwarded to MLLM, while the robot's status and navigation goals (following an object or simply driving to an object) are rule-based processes.    
 	\item When navigation or system status is requested, the system writes or subscribes to ROS2 topics to control the robot or query its status.
 \end{enumerate}
@@ -208,7 +208,7 @@ The interface provides a selection of different versions and sizes of YOLO and Y
 
 Efficient YOLO-based object detection serves three purposes in the system. First, YOLO provides real-time 2D detections that are fused with the ZED 2i depth measurements to estimate spatial object data (e.g., distance and 3D localization, see Fig. \ref{framework_architecture}), which are then formatted (Fig. \ref{transformation_template}) and passed to the MLLM as part of the grounded input prompt. Second, although modern MLLMs/VLMs can also produce 2D bounding boxes, YOLO is used as a lightweight preliminary detection layer to reduce MLLM workload and reduce inference latency.
 
-[The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates ($x = 0$, $y = 0$, $z = 0$). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]
+%[The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates ($x = 0$, $y = 0$, $z = 0$). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]%
 
 Third, it is used to navigate and follow a recognized object. To this end, the distance from each detected object to the camera and the pairwise inter-object distances within a frame are computed using the 3D Euclidean distance. The selection of the target object is initiated through its unique identification (ID), which is facilitated by either vocal input or interface selection. 
 
