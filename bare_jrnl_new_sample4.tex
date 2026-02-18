@@ -14,13 +14,15 @@
 \usepackage{cleveref}
 %added xcolor for box color
 \usepackage{xcolor}
+\usepackage{enumitem}
+
 
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
 
 \begin{document}
 	
-	\title{Combining Multimodal Scene Graph and  Large Language Model  for Inclusive Human-Robot  Teaming in the Society of the Future}
+	\title{Combining Multimodal Scene Graph and  Large Language Model  for Inclusive Human-Robot  Teanming in the Society of the Future}
 	
 	\author{Trung Kien La and Eric Guiffo Kaigom
 		% <-this % stops a space
@@ -152,24 +154,24 @@ CLIP is widely used for processing semantic features due to its open‑vocabular
 \subsection{Operationalization  of scene graphs}
 Scene graph creation  relies on the detection of objects on images and construction of a structured representation of these objects along with their semantic attributes, and relationships. This is done for different societal purposes \cite{amiri2022reasoning}. Included are  finding someone a place to sit in an indoor environment \cite{ravichandran2025safety}, assistance in cooking \cite{kwon2025large}, and  inspection missions in city-scale outdoor environments \cite{viswanathan2024xflie}. However, human activities are  characterized by a long-term horizon beyond an image.
 
- Long-term goals in  human-inhabited environments are handled in \cite{ravichandran2025safety} by federating multiple local scene graphs from previous pictures to yield a global scene graph.  In this work, we leverage a multi-modal LLM (MLLM) that exploits the reasoning history and its generalization capability to achieve long term reasoning. Such a contextual grounding is also enabled in \cite{kwon2025large} using the generative capability of an LLM in conjunction with preceding scenarios. We enlarge the scope of this scene-centered contextualization. Our goal is to integrate the mobile robotic device in the collective intelligence loop, as advocated in \cref{introi}. Specifically, internal processes of the robot, such as its energy consumption and motion dynamics, are taken into account. This allows for the management of both the  planning and physical feasibility of tasks. Indeed,  spatial goals specified by a human teammate and requirements on the robot dynamics are considered in the communication, taking care to keep the vocabulary as accessible as possible. A human teammate can thereby ask  the robot whether it has localized the target object in its current mental model and can physically reach that object long before an  attempt to move to the object is started. Visual question-answering queries have been used in \cite{morales2025vqa} to discover relevant events for a safe navigation through a city  and then build a scene graph that structures gained information to assist people with low vision in urban traffics. The device  that supports this assistive capability is a glass \cite{morales2025vqa}. In this work, the mobile robot not only follows  but also informs and guides its teammate from behind with a $360^{\circ}$ perspective on the environment  while dodging obstacles.
+ Long-term goals in  human-inhabited environments are handled in \cite{ravichandran2025safety} by federating multiple local scene graphs from previous pictures to yield a global scene graph.  In this work, we leverage a MLLM that exploits the reasoning history and its generalization capability to achieve long term reasoning. Such a contextual grounding is also enabled in \cite{kwon2025large} using the generative capability of an LLM in conjunction with preceding scenarios. We enlarge the scope of this scene-centered contextualization. Our goal is to integrate the mobile robotic device in the collective intelligence loop, as advocated in \cref{introi}. Specifically, internal processes of the robot, such as its energy consumption and motion dynamics, are taken into account. This allows for the management of both the  planning and physical feasibility of tasks. Indeed,  spatial goals specified by a human teammate and requirements on the robot dynamics are considered in the communication, taking care to keep the vocabulary as accessible as possible. A human teammate can thereby ask  the robot whether it has localized the target object in its current mental model and can physically reach that object long before an  attempt to move to the object is started. Visual question-answering queries have been used in \cite{morales2025vqa} to discover relevant events for a safe navigation through a city  and then build a scene graph that structures gained information to assist people with low vision in urban traffics. The device  that supports this assistive capability is a glass \cite{morales2025vqa}. In this work, the mobile robot not only follows  but also informs and guides its teammate from behind with a $360^{\circ}$ perspective on the environment  while dodging obstacles.
 
 
 \section{Section}
-\begin{itemize}
-\item{First short definition of scene graph}
-\item{Comparison with other scene graph generation tools and frameworks such as [Concept Graph, OpenIN, HOVSG, Graph2Nav, 3DGraphLLM, SG-Nav, Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution, VLMaps ]  (need mapping beforehand and/or need powerful and additional hardware for models such as Grounding DINO, CLIP, GLIP, SAM, BLIP-2 and even additional drones for mapping, which does not suit our case [real-time, dynamic and unseen environment, reactive, portable/mobile, cost-effective or free/local models, audio interaction, suitable outdoors]). Nearly all the frameworks are used indoors.}
-\item{Most similar:  }
-\item{Can an Embodied Agent Find Your –Cat-shaped Mug? LLM-Based Zero-Shot Object Navigation (uses depth information, but needs mapping)}
-\item{VISIONGPT (YOLO World, ChatGPT, voice input and feedback)}
-\item {Cobots \& Service Robots \& Society 5.0/6.0}
-\end{itemize}
+%\begin{itemize}
+%\item{First short definition of scene graph}
+%\item{Comparison with other scene graph generation tools and frameworks such as [Concept Graph, OpenIN, HOVSG, Graph2Nav, 3DGraphLLM, SG-Nav, Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution, VLMaps ]  (need mapping beforehand and/or need powerful and additional hardware for models such as Grounding DINO, CLIP, GLIP, SAM, BLIP-2 and even additional drones for mapping, which does not suit our case [real-time, dynamic and unseen environment, reactive, portable/mobile, cost-effective or free/local models, audio interaction, suitable outdoors]). Nearly all the frameworks are used indoors.}
+%\item{Most similar:  }
+%\item{Can an Embodied Agent Find Your –Cat-shaped Mug? LLM-Based Zero-Shot Object Navigation (uses depth information, but needs mapping)}
+%\item{VISIONGPT (YOLO World, ChatGPT, voice input and feedback)}
+%\item {Cobots \& Service Robots \& Society 5.0/6.0}
+%\end{itemize}
 
 A scene graph (SG) serves to represent a scene with objects,
 their attributes, and relationships between other objects in a structured way.
 Scene graph generation (SGG) can be based on images, text, and videos.
 Such a hierarchical graph data structure consists of nodes (O) and edges (E). Nodes (O) are objects such as persons, animals, places or things (bicycle, car, etc.), but also parts of other objects (e.g., limbs such as a person's arms). Each object node is usually equipped with attributes that describe the state of the object (e.g., colors, size, or pose). The edges (E) represent the relationships between the object pairs. These connections between objects describe actions (man holds cup) or positions (man stands in front of a bench). Typically, such a relationship is expressed as a
-$\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple. [small SG image excerpt here]
+$\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple. 
 An SG can be defined as a tuple:
 
 \begin{equation}
@@ -214,12 +216,12 @@ Some of the frameworks presented require prior mapping or 3D reconstruction \cit
 This section presents the developed methods and their implementation. 
 
 \subsection{Overview of Features and Components}
-Our framework pAIrSEEption is a multimodal voice assistance system for environmental detection and navigation with a responsive graphical user interface (GUI) based on PySide6 (see Fig. \ref{framework_architecture}), which serves as the interface between humans and the machine. Fig.\ref{overview_framework} illustrates the features of the user interface. The GUI can be installed across various platforms. In this case, the interface was installed on the Jetson AGX Orin (32GB version), an edge device and on a standard laptop with an integrated Nvidia graphics card. Subsequently, a ZED 2i stereo camera can be connected to these devices. The mobile Husky robot is utilized as the mounting platform for the components as shown in Fig.\ref{husky_robot}.
+Our framework, coined pAIrSEEption, is a multimodal voice assistance system for environmental detection and navigation with a responsive asynchronous graphical user interface (GUI) based on PySide6 (see Fig. \ref{framework_architecture}), which serves as the interface between humans and the machine. Fig.\ref{overview_framework} illustrates the features of the user interface. The GUI can be installed across various platforms. For instance, the interface was installed on the Jetson AGX Orin (32GB version), an edge device and on a standard laptop with an integrated Nvidia graphics card. Subsequently, a ZED 2i stereo camera can be connected to these devices. The mobile Husky UGV robot \cite{husky} is utilized as the mounting platform for the components as shown in Fig.\ref{husky_robot}.
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=2.5in]{images/overview_eng.png}
-	\caption{Husky Robot as a mounting platform for the ZED 2i camera.}
+	\caption{Overview of features and components of the pAIrSEEption framework.}
 	\label{overview_framework}
 \end{figure}
 
@@ -245,7 +247,7 @@ The GUI acts as a visualization and control center for the user. All data stream
 All data and information displayed on the interface, as well as user (voice) input, can be saved locally in common file formats via the GUI, facilitating any necessary fine-tuning or training of the models (YOLO and MLLM) in the future.
 
 \subsection{Setup and Applications}
-The interface provides a selection of different versions and sizes of YOLO and YOLOE (open prompt) models for object detection and segmentation as well as MLLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The dataflow can be divided into five layers (Fig.\ref{framework_architecture}):
+The interface provides a selection of different versions and sizes of YOLO and YOLOE (open prompt) models for object detection and segmentation as well as MLLMs for scene interpretation, which can be expanded as needed.  In addition, specific YOLO settings can be configured, such as showing and hiding bounding boxes, classification, and confidence. With an additional confidence slide bar, objects that are not well recognized can be filtered, which are below the set threshold. The dataflow can be divided into mainly five layers (Fig.\ref{framework_architecture}):
 \begin{enumerate}
 	\item Voice (Speech-To-Text, STT) or text input via the graphical user interface (scene description, navigation goal, robot status or casual chat). 
 	\item Object detection with distance. If casual conversation with the MLLM is initiated then this step is skipped. 
@@ -261,7 +263,7 @@ The interface provides a selection of different versions and sizes of YOLO and Y
 	\label{framework_architecture}
 \end{figure*}
 
-Efficient YOLO-based object detection serves three purposes in the system. First, YOLO provides real-time 2D detections that are fused with the ZED 2i depth measurements to estimate spatial object data (e.g., distance and 3D localization, see Fig. \ref{framework_architecture}), which are then formatted (Fig. \ref{transformation_template}) and passed to the MLLM as part of the grounded input prompt. Second, although modern MLLMs/VLMs can also produce 2D bounding boxes, YOLO is used as a lightweight preliminary detection layer to reduce MLLM workload and reduce inference latency.
+Efficient YOLO-based object detection serves three purposes in the system. First, YOLO provides real-time 2D detections that are fused with the ZED 2i depth measurements, leveraging the ZED SDK, to estimate spatial object data (e.g., distance and 3D localization, see Fig. \ref{framework_architecture}), which are then formatted (Fig. \ref{transformation_template}) and passed to the MLLM as part of the grounded input prompt. Second, although modern MLLMs/VLMs can also produce 2D bounding boxes, YOLO is used as a lightweight preliminary detection layer to reduce MLLM workload and reduce inference latency.
 
 %[The ZED SDK provides high-resolution stereo images and a depth map, which shows the distance of each pixel in the image. It also offers position tracking and a velocity estimation of the objects via the Python API, pyzed. This API can be used to configure camera parameters, such as resolution, FPS, depth mode, and depth measurement units. The resolution is set to 1280 x 720 pixels by default, with 60 FPS and performance mode for depth detection enabled. The unit of measurement is set to meters. The origin of the stereo camera is set to the coordinates ($x = 0$, $y = 0$, $z = 0$). For compatibility reasons, the camera's 3D coordinate system has been set to match the one used in Robot Operating System 2 (ROS2), a middleware framework for robots, since the mobile robot is based on it.]%
 
@@ -308,13 +310,11 @@ The GUI offers various selections of MLLMs. These can be divided into two catego
 
 
 The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
-in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot.
-This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
+in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot. Gemma 3 supports multimodale input with a very large context window and offers features that can improve attention to small details in images .Qwen 2.5 VL is often preferred for accurate, consistent captions—especially when text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
 Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs).
 
-The experiments (in SECTION X) entail the implementation of accessible MLLMs and VLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client.
-Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller MLLMs.
-\begin{figure}[!b]
+The experiments (in section \ref{sec:experiments}) entail the implementation of accessible MLLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
+\begin{figure}[!ht]
 	\centering
 	\includegraphics[width=2.5in]{images/jetson_client_cropped.pdf}
 	\caption{Client-server architecture between application device and Ollama server.}
@@ -374,9 +374,9 @@ The following text-prompt instructs the MLLM on processing data. The goal is to 
 %\vspace{1em} 
 
 The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{transformation_template} presents a schematic representation of the result of this transformation using the template. By combining the image data with the readable object data using the MLLM, an understandable 3D scene is described, which is accessible to humans.
-The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function.
+The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function. This could be used, for example, to help a blind or visually impaired person navigate. The result of this semantic scene interpretation is shown in section \ref{subsec:sceneunderstanding}.
 
-\begin{figure}[!b]
+\begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\columnwidth]{images/transformation_template.png}
 	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input}
@@ -384,46 +384,217 @@ The result of the scene interpretation is displayed as text in the output window
 \end{figure}
 
 
-\begin{figure}[htpb]
+%\begin{figure}[htpb]
+%	\centering
+%	\includegraphics[width=8.7cm]{images/yolo_timeline_yolo11l_tensorRT.png}
+%	\caption{Client-server architecture between application device and Ollama server.}
+%	\label{yolo_timeline_tensorrt11}
+%\end{figure}
+
+\section{Evaluation and Results}
+\label{sec:experiments}
+This section presents hardware test results and benchmarks from experiments with YOLO models within pAIrSEEption and various inference times with MLLMs such as Gemma 3 and Qwen 2.5 VL until a scene description is generated. The second experiment shows results from a usability evaluation of the framework with a focus on human robot interaction and object following.
+
+\subsection{Performance Analysis of YOLO Models}
+Fig. \ref{fig:yolo_fps} and Fig. \ref{fig:yolo_gpu} show the average FPS and GPU usage of a variety of popular YOLO models of different sizes that are integrated into pAIrSEEption, respectively. The FPS value is an important measure for evaluating the perception module in the overall system and affects the response time, safety, precision of navigation, and tracking. The framework offers easy integration into the system by storing a PT, ONNX, or engine YOLO model in the same folder as the pAIrSEEption application. These models also include engine models that have been optimized with TensorRT (to 16-Bit Floating Point) on a consumer laptop (Nvidia RTX A2000 graphics card with 8 GB VRAM, 32 GB RAM and i7-13800H processor) to demonstrate accessibility.
+A confidence threshold of 40\% was selected on the GUI. Data collection took place in a laboratory setting. The hardware performance data of the different YOLO models was recorded on the GUI over a set number of frames of around 700 to 1750 frames with varying activity within the scene (static and moving objects, while moving objects are counted as active). 
+The data recording is part of the GUI, and the diagrams were created from this data. The results show that The yolo11n model achieves the best value in the average FPS evaluation with just under 40 FPS, which was to be expected as this model is the smallest in this test series.
+The large yolo11l\_tensorRT is at a similar level and shows that optimization with TensorRT achieves a significant improvement of approximately 5 FPS on average compared to the standard yolo11l PT model. When comparing the two optimized TensorRT models in the overall system, the YOLO 11 version is ahead of version 8 by around 5 FPS on average and with a  negligibly higher GPU consumption of 2\% to 3\%.
+
+\begin{figure}[!ht]
 	\centering
-	\includegraphics[width=8.7cm]{images/yolo_timeline_yolo11l_tensorRT.png}
-	\caption{Client-server architecture between application device and Ollama server.}
-	\label{yolo_timeline_tensorrt11}
+	\includegraphics[width=\columnwidth] {images/yolo_performance_fps.png}
+	\caption{FPS analysis of YOLO models on the laptop.}
+	\label{fig:yolo_fps}
 \end{figure}
+
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[width=\columnwidth, trim={0 550 720 42}, clip]{images/yolo_performance_1_of_2.png}
+%	\caption{ FPS Analysis of YOLO Models on the laptop.}
+%	\label{fig:yolo_fps}
+%\end{figure}
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=\columnwidth] {images/yolo_performance_gpu.png}
+	\caption{GPU usage analysis of YOLO Models on the laptop.}
+	\label{fig:yolo_gpu}
+\end{figure}
+
+
+\subsection{Performance of MLLMs and Showcase of Scene Understanding}
+\label{subsec:sceneunderstanding}
+Fig. \ref{timing_breakdown} shows the duration of various Gemma 3 and Qwen 2.5 VL models to generate and describe a current scene with object data. Ollama is used to determine this  metric and record it in measurement logs. These logs consist of several parts. They contain metadata such as timestamps, an ID (for unique assignment of images and audio files to an analysis log), and the model used for scene interpretation. In addition, the number of input and output tokens is determined. In this test, the same scene was always tested with different models. 
+The duration from when the user initiates a request for the scene description to the output of the response is broken down into three parts: the model load time, the input processing (both on the server as shown in Fig. \ref{client_server}) and the output generation sent from the server to the consumer laptop where pAIrSEEption runs. 
+
+[...]
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=\columnwidth] {images/lab.jpg}
+	\caption{GPU usage analysis of YOLO Models on the laptop.}
+	\label{mllm_scene_lab}
+\end{figure}
+
+\begin{center} 
+	\fcolorbox{black}{black!5}{%
+		\begin{minipage}{0.92\columnwidth}
+			\setlength{\parskip}{0.5em}
+			\ttfamily
+			
+		You are in a room, presumably an office.
+		Directly in front of you, about 1.8 meters away and slightly to the left, is a screen. To your right, about 2.5 meters away, is a chair. To your left, about 3.7 meters away, is another chair.
+		A little further ahead, about 4 meters away and to your left, is another
+		screen. To your right, about 5 meters away, is another chair. Be aware of the chairs and screens as potential obstacles.
+		The floor appears to be level.
+		\end{minipage}%
+	}
+\end{center}
+
+[...]
+
 \begin{figure}[!htpb]
 	\centering
 	\includegraphics[width=8.7cm]{images/timing_breakdown.png}
-	\caption{Client-server architecture between application device and Ollama server.}
+	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfiles and adapted to our application. Abbreviations: "G3" = Geemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
 	\label{timing_breakdown}
 \end{figure}
-\begin{figure}[!htpb]
+
+\subsection{Usability Study}
+%\begin{table*}[!ht]
+%	\centering
+%	\caption{Quantitative Results of the Usability Evaluation ($N=7$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.}
+%	\label{tab:user_study_results}
+%	\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+%		\hline
+%		\textbf{N=7} & \textbf{Q1} & \textbf{Q2} & \textbf{Q3*} & \textbf{Q4} & \textbf{Q5} & \textbf{Q6*} & \textbf{Q7} & \textbf{Q8} & \textbf{Q9} \\ \hline
+%		P1 & 4 & 4 & 3 & 5 & 4 & 1 & 4 & 5 & 4 \\ \hline
+%		P2 & 4 & 4 & 3 & 5 & 5 & 1 & 4 & 5 & 4 \\ \hline
+%		P3 & 5 & 5 & 1 & 4 & 5 & 2 & 5 & 5 & 5 \\ \hline
+%		P4 & 5 & 5 & 1 & 5 & 5 & 2 & 5 & 5 & 5 \\ \hline
+%		P5 & 5 & 5 & $-$ & 4 & 5 & 1 & 5 & 5 & 5 \\ \hline
+%		P6 & 5 & 5 & 1 & 5 & 5 & 1 & 4 & 4 & 5 \\ \hline
+%		P7 & 5 & 4 & 2 & 5 & 4 & 3 & 4 & 4 & 3 \\ \hline \hline
+%		\textbf{Mean} $\bar{x}$ & \textbf{4.71} & \textbf{4.57} & \textbf{1.83} & \textbf{4.71} & \textbf{4.71} & \textbf{1.57} & \textbf{4.43} & \textbf{4.71} & \textbf{4.43} \\ \hline
+%		\textbf{SD} $s$ & \textbf{0.45} & \textbf{0.49} & \textbf{0.90} & \textbf{0.45} & \textbf{0.45} & \textbf{0.73} & \textbf{0.49} & \textbf{0.45} & \textbf{0.73} \\ \hline
+%	\end{tabular}
+%	\vspace{1ex}
+%	\begin{flushleft}
+%		\small *Negative questions: lower values indicate better performance (fewer errors/issues).
+%	\end{flushleft}
+%\end{table*}
+
+%\subsubsection{Survey Design}
+%\begin{table}[!ht]
+%	\centering
+%	\caption{Survey Questionnaire Items and Scales}
+%	\label{tab:questionnaire}
+%	\footnotesize 
+%	\begin{tabular}{|l|p{4.5cm}|l|}
+%		\hline
+%		\textbf{ID} & \textbf{Question (Translated from German)} & \textbf{Scale (1--5)} \\ \hline
+%		\multicolumn{3}{|l|}{\textit{Part 1: Voice Control}} \\ \hline
+%		Q1 & How easy was it to give voice commands? & Very hard -- Very easy \\ \hline
+%		Q2 & Did the robot reliably recognize your commands? & Never -- Always \\ \hline
+%		Q3* & Did you have to repeat commands? & Never -- Always \\ \hline
+%		\multicolumn{3}{|l|}{\textit{Part 2: Object Tracking}} \\ \hline
+%		Q4 & Did the robot identify the correct object? & Never -- Always \\ \hline
+%		Q5 & How fast did the robot react to your command? & Very slow -- Very fast \\ \hline
+%		Q6* & Did the robot lose the object? & Never -- Always \\ \hline
+%		\multicolumn{3}{|l|}{\textit{Part 3: User Experience}} \\ \hline
+%		Q7 & How easy was the overall operation? & Very hard -- Very easy \\ \hline
+%		Q8 & Did you feel safe while the robot followed? & Not at all -- Fully \\ \hline
+%		Q9 & Would you use this in real applications? & No -- Yes \\ \hline
+%	\end{tabular}
+%\end{table}
+
+\subsubsection{Experimental Setup}
+Participants (N = 7) from various technical backgrounds (Engineering Bachelor and Master levels) were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the student. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the students were asked to anonymously evaluate their overall impression in a survey.
+
+\subsubsection{Study Design}
+To evaluate the usability of mainly the voice control and object tracking (following an object with the mobile robot), a survey consisting of nine Likert-scale items (with scores of 1 to 5) and three open questions was conducted. The items were structured as follows:
+
+\begin{itemize}[leftmargin=*]
+	\item \textbf{Voice Control:} 
+	\begin{enumerate}[label=Q\arabic*:, series=survey, widest=Q12, leftmargin=*]
+		\item Ease of giving commands. 
+		\item Recognition reliability. 
+		\item Necessity of repetitions (negative item*). 
+	\end{enumerate}
+	
+	\item \textbf{Object Tracking:} 
+	\begin{enumerate}[label=Q\arabic*:, resume=survey, widest=Q12, leftmargin=*]
+		\item Correct object identification.
+		\item System response time. 
+		\item Frequency of losing the target (negative item*). 
+	\end{enumerate}
+	
+	\item \textbf{User Experience:} 
+	\begin{enumerate}[label=Q\arabic*:, resume=survey, widest=Q12, leftmargin=*]
+		\item Overall ease of use. 
+		\item Perceived safety during operation. 
+		\item Intention to use in real-world applications. 
+	\end{enumerate}
+	
+	\item \textbf{Qualitative Feedback (Open-ended):} 
+	\begin{enumerate}[label=Q\arabic*:, resume=survey, widest=Q12, leftmargin=*]
+		\item Positive aspects of the system operation. 
+		\item Suggestions for improving user comfort.
+		\item Proposed additional functions or commands. 
+	\end{enumerate}
+\end{itemize}
+
+The questions were rated by participants on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 6 was calculated for this question.
+
+\subsubsection{Results and Discussion}
+
+\begin{table}[htpb]
 	\centering
-	\includegraphics[width=8.7cm]{images/yolo_performance_1_of_2.png}
-	\caption{Client-server architecture between application device and Ollama server.}
-	\label{yolo_performance_1_2}
-\end{figure}
+	\caption{Quantitative Results of the Usability Evaluation ($N=7$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
+	*Negative questions: lower values indicate better performance.}
+	\label{tab:user_study_results}
+	\setlength{\tabcolsep}{3.5pt} 
+	\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+		\hline
+		\textbf{Participant} & \textbf{Q1} & \textbf{Q2} & \textbf{Q3*} & \textbf{Q4} & \textbf{Q5} & \textbf{Q6*} & \textbf{Q7} & \textbf{Q8} & \textbf{Q9} \\ \hline
+		P1 & 4 & 4 & 3 & 5 & 4 & 1 & 4 & 5 & 4 \\ \hline
+		P2 & 4 & 4 & 3 & 5 & 5 & 1 & 4 & 5 & 4 \\ \hline
+		P3 & 5 & 5 & 1 & 4 & 5 & 2 & 5 & 5 & 5 \\ \hline
+		P4 & 5 & 5 & 1 & 5 & 5 & 2 & 5 & 5 & 5 \\ \hline
+		P5 & 5 & 5 & $-$ & 4 & 5 & 1 & 5 & 5 & 5 \\ \hline
+		P6 & 5 & 5 & 1 & 5 & 5 & 1 & 4 & 4 & 5 \\ \hline
+		P7 & 5 & 4 & 2 & 5 & 4 & 3 & 4 & 4 & 3 \\ \hline \hline
+		\textbf{Mean} $\bar{x}$ & \textbf{4.71} & \textbf{4.57} & \textbf{1.83} & \textbf{4.71} & \textbf{4.71} & \textbf{1.57} & \textbf{4.43} & \textbf{4.71} & \textbf{4.43} \\ \hline
+		\textbf{SD} $s$ & \textbf{0.45} & \textbf{0.49} & \textbf{0.90} & \textbf{0.45} & \textbf{0.45} & \textbf{0.73} & \textbf{0.49} & \textbf{0.45} & \textbf{0.73} \\ \hline
+	\end{tabular}
+	\vspace{1ex}
+\end{table}
 
-\section{Experiments and Results}
+The quantitive results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the subsequent correct object identification by the system, the system response time, and the perceived safety during robot operation (Q1, Q4, Q5 and Q8: $\bar{x}$ = 4.71 of 5 and in each case $s$ = 0.45). Furthermore, the reliability of object recognition was rated as very good (Q2: $\bar{x}$ = 4.57 and Q3: $\bar{x}$ = 1.83) and the overall operation of robot and GUI (Q7: $\bar{x}$ = 4.43) was also rated very highly. The participants are also willing to use such a system in real-world applications (Q9: $\bar{x}$ = 4.43). 
+While Q6: $\bar{x}$ = 1.57 further confirms that the tracking behavior was perceived as predictable and non-threatening. 
+The low standard deviation $s$ across most items indicates a high consensus among participants.
+It should be noted, however, that the participants all come from the field of engineering, so that an intrinsic interest in technology must be assumed. The study is also limited by the small sample size ($N=7$), which serves as a pilot evaluation.  
+For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase. 
+The qualitative feedback (Q10 to Q12) reveal that participants particularly emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
+Potential for improvement was seen primarily in the robot driving around corners (slow turns). Suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
+Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm.
 
-
-
-\section{Text}
+Overall, the results suggest that our system can effectively lower the entry barrier for robot interaction and shows great potential for service robotics in domestic or industrial settings.
 
 \section{Conclusion}
 The conclusion goes here.
 
 
 \section*{Acknowledgments}
-This should be a simple paragraph before the References to thank those individuals and institutions who have supported your work on this article.
+We would like to thank Mr. S. Azizpour for his support in conducting the usability study. We would also like to thank all participants for their time and feedback.
 
 
-
-{\appendix[Proof of the Zonklar Equations]
-Use $\backslash${\tt{appendix}} if you have a single appendix:
-Do not use $\backslash${\tt{section}} anymore after $\backslash${\tt{appendix}}, only $\backslash${\tt{section*}}.
-If you have multiple appendixes use $\backslash${\tt{appendices}} then use $\backslash${\tt{section}} to start each appendix.
-You must declare a $\backslash${\tt{section}} before using any $\backslash${\tt{subsection}} or using $\backslash${\tt{label}} ($\backslash${\tt{appendices}} by itself
- starts a section numbered zero.)}
+%{\appendix[Proof of the Zonklar Equations]
+%Use $\backslash${\tt{appendix}} if you have a single appendix:
+%Do not use $\backslash${\tt{section}} anymore after $\backslash${\tt{appendix}}, only $\backslash${\tt{section*}}.
+%If you have multiple appendixes use $\backslash${\tt{appendices}} then use $\backslash${\tt{section}} to start each appendix.
+%You must declare a $\backslash${\tt{section}} before using any $\backslash${\tt{subsection}} or using $\backslash${\tt{label}} ($\backslash${\tt{appendices}} by itself
+% starts a section numbered zero.)}
 
 
 
@@ -436,19 +607,19 @@ You must declare a $\backslash${\tt{section}} before using any $\backslash${\tt{
 
 
 
-\section{References Section}
-You can use a bibliography generated by BibTeX as a .bbl file.
-BibTeX documentation can be easily obtained at:
-http://mirror.ctan.org/biblio/bibtex/contrib/doc/
-The IEEEtran BibTeX style support page is:
-http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\section{References Section}
+%You can use a bibliography generated by BibTeX as a .bbl file.
+%BibTeX documentation can be easily obtained at:
+%http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+%The IEEEtran BibTeX style support page is:
+%http://www.michaelshell.org/tex/ieeetran/bibtex/
 
 % argument is your BibTeX string definitions and bibliography database(s)
 %\bibliography{IEEEabrv,../bib/paper}
 %
-\section{Simple References}
-You can manually copy in the resultant .bbl file and set second argument of $\backslash${\tt{begin}} to the number of references
-(used to reserve space for the reference number labels box).
+%\section{Simple References}
+%You can manually copy in the resultant .bbl file and set second argument of $\backslash${\tt{begin}} to the number of references
+%(used to reserve space for the reference number labels box).
 
 \begin{thebibliography}{1}
 	\bibliographystyle{IEEEtran}
@@ -493,6 +664,8 @@ You can manually copy in the resultant .bbl file and set second argument of $\ba
 
 \bibitem{su2024adopting}Su, P. \& Chen, D. Adopting graph neural networks to analyze human–object interactions for inferring activities of daily living. {\em Sensors}. \textbf{24}, 2567 (2024)
 
+\bibitem{husky}"Husky A200 User Manual," Clearpath, https://docs.clearpathrobotics.com/docs\_robots/outdoor\_robots/husky/\\a200/user\_manual\_husky (accessed Feb. 18, 2026).
+
 	\bibitem{conceptgraphs}
 	Q. Gu et al., "ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning," 2024 IEEE International Conference on Robotics and Automation (ICRA), Yokohama, Japan, 2024, pp. 5021-5028, doi: 10.1109/ICRA57147.2024.10610243.
 	
@@ -525,6 +698,16 @@ You can manually copy in the resultant .bbl file and set second argument of $\ba
 	
 	\bibitem{vlmaps}
 	C. Huang, O. Mees, A. Zeng and W. Burgard, "Visual Language Maps for Robot Navigation," 2023 IEEE International Conference on Robotics and Automation (ICRA), London, United Kingdom, 2023, pp. 10608-10615, doi: 10.1109/ICRA48891.2023.10160969.
+	
+	\bibitem{gemma3}
+	Gemma Team et al., "Gemma 3 Technical Report," arXiv:2503.19786, 2025.
+	[Online]. Available: https://doi.org/10.48550/arXiv.2503.19786
+	
+	\bibitem{qwen25vl}
+	S. Bai et al., “Qwen2.5-VL Technical Report,” arXiv:2502.13923, 2025.
+	[Online]. Available: 
+	https://doi.org/10.48550/arXiv.2502.13923
+	
 	
 \end{thebibliography}
 
