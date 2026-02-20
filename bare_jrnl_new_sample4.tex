@@ -312,7 +312,6 @@ The GUI offers various selections of MLLMs. These can be divided into two catego
 The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
 in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot. Gemma 3 supports multimodale input with a very large context window and offers features that can improve attention to small details in images .Qwen 2.5 VL is often preferred for accurate, consistent captions—especially when text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
 Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs).
-
 The experiments (in section \ref{sec:experiments}) entail the implementation of accessible MLLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
 \begin{figure}[!ht]
 	\centering
@@ -432,7 +431,7 @@ The duration from when the user initiates a request for the scene description to
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\columnwidth] {images/lab.jpg}
-	\caption{GPU usage analysis of YOLO Models on the laptop.}
+	\caption{Qualitative assessment of Gemma 3 12B scene description capability. The model integrates real-time object detection data to generate a natural language representation of the robot's environment for assistive navigation}
 	\label{mllm_scene_lab}
 \end{figure}
 
@@ -446,17 +445,17 @@ The duration from when the user initiates a request for the scene description to
 		Directly in front of you, about 1.8 meters away and slightly to the left, is a screen. To your right, about 2.5 meters away, is a chair. To your left, about 3.7 meters away, is another chair.
 		A little further ahead, about 4 meters away and to your left, is another
 		screen. To your right, about 5 meters away, is another chair. Be aware of the chairs and screens as potential obstacles.
-		The floor appears to be level.
+		The floor appears to be level.*
 		\end{minipage}%
 	}
 \end{center}
-
+*The response from the Gemma 3 12 B model was originally generated in German.
 [...]
 
 \begin{figure}[!htpb]
 	\centering
 	\includegraphics[width=8.7cm]{images/timing_breakdown.png}
-	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfiles and adapted to our application. Abbreviations: "G3" = Geemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
+	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfiles and adapted to our application. Abbreviations: "G3" = Gemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
 	\label{timing_breakdown}
 \end{figure}
 
@@ -544,13 +543,13 @@ To evaluate the usability of mainly the voice control and object tracking (follo
 	\end{enumerate}
 \end{itemize}
 
-The questions were rated by participants on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 6 was calculated for this question.
+The questions were rated by participants on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 9 was used to calculate mean and standard derivation for this question.
 
 \subsubsection{Results and Discussion}
 
 \begin{table}[htpb]
 	\centering
-	\caption{Quantitative Results of the Usability Evaluation ($N=7$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
+	\caption{Quantitative Results of the Usability Evaluation ($N=10$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
 	*Negative questions: lower values indicate better performance.}
 	\label{tab:user_study_results}
 	\setlength{\tabcolsep}{3.5pt} 
@@ -563,18 +562,21 @@ The questions were rated by participants on a scale of 1 to 5, with 1 being the 
 		P4 & 5 & 5 & 1 & 5 & 5 & 2 & 5 & 5 & 5 \\ \hline
 		P5 & 5 & 5 & $-$ & 4 & 5 & 1 & 5 & 5 & 5 \\ \hline
 		P6 & 5 & 5 & 1 & 5 & 5 & 1 & 4 & 4 & 5 \\ \hline
-		P7 & 5 & 4 & 2 & 5 & 4 & 3 & 4 & 4 & 3 \\ \hline \hline
+		P7 & 5 & 4 & 2 & 5 & 4 & 3 & 4 & 4 & 3 \\ \hline
+		P8 & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\ \hline
+		P9 & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\ \hline
+		P10 & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\ \hline \hline
 		\textbf{Mean} $\bar{x}$ & \textbf{4.71} & \textbf{4.57} & \textbf{1.83} & \textbf{4.71} & \textbf{4.71} & \textbf{1.57} & \textbf{4.43} & \textbf{4.71} & \textbf{4.43} \\ \hline
-		\textbf{SD} $s$ & \textbf{0.45} & \textbf{0.49} & \textbf{0.90} & \textbf{0.45} & \textbf{0.45} & \textbf{0.73} & \textbf{0.49} & \textbf{0.45} & \textbf{0.73} \\ \hline
+		\textbf{SD} $s$ & \textbf{0.49} & \textbf{0.53} & \textbf{0.98} & \textbf{0.49} & \textbf{0.49} & \textbf{0.79} & \textbf{0.53} & \textbf{0.49} & \textbf{0.79} \\ \hline
 	\end{tabular}
 	\vspace{1ex}
 \end{table}
 
-The quantitive results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the subsequent correct object identification by the system, the system response time, and the perceived safety during robot operation (Q1, Q4, Q5 and Q8: $\bar{x}$ = 4.71 of 5 and in each case $s$ = 0.45). Furthermore, the reliability of object recognition was rated as very good (Q2: $\bar{x}$ = 4.57 and Q3: $\bar{x}$ = 1.83) and the overall operation of robot and GUI (Q7: $\bar{x}$ = 4.43) was also rated very highly. The participants are also willing to use such a system in real-world applications (Q9: $\bar{x}$ = 4.43). 
+The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the subsequent correct object identification by the system, the system response time, and the perceived safety during robot operation (Q1, Q4, Q5 and Q8: $\bar{x}$ = 4.71 of 5 and in each case $s$ = 0.49). Furthermore, the reliability of object recognition was rated as very good (Q2: $\bar{x}$ = 4.57 and Q3: $\bar{x}$ = 1.83) and the overall operation of robot and GUI (Q7: $\bar{x}$ = 4.43) was also rated very highly. The participants are also willing to use such a system in real-world applications (Q9: $\bar{x}$ = 4.43). 
 While Q6: $\bar{x}$ = 1.57 further confirms that the tracking behavior was perceived as predictable and non-threatening. 
 The low standard deviation $s$ across most items indicates a high consensus among participants.
-It should be noted, however, that the participants all come from the field of engineering, so that an intrinsic interest in technology must be assumed. The study is also limited by the small sample size ($N=7$), which serves as a pilot evaluation.  
-For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase. 
+It should be noted, however, that the participants all come from the field of engineering, so that an intrinsic interest in technology must be assumed. The study is also limited by the small sample size ($N=10$), which serves as a pilot evaluation.  
+For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase. 
 The qualitative feedback (Q10 to Q12) reveal that participants particularly emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
 Potential for improvement was seen primarily in the robot driving around corners (slow turns). Suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
 Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm.
