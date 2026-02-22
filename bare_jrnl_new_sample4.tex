@@ -211,6 +211,8 @@ An SG can be defined as a tuple:
 \noindent For SGG, diverse models and technologies are employed across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
 Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g., Segment Anything Model, SAM) and open-vocabulary encoders (e.g., Contrastive Language–Image Pre-training, CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
 Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware and various sensors.    
+[...]
+
 
 
 
@@ -316,7 +318,7 @@ The GUI offers various selections of MLLMs. These can be divided into two catego
 The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
 in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot. Gemma 3 supports multimodale input with a very large context window and offers features that can improve attention to small details in images .Qwen 2.5 VL is often preferred for accurate, consistent captions—especially when text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
 Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs).
-The experiments (in section \ref{sec:experiments}) entail the implementation of accessible MLLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
+[REWORK]The experiments (in section \ref{sec:experiments}) entail the implementation of accessible MLLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=2.5in]{images/jetson_client_cropped.pdf}
@@ -377,7 +379,7 @@ The following text-prompt instructs the MLLM on processing data. The goal is to 
 %\vspace{1em} 
 
 The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{transformation_template} presents a schematic representation of the result of this transformation using the template. By combining the image data with the readable object data using the MLLM, an understandable 3D scene is described, which is accessible to humans.
-The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function. This could be used, for example, to help a blind or visually impaired person navigate. The result of this semantic scene interpretation is shown in section \ref{subsec:sceneunderstanding}.
+The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function. This could be used, for example, to help a blind or visually impaired person navigate. The result of this semantic scene interpretation is shown in section \ref{subsec:sceneunderstanding}. 
 
 \begin{figure}[htbp]
 	\centering
@@ -386,6 +388,7 @@ The result of the scene interpretation is displayed as text in the output window
 	\label{transformation_template}
 \end{figure}
 
+\subsection{Lessons learned here?}
 
 %\begin{figure}[htpb]
 %	\centering
@@ -435,25 +438,37 @@ The duration from when the user initiates a request for the scene description to
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\columnwidth] {images/lab.jpg}
-	\caption{Qualitative assessment of Gemma 3 12B scene description capability. The model integrates real-time object detection data to generate a natural language representation of the robot's environment for assistive navigation}
+	\caption{[Change if img with bbox is available] Qualitative assessment of Gemma 3 12B scene description capability. The model integrates real-time object detection data to generate a natural language representation of the robot's environment for assistive navigation. The scene description generated by a Gemma 3 12B model with spatial object data, reads as follows: \textit{"You are in a room, presumably an
+		office. Directly in front of you,
+		about 1.8 meters away and slightly to
+		the left, is a screen. To your right,
+		about 2.5 meters away, is a chair. To
+		your left, about 3.7 meters away, is
+		another chair. A little further ahead,
+		about 4 meters away and to your left,
+		is another screen. To your right,
+		about 5 meters away, is another chair.
+		Be aware of the chairs and screens as
+		potential obstacles. The floor appears
+		to be level."} This response was originally generated in German.}
 	\label{mllm_scene_lab}
 \end{figure}
 
-\begin{center} 
-	\fcolorbox{black}{black!5}{%
-		\begin{minipage}{0.92\columnwidth}
-			\setlength{\parskip}{0.5em}
-			\ttfamily
-			
-		You are in a room, presumably an office.
-		Directly in front of you, about 1.8 meters away and slightly to the left, is a screen. To your right, about 2.5 meters away, is a chair. To your left, about 3.7 meters away, is another chair.
-		A little further ahead, about 4 meters away and to your left, is another
-		screen. To your right, about 5 meters away, is another chair. Be aware of the chairs and screens as potential obstacles.
-		The floor appears to be level.*
-		\end{minipage}%
-	}
-\end{center}
-*The response from the Gemma 3 12 B model was originally generated in German.
+%\begin{center} 
+%	\fcolorbox{black}{black!5}{%
+%		\begin{minipage}{0.92\columnwidth}
+%			\setlength{\parskip}{0.5em}
+%			\ttfamily
+%			
+%		You are in a room, presumably an office.
+%		Directly in front of you, about 1.8 meters away and slightly to the left, is a screen. To your right, about 2.5 meters away, is a chair. To your left, about 3.7 meters away, is another chair.
+%		A little further ahead, about 4 meters away and to your left, is another
+%		screen. To your right, about 5 meters away, is another chair. Be aware of the chairs and screens as potential obstacles.
+%		The floor appears to be level.*
+%		\end{minipage}%
+%	}
+%\end{center}
+%*The response from the Gemma 3 12 B model was originally generated in German.
 [...]
 
 \begin{figure}[!htpb]
