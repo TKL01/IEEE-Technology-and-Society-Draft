@@ -62,14 +62,14 @@
 	
 	While mobile robots are useful to carry a wide range of payloads without physical stress \cite{gona2024intelligent}, citizens struggle to ask them to move to a target location. Doing so for everyone requires a paradigm shift from programming-based to communication-oriented task achievement that hides the technical complexity and emphasizes  societal opportunities and usefulness. An  application example is to  move a heavy box from a place to another without workspace calibration, in which case the robot is steered to a desired position by following a human operator as shown in \cref{intro}. The operator can freely and comfortably move around and specify the  final position of the payload in motion anywhere. The robot simply tracks the uncertain human path while avoiding  obstacles to reach that position. Nevertheless, most current mobile robots fail to communicate their mental model, i.e., understanding of the operational environment, difficulty to achieve a goal, and internal state, to humans in real-time. This bidirectional gap unfortunately prevents citizens to  engage in a service-oriented dialog with the robot to anticipate events, strategically refine  their expectations in an iterative way,  or adapt  their individual \textit{requests} (instead of hard-coded \textit{commands}) to the robot on the fly without writing any line of code.
 	
-	The immediate advantages of doing so are manifold for a human teammate interaction with the robot. The communication with the robot can occur in  a desired language supported by an LLM. Individual needs can be conveyed more readily.  A technical  background is no longer necessary to prompt the robot to complete a task. People can translate complex tasks into  sequences of single spoken request primitives to achieve specific objectives. For example, following a complex path can be broken down into  intermediate motions of the robot that aim to attain the vicinity of previously unseen objects that suddenly appear in the workspace of the moving robot  (see \cref{mental}). A  human teammate in motion  can act as a guide followed upon invitation by the robot that serves as a assistive device  carrying the payload to a desired location. Meanwhile, the robot can exploit its reasoning about its dynamic and experienced mental model of the environment to amend human guidance (e.g., in the case of events grounded in historical contexts or long-term decisions) and give directive feedback about the environment to human. This shared autonomy democratizes  access to robots and facilitates the  inclusion as well as the self-determination of human operators. 
+	The immediate advantages of doing so are manifold for a human teammate interaction with the robot. The communication with the robot can occur in  a desired language supported by an LLM. Individual needs can be conveyed more readily.  A technical  background is no longer necessary to prompt the robot to complete a task. People can translate complex tasks into  sequences of single spoken request primitives to achieve specific objectives. For example, following a complex path can be broken down into  intermediate motions of the robot that aim to attain the vicinity of previously unseen objects that suddenly appear in the workspace of the moving robot  (see \cref{mental1}). A  human teammate in motion  can act as a guide followed upon invitation by the robot that serves as a assistive device  carrying the payload to a desired location. Meanwhile, the robot can exploit its reasoning about its dynamic and experienced mental model of the environment to amend human guidance (e.g., in the case of events grounded in historical contexts or long-term decisions) and give directive feedback about the environment to human. This shared autonomy democratizes  access to robots and facilitates the  inclusion as well as the self-determination of human operators. 
 	
 	
 	\begin{figure}[!t]
 		\centering
 		\includegraphics[width=\columnwidth]{pic/mental.png}
 		\caption{Perception of an \textit{indoor} environment by a mobile robot. Semantic detection and segmentation of objects to construct a scene graph as a mental model. The robot reasons on this graph using an MLLM to track a moving chair mentioned by the human-teammate using natural language.}
-		\label{mental}
+		\label{mental1}
 	\end{figure}
 	
 	
@@ -85,7 +85,7 @@ The remainder of this work is organized as follows.
 	\centering
 	\includegraphics[width=\columnwidth]{pic/mental2.png}
 	\caption{Semantic understanding of an \textit{outdoor} societal workspace by the robot that not only follows the human teammate but also gives hints about surrounding objects using  natural language. Objects are e.g. obstacles, such as a car, or  useful items like a bicycle. The robot is  aware of an estimated relative pose  (i.e., position and orientation) and velocity along with the affordance of objects even unseen by humans. It uses this information for  reachability assessment and human guidance. The robot therefore uses AI to visually and semantically understand the scene (hence, we coined it \textit{pAIrSEEption}) as well as inform and  augment humans, paving the ground for the society of the future.}
-	\label{mental}
+	\label{mental2}
 \end{figure}
 
 
@@ -384,7 +384,7 @@ The result of the scene interpretation is displayed as text in the output window
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\columnwidth]{images/transformation_template.png}
-	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input}
+	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input.[add detailed description:]}
 	\label{transformation_template}
 \end{figure}
 
@@ -527,7 +527,7 @@ The duration from when the user initiates a request for the scene description to
 %\end{table}
 
 \subsubsection{Experimental Setup}
-Participants (N = 7) from various technical backgrounds (Engineering Bachelor and Master levels) were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the student. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the students were asked to anonymously evaluate their overall impression in a survey.
+Participants (N = 10) from various technical/engineering backgrounds were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the student. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the students were asked to anonymously evaluate their overall impression in a survey.
 
 \subsubsection{Study Design}
 To evaluate the usability of mainly the voice control and object tracking (following an object with the mobile robot), a survey consisting of nine Likert-scale items (with scores of 1 to 5) and three open questions was conducted. The items were structured as follows:
