@@ -173,7 +173,7 @@ Scene graphs have been deployed for different societal applications \cite{amiri2
 
 A scene graph (SG) serves to represent a scene with objects,
 their attributes, and relationships between other objects in a structured way.
-Scene graph generation (SGG) can be based on images, text, and videos.
+SGG can be based on images, text, and videos.
 Such a hierarchical graph data structure consists of nodes (O) and edges (E). Nodes (O) are objects such as persons, animals, places or things (bicycle, car, etc.), but also parts of other objects (e.g., limbs such as a person's arms). Each object node is usually equipped with attributes that describe the state of the object (e.g., colors, size, or pose). The edges (E) represent the relationships between the object pairs. These connections between objects describe actions (man holds cup) or positions (man stands in front of a bench). Typically, such a relationship is expressed as a
 $\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple. 
 An SG can be defined as a tuple:
@@ -209,7 +209,7 @@ An SG can be defined as a tuple:
 	\end{equation}
 	
 \noindent For SGG, diverse models and technologies are employed across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
-Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g., Segment Anything Model, SAM) and open-vocabulary encoders (e.g., Contrastive Language–Image Pre-training, CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
+Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g.,  SAM/SAM 2) and open-vocabulary encoders (e.g., CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
 Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware and various sensors.    
 [...]
 
@@ -316,7 +316,7 @@ The GUI offers various selections of MLLMs. These can be divided into two catego
 
 
 The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
-in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot. Gemma 3 supports multimodale input with a very large context window and offers features that can improve attention to small details in images .Qwen 2.5 VL is often preferred for accurate, consistent captions—especially when text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
+in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot. Gemma 3 supports multimodale input with a very large context window and offers features that can improve attention to small details in images. Qwen 2.5 VL is often preferred for accurate, consistent captions—especially when there is text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
 Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs).
 [REWORK]The experiments (in section \ref{sec:experiments}) entail the implementation of accessible MLLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
 \begin{figure}[!ht]
@@ -388,7 +388,7 @@ The result of the scene interpretation is displayed as text in the output window
 	\label{transformation_template}
 \end{figure}
 
-\subsection{Lessons learned here?}
+%\subsection{Lessons learned here?}
 
 %\begin{figure}[htpb]
 %	\centering
