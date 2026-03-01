@@ -1,5 +1,6 @@
 *.pdf
 !images/*.pdf
+!surveyux/*.pdf
 *.log
 *.aux
 *.bbl
