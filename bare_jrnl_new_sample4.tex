@@ -527,7 +527,7 @@ The duration from when the user initiates a request for the scene description to
 %\end{table}
 
 \subsubsection{Experimental Setup}
-Participants (N = 10) from various technical/engineering backgrounds were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the student. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the students were asked to anonymously evaluate their overall impression in a survey.
+Participants (N = 10) from various technical/engineering backgrounds were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the participants. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the participants were asked to anonymously evaluate their overall impression in a survey.
 
 \subsubsection{Study Design}
 To evaluate the usability of mainly the voice control and object tracking (following an object with the mobile robot), a survey consisting of nine Likert-scale items (with scores of 1 to 5) and three open questions was conducted. The items were structured as follows:
@@ -562,7 +562,7 @@ To evaluate the usability of mainly the voice control and object tracking (follo
 	\end{enumerate}
 \end{itemize}
 
-The questions were rated by participants on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 9 was used to calculate mean and standard derivation for this question.
+The questions were rated by participants (P1 to P10) on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 9 was used to calculate mean and standard derivation for this particular question.
 
 \subsubsection{Results and Discussion}
 
@@ -583,7 +583,7 @@ The questions were rated by participants on a scale of 1 to 5, with 1 being the 
 		P6 & 5 & 5 & 1 & 5 & 5 & 1 & 4 & 4 & 5 \\ \hline
 		P7 & 5 & 4 & 2 & 5 & 4 & 3 & 4 & 4 & 3 \\ \hline
 		P8 & 4 & 5 & 1 & 5 & 4 & 1 & 5 & 5 & 2 \\ \hline
-		P9 & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\ \hline
+		P9 & 5 & 4 & 2 & 5 & 4 & 2 & 5 & 4 & 5 \\ \hline
 		P10 & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\ \hline \hline
 		\textbf{Mean} $\bar{x}$ & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} \\ \hline
 		\textbf{SD} $s$ & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} \\ \hline
@@ -591,15 +591,18 @@ The questions were rated by participants on a scale of 1 to 5, with 1 being the 
 	\vspace{1ex}
 \end{table}
 
-The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the subsequent correct object identification by the system, the system response time, and the perceived safety during robot operation (Q1, Q4, Q5 and Q8: $\bar{x}$ = X/5 and in each case $s$ = X). Furthermore, the reliability of object recognition was rated as very good (Q2: $\bar{x}$ = X and Q3: $\bar{x}$ = X) and the overall operation of robot and GUI (Q7: $\bar{x}$ = X) was also rated very highly. The participants are also willing to use such a system in real-world applications (Q9: $\bar{x}$ = X). 
-While Q6: $\bar{x}$ = X further confirms that the tracking behavior was perceived as predictable and non-threatening. 
-The low standard deviation $s$ across most items indicates a high consensus among participants.
-It should be noted, however, that the participants all come from the field of engineering, so that an intrinsic interest in technology must be assumed. The study is also limited by the small sample size ($N=10$), which serves as a pilot evaluation.  
-For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase. 
-The qualitative feedback (Q10 to Q12) reveal that participants particularly emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
-Potential for improvement was seen primarily in the robot driving around corners (slow turns). Suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
-Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm.
 
+The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the subsequent correct object identification by the system, the system response time, and the perceived safety during robot operation (Q1, Q4, Q5 and Q8: $\bar{x}$ = X/5 and in each case $s$ = X, . Furthermore, the reliability of object recognition was rated as very good ($\bar{x}_{Q2}$ = X and $\bar{x}_{Q3}$ = X) and the overall operation of robot and GUI ($\bar{x}_{Q7}$ = X) was also rated very highly. The participants are also willing to use such a system in real-world applications ($\bar{x}_{Q9}$ = X). 
+While $\bar{x}_{Q6}$ = X further confirms that the tracking behavior was perceived as predictable and non-threatening. 
+The low standard deviation $s$ across most items indicates a high consensus among participants.
+It should be noted, however, that the participants all come from the field of engineering, so that a high level of technical affinity and an intrinsic interest in robotics must be assumed. Therefore, the acceptance to use the system in real-world applications as well as the perceived ease of use might be lower for lay users. The study is also limited by the small sample size ($N=10$), which serves as a pilot evaluation.  
+For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase.
+Given their technical background, participants provided sophisticated qualitative feedback (Q10 to Q12) that highlights both operational performance and technical scalability. They positively emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
+Potential for improvement was seen primarily in the robot driving around corners (slow turns) and a broader language support. While the current architecture leverages faster-whisper for automatic language recognition for the voice command inputs, the STT output currently is limited to German. However, the MLLMs used in the system natively support multilingual interaction and it remains a high priority task for future iterations to further foster inclusion. 
+Beyond the interaction, interoperability with web-based and industry standards, in particular the Internet of Things and Industrial Internet of Things ecosystems, was also proposed.
+Further suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
+Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm as well as inter-robot communication. 
+Furthermore, participants suggested implementing fallback mechanisms to handle (voice) signal loss and exploring additional communication modalities to ensure reliable operation.
 Overall, the results suggest that our system can effectively lower the entry barrier for robot interaction and shows great potential for service robotics in domestic or industrial settings.
 
 \section{Conclusion}
