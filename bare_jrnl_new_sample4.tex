@@ -171,7 +171,7 @@ Scene graphs have been deployed for different societal applications \cite{amiri2
 %\item {Cobots \& Service Robots \& Society 5.0/6.0}
 %\end{itemize}
 
-A scene graph (SG) serves to represent a scene with objects,
+An SG serves to represent a scene with objects,
 their attributes, and relationships between other objects in a structured way.
 SGG can be based on images, text, and videos.
 Such a hierarchical graph data structure consists of nodes (O) and edges (E). Nodes (O) are objects such as persons, animals, places or things (bicycle, car, etc.), but also parts of other objects (e.g., limbs such as a person's arms). Each object node is usually equipped with attributes that describe the state of the object (e.g., colors, size, or pose). The edges (E) represent the relationships between the object pairs. These connections between objects describe actions (man holds cup) or positions (man stands in front of a bench). Typically, such a relationship is expressed as a
@@ -210,7 +210,7 @@ An SG can be defined as a tuple:
 	
 \noindent For SGG, diverse models and technologies are employed across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
 Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g.,  SAM/SAM 2) and open-vocabulary encoders (e.g., CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
-Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware and various sensors.    
+Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware, various sensors and further processing by various systems. In most cases, an entire room or floor must first be scanned/mapped using LiDAR and/or depth cameras. This map is then further processed and enriched with descriptions of these objects, for example with the help of MLLMs. This enables, for example, visual questions and answers about specific objects.     
 [...]
 
 
@@ -402,17 +402,25 @@ The result of the scene interpretation is displayed as text in the output window
 This section presents hardware test results and benchmarks from experiments with YOLO models within pAIrSEEption and various inference times with MLLMs such as Gemma 3 and Qwen 2.5 VL until a scene description is generated. The second experiment shows results from a usability evaluation of the framework with a focus on human robot interaction and object following.
 
 \subsection{Performance Analysis of YOLO Models}
-Fig. \ref{fig:yolo_fps} and Fig. \ref{fig:yolo_gpu} show the average FPS and GPU usage of a variety of popular YOLO models of different sizes that are integrated into pAIrSEEption, respectively. The FPS value is an important measure for evaluating the perception module in the overall system and affects the response time, safety, precision of navigation, and tracking. The framework offers easy integration into the system by storing a PT, ONNX, or engine YOLO model in the same folder as the pAIrSEEption application. These models also include engine models that have been optimized with TensorRT (to 16-Bit Floating Point) on a consumer laptop (Nvidia RTX A2000 graphics card with 8 GB VRAM, 32 GB RAM and i7-13800H processor) to demonstrate accessibility.
+Fig. \ref{fig:yolo_comparison} shows the average FPS and GPU usage of a variety of popular YOLO models of different sizes that are integrated into pAIrSEEption, respectively. The FPS value is an important measure for evaluating the perception module in the overall system and affects the response time, safety, precision of navigation, and tracking. The framework offers easy integration into the system by storing a pytorch (\textit{.pt}), \textit{.onnx}, or \textit{.engine} (TensoRT) YOLO model in the same folder as the pAIrSEEption application. These models also include engine models that have been optimized with TensorRT (to 16-Bit Floating Point for testing purposes) on a consumer laptop (Nvidia RTX A2000 graphics card with 8 GB VRAM, 32 GB RAM and i7-13800H processor) to demonstrate accessibility.
 A confidence threshold of 40\% was selected on the GUI. Data collection took place in a laboratory setting. The hardware performance data of the different YOLO models was recorded on the GUI over a set number of frames of around 700 to 1750 frames with varying activity within the scene (static and moving objects, while moving objects are counted as active). 
-The data recording is part of the GUI, and the diagrams were created from this data. The results show that The yolo11n model achieves the best value in the average FPS evaluation with just under 40 FPS, which was to be expected as this model is the smallest in this test series.
-The large yolo11l\_tensorRT is at a similar level and shows that optimization with TensorRT achieves a significant improvement of approximately 5 FPS on average compared to the standard yolo11l PT model. When comparing the two optimized TensorRT models in the overall system, the YOLO 11 version is ahead of version 8 by around 5 FPS on average and with a  negligibly higher GPU consumption of 2\% to 3\%.
+The data recording is part of the GUI, and the diagrams were created from this data. The results show that the yolo11n (nano) model achieves the best value in the average FPS evaluation with just under 40 FPS, which was to be expected as this model is the smallest in this test series.
+The large yolo11l\_tensorRT is at a similar level and shows that optimization with TensorRT achieves a significant improvement of approximately 5 FPS on average compared to the standard yolo11l.pt model. When comparing the two optimized TensorRT models in the overall system, the YOLO 11 version is ahead of version 8 by around 5 FPS on average and with a  negligibly higher GPU consumption of 2\% to 3\%. As expected, segmentation models (with  suffix \textit{seg} in the diagram) typically achieve lower FPS compared to their object detection counterpart models. In future work, this could be used for avoidance of objects, where this pixel mask is used to avoid objects more precisely.
 
-\begin{figure}[!ht]
+\begin{figure*}[!ht]
 	\centering
-	\includegraphics[width=\columnwidth] {images/yolo_performance_fps.png}
-	\caption{FPS analysis of YOLO models on the laptop.}
-	\label{fig:yolo_fps}
+	\includegraphics[width=\textwidth]{images/yolo_comparison.png}
+	\caption{FPS and GPU usage analysis of YOLO models on the laptop with an average of 5.5 static and 1.1 active objects (objects in motion) captured over 1750 frames.}
+	\label{fig:yolo_comparison}
+\end{figure*}
+
+\begin{figure}[!htpb]
+	\centering
+	\includegraphics[width=8.7cm]{images/timing_breakdown.png}
+	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfile parameters and adapted to our application. Abbreviations: "G3" = Gemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
+	\label{timing_breakdown}
 \end{figure}
+
 
 %\begin{figure}[!ht]
 %	\centering
@@ -420,39 +428,39 @@ The large yolo11l\_tensorRT is at a similar level and shows that optimization wi
 %	\caption{ FPS Analysis of YOLO Models on the laptop.}
 %	\label{fig:yolo_fps}
 %\end{figure}
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=\columnwidth] {images/yolo_performance_gpu.png}
-	\caption{GPU usage analysis of YOLO Models on the laptop.}
-	\label{fig:yolo_gpu}
-\end{figure}
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[width=\columnwidth] {images/yolo_performance_gpu_big.png}
+%	\caption{GPU usage analysis of YOLO Models on the laptop.}
+%	\label{fig:yolo_gpu}
+%\end{figure}
 
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=\columnwidth] {images/lab.jpg}
+	\caption{Qualitative assessment of Gemma 3 12B scene description capability. The model integrates real-time object detection data to generate a natural language representation of the robot's environment for assistive navigation. The scene description generated by a Gemma 3 12B model with spatial object data, reads as follows: \textit{"You are in a room, presumably an
+			office. Directly in front of you,
+			about 1.8 meters away and slightly to
+			the left, is a screen. To your right,
+			about 2.5 meters away, is a chair. To
+			your left, about 3.7 meters away, is
+			another chair. A little further ahead,
+			about 4 meters away and to your left,
+			is another screen. To your right,
+			about 5 meters away, is another chair.
+			Be aware of the chairs and screens as
+			potential obstacles. The floor appears
+			to be level."} This response was originally generated in German.}
+	\label{mllm_scene_lab}
+\end{figure}
 
 \subsection{Performance of MLLMs and Showcase of Scene Understanding}
 \label{subsec:sceneunderstanding}
 Fig. \ref{timing_breakdown} shows the duration of various Gemma 3 and Qwen 2.5 VL models to generate and describe a current scene with object data. Ollama is used to determine this  metric and record it in measurement logs. These logs consist of several parts. They contain metadata such as timestamps, an ID (for unique assignment of images and audio files to an analysis log), and the model used for scene interpretation. In addition, the number of input and output tokens is determined. In this test, the same scene was always tested with different models. 
-The duration from when the user initiates a request for the scene description to the output of the response is broken down into three parts: the model load time, the input processing (both on the server as shown in Fig. \ref{client_server}) and the output generation sent from the server to the consumer laptop where pAIrSEEption runs. 
+The duration from when the user initiates a request for the scene description to the output of the response is broken down into three parts: the model load time, the input processing (both on the server as shown in Fig. \ref{client_server}) and the output generation sent from the server to the consumer laptop where pAIrSEEption runs. [...]
 
-[...]
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=\columnwidth] {images/lab.jpg}
-	\caption{[Change if img with bbox is available] Qualitative assessment of Gemma 3 12B scene description capability. The model integrates real-time object detection data to generate a natural language representation of the robot's environment for assistive navigation. The scene description generated by a Gemma 3 12B model with spatial object data, reads as follows: \textit{"You are in a room, presumably an
-		office. Directly in front of you,
-		about 1.8 meters away and slightly to
-		the left, is a screen. To your right,
-		about 2.5 meters away, is a chair. To
-		your left, about 3.7 meters away, is
-		another chair. A little further ahead,
-		about 4 meters away and to your left,
-		is another screen. To your right,
-		about 5 meters away, is another chair.
-		Be aware of the chairs and screens as
-		potential obstacles. The floor appears
-		to be level."} This response was originally generated in German.}
-	\label{mllm_scene_lab}
-\end{figure}
+
 
 %\begin{center} 
 %	\fcolorbox{black}{black!5}{%
@@ -471,12 +479,7 @@ The duration from when the user initiates a request for the scene description to
 %*The response from the Gemma 3 12 B model was originally generated in German.
 [...]
 
-\begin{figure}[!htpb]
-	\centering
-	\includegraphics[width=8.7cm]{images/timing_breakdown.png}
-	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfiles and adapted to our application. Abbreviations: "G3" = Gemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
-	\label{timing_breakdown}
-\end{figure}
+
 
 \subsection{Usability Study}
 %\begin{table*}[!ht]
@@ -562,14 +565,29 @@ To evaluate the usability of mainly the voice control and object tracking (follo
 	\end{enumerate}
 \end{itemize}
 
-The questions were rated by participants (P1 to P10) on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 9 was used to calculate mean and standard derivation for this particular question.
+The questions were rated by participants (P1 to P9) on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 8 was used to calculate mean and standard derivation for this particular question.
 
 \subsubsection{Results and Discussion}
 
-\begin{table}[htpb]
+
+The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the perceived safety during robot operation (mean: $\bar{x}_{Q1, Q8} = 4.67$ and standard derivation (SD): $s_{Q1, Q8} = 0.50$ respectively), the subsequent correct object identification by the system was rated the highest with an average rating of $\bar{x}_{Q4} = 4.78$ and the lowest SD with $s_{Q4} = 0.44$. 
+Furthermore, very high ratings for the recognition reliability, the system response time and the overall ease of use ($\bar{x}_{Q2, Q5, Q7} = 4.56$) indicate that the tracking behavior was perceived as predictable and non-threatening. 
+The participants are also willing to use such a system in real-world applications ($\bar{x}_{Q9}$ = 4.22). While the low ratings for necessity of (voice) repetitions ($\bar{x}_{Q3)} = 1.75$) and the frequency of losing the tracked target ($\bar{x}_{Q6)} = 1.56$) show that the implementation of voice control and object detection works very well.  
+The low SD $s$ across most items indicates a high consensus among participants.
+It should be noted, however, that the participants all come from the field of engineering, so that a high level of technical affinity and an intrinsic interest in robotics must be assumed. Therefore, the acceptance to use the system in real-world applications as well as the perceived ease of use might be lower for lay users. The study is also limited by the small sample size ($N=9$), which serves as a pilot evaluation.  
+For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase.
+Given their technical background, participants provided sophisticated qualitative feedback (Q10 to Q12) that highlights both operational performance and technical scalability. They positively emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
+Potential for improvement was seen primarily in the robot driving around corners (slow turns) and a broader language support. While the current architecture leverages faster-whisper for automatic language recognition for the voice command inputs, the STT output currently is limited to German. However, the MLLMs used in the system natively support multilingual interaction and it remains a high priority task for future iterations to further foster inclusion. 
+Beyond the interaction, interoperability with web-based and industry standards, in particular the Internet of Things and Industrial Internet of Things ecosystems, was also proposed.
+Further suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
+Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm as well as inter-robot communication. 
+Furthermore, participants suggested implementing fallback mechanisms to handle (voice) signal loss and exploring additional communication modalities to ensure reliable operation.
+Overall, the results suggest that our system can effectively lower the entry barrier for robot interaction and shows great potential for service robotics in domestic and industrial settings.
+
+\begin{table}[!t]
 	\centering
-	\caption{Quantitative Results of the Usability Evaluation ($N=10$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
-	*Negative questions: lower values indicate better performance.}
+	\caption{Quantitative Results of the Usability Evaluation ($N=9$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
+		*Negative questions: lower values indicate better performance.}
 	\label{tab:user_study_results}
 	\setlength{\tabcolsep}{3.5pt} 
 	\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
@@ -583,34 +601,19 @@ The questions were rated by participants (P1 to P10) on a scale of 1 to 5, with 
 		P6 & 5 & 5 & 1 & 5 & 5 & 1 & 4 & 4 & 5 \\ \hline
 		P7 & 5 & 4 & 2 & 5 & 4 & 3 & 4 & 4 & 3 \\ \hline
 		P8 & 4 & 5 & 1 & 5 & 4 & 1 & 5 & 5 & 2 \\ \hline
-		P9 & 5 & 4 & 2 & 5 & 4 & 2 & 5 & 4 & 5 \\ \hline
-		P10 & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ & $-$ \\ \hline \hline
-		\textbf{Mean} $\bar{x}$ & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} \\ \hline
-		\textbf{SD} $s$ & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} \\ \hline
+		P9 & 5 & 4 & 2 & 5 & 4 & 2 & 5 & 4 & 5 \\ \hline \hline
+		\textbf{Mean} $\bar{x}$ & \textbf{4.67} & \textbf{4.56} & \textbf{1.75} & \textbf{4.78} & \textbf{4.56} & \textbf{1.56} & \textbf{4.56} & \textbf{4.67} & \textbf{4.22} \\ \hline
+		\textbf{SD} $s$ & \textbf{0.50} & \textbf{0.53} & \textbf{0.89} & \textbf{0.44} & \textbf{0.53} & \textbf{0.73} & \textbf{0.53} & \textbf{0.50} & \textbf{1.09} \\ \hline
 	\end{tabular}
 	\vspace{1ex}
 \end{table}
-
-
-The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the subsequent correct object identification by the system, the system response time, and the perceived safety during robot operation (Q1, Q4, Q5 and Q8: $\bar{x}$ = X/5 and in each case $s$ = X, . Furthermore, the reliability of object recognition was rated as very good ($\bar{x}_{Q2}$ = X and $\bar{x}_{Q3}$ = X) and the overall operation of robot and GUI ($\bar{x}_{Q7}$ = X) was also rated very highly. The participants are also willing to use such a system in real-world applications ($\bar{x}_{Q9}$ = X). 
-While $\bar{x}_{Q6}$ = X further confirms that the tracking behavior was perceived as predictable and non-threatening. 
-The low standard deviation $s$ across most items indicates a high consensus among participants.
-It should be noted, however, that the participants all come from the field of engineering, so that a high level of technical affinity and an intrinsic interest in robotics must be assumed. Therefore, the acceptance to use the system in real-world applications as well as the perceived ease of use might be lower for lay users. The study is also limited by the small sample size ($N=10$), which serves as a pilot evaluation.  
-For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase.
-Given their technical background, participants provided sophisticated qualitative feedback (Q10 to Q12) that highlights both operational performance and technical scalability. They positively emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
-Potential for improvement was seen primarily in the robot driving around corners (slow turns) and a broader language support. While the current architecture leverages faster-whisper for automatic language recognition for the voice command inputs, the STT output currently is limited to German. However, the MLLMs used in the system natively support multilingual interaction and it remains a high priority task for future iterations to further foster inclusion. 
-Beyond the interaction, interoperability with web-based and industry standards, in particular the Internet of Things and Industrial Internet of Things ecosystems, was also proposed.
-Further suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
-Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm as well as inter-robot communication. 
-Furthermore, participants suggested implementing fallback mechanisms to handle (voice) signal loss and exploring additional communication modalities to ensure reliable operation.
-Overall, the results suggest that our system can effectively lower the entry barrier for robot interaction and shows great potential for service robotics in domestic or industrial settings.
 
 \section{Conclusion}
 The conclusion goes here.
 
 
 \section*{Acknowledgments}
-We would like to thank Mr. S. Azizpour and Mr. A. Koennecke for his support in conducting the usability study and robot control, respectively. We would also like to thank all participants for their time and feedback.
+We would like to thank Mr. S. Azizpour for his support in conducting the usability study and Mr. A. Koennecke for his support with robot control. We would also like to thank all participants for their time and feedback.
 
 
 %{\appendix[Proof of the Zonklar Equations]
