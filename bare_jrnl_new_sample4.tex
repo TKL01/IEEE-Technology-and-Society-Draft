@@ -143,7 +143,7 @@ Mobile robots need to reason about contextualized and structured information to 
 
 \subsection{Algorithms for the generation of scene graphs}
 Three classes of algorithms currently emerge for the design of SGs, as emphasized in \cref{tab:features}.
-Edge dual scene graph generation has been recently proposed   to capture multi-object relationships for SGG \cite{kim2025semantic}. The approach integrates object detection based on a fast Region-based Convolutional Neural Networks (R-CNN), an edge dual scene graph,  and an object-relation-centric Message Passing Neural Network (MPNN). Rich contextual interactions  between unconstrained objects are retrieved by the object-relation MPNN that learns both object- and relation-centric features to enhance the prediction accuracy and enable  fine-grained and iterative updates between objects. In orther words, MPNN aggregates information from neighborhood entities. Updates of the description of the considered entity are thereby enabled. MPNN finally outputs a feature vector for the entire graph \cite{kim2025semantic,su2024adopting}. Further modern techniques for SGG leverage the attention mechanism. Such  approaches connect objects with significant attention weights to edges from the self-attention layers of a pre-trained DEtection TRansformer  \cite{im2024egtr}. In the third strategy based on Convolutional Scene Graph Generation (CSGG), objects are encoded as bounding box center points. Relationships are represented  as 2D vector fields, i.e., an integral on a sub-region that points from subject to object \cite{liu2021fully}. Features related to the MPNN-, attention-, and CSGG-based approach are given in \cite{liu2024repsgg} and associated in 	\cref{tab:features} with their inference methods. \textcolor{red}{Herr La: sind wir box-, query- and/oder point based? }
+Edge dual scene graph generation has been recently proposed   to capture multi-object relationships for SGG \cite{kim2025semantic}. The approach integrates object detection based on a fast Region-based Convolutional Neural Networks (R-CNN), an edge dual scene graph,  and an object-relation-centric Message Passing Neural Network (MPNN). Rich contextual interactions  between unconstrained objects are retrieved by the object-relation MPNN that learns both object- and relation-centric features to enhance the prediction accuracy and enable  fine-grained and iterative updates between objects. In orther words, MPNN aggregates information from neighborhood entities. Updates of the description of the considered entity are thereby enabled. MPNN finally outputs a feature vector for the entire graph \cite{kim2025semantic,su2024adopting}. Further modern techniques for SGG leverage the attention mechanism. Such  approaches connect objects with significant attention weights to edges from the self-attention layers of a pre-trained DEtection TRansformer  \cite{im2024egtr}. In the third strategy based on Convolutional Scene Graph Generation (CSGG), objects are encoded as bounding box center points. Relationships are represented  as 2D vector fields, i.e., an integral on a sub-region that points from subject to object \cite{liu2021fully}. Features related to the MPNN-, attention-, and CSGG-based approach are given in \cite{liu2024repsgg} and associated in 	\cref{tab:features} with their inference methods. \textcolor{red}{Herr La: sind wir box-, query- and/oder point based?  We use a box-based approach (YOLO, CNN) and extend it by employing an MLLM to determine relations between objects through natural language and logical inference.}
 
 
 \subsection{Tools for the genereration of scene graphs}
@@ -175,43 +175,43 @@ An SG serves to represent a scene with objects,
 their attributes, and relationships between other objects in a structured way.
 SGG can be based on images, text, and videos.
 Such a hierarchical graph data structure consists of nodes (O) and edges (E). Nodes (O) are objects such as persons, animals, places or things (bicycle, car, etc.), but also parts of other objects (e.g., limbs such as a person's arms). Each object node is usually equipped with attributes that describe the state of the object (e.g., colors, size, or pose). The edges (E) represent the relationships between the object pairs. These connections between objects describe actions (man holds cup) or positions (man stands in front of a bench). Typically, such a relationship is expressed as a
-$\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple. 
-An SG can be defined as a tuple:
+$\langle \text{subject} \;-\; \text{predicate} \;-\; \text{object} \rangle$ triple. \cite{hli2024sgg} 
 
-\begin{equation}
-	\label{eq:SG}
-	SG = (\mathcal{O}, R, E)
-\end{equation}
-
-\noindent Where: 
-
-\begin{itemize}
-	\item $\mathcal{O} = \{o_1, \ldots, o_n\}$ is the set of objects recognized in the images, 
-	where $n$ is the number of objects. Each object $o_i$ can also be described as a tuple: 
-	\begin{equation}
-		\label{eq:o_i}
-		o_i = (c_i, A_i)
-	\end{equation}
-	where $c_i$ denotes the category (e.g., person, soccer stadium, animal) and 
-	$A_i$ denotes the attributes (e.g., shape, color, pose) of the object.
-	
-	\item $R$ stands for the set of relationships between the nodes (objects).
-	\item $E \subseteq \mathcal{O} \times R \times \mathcal{O}$ represents
-	the edges between the object instance nodes 
-	and the relationship nodes. The edge set $E$ consists of exactly those triples that are considered 
-	relationships between the object pairs.
-\end{itemize}
-	
-\noindent Using the following formulation, scene graphs can be expressed from an image $I$ using SGG methods:
-	\begin{equation}
-		\label{eq:SGG}
-		SG(\mathcal{O}, R, E) = SGG(I)
-	\end{equation}
+%An SG can be defined as a tuple:
+%
+%\begin{equation}
+%	\label{eq:SG}
+%	SG = (\mathcal{O}, R, E)
+%\end{equation}
+%
+%\noindent Where: 
+%
+%\begin{itemize}
+%	\item $\mathcal{O} = \{o_1, \ldots, o_n\}$ is the set of objects recognized in the images, 
+%	where $n$ is the number of objects. Each object $o_i$ can also be described as a tuple: 
+%	\begin{equation}
+%		\label{eq:o_i}
+%		o_i = (c_i, A_i)
+%	\end{equation}
+%	where $c_i$ denotes the category (e.g., person, soccer stadium, animal) and 
+%	$A_i$ denotes the attributes (e.g., shape, color, pose) of the object.
+%	
+%	\item $R$ stands for the set of relationships between the nodes (objects).
+%	\item $E \subseteq \mathcal{O} \times R \times \mathcal{O}$ represents
+%	the edges between the object instance nodes 
+%	and the relationship nodes. The edge set $E$ consists of exactly those triples that are considered 
+%	relationships between the object pairs.
+%\end{itemize}
+%	
+%\noindent Using the following formulation, scene graphs can be expressed from an image $I$ using SGG methods:
+%	\begin{equation}
+%		\label{eq:SGG}
+%		SG(\mathcal{O}, R, E) = SGG(I)
+%	\end{equation}
 	
 \noindent For SGG, diverse models and technologies are employed across robotics, computer vision, autonomous navigation, and human-machine interaction. These are summarized in Table \ref{tab:scenegraph_technologies}. 
-Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g.,  SAM/SAM 2) and open-vocabulary encoders (e.g., CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern Vision Language Models (VLMs) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
-Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware, various sensors and further processing by various systems. In most cases, an entire room or floor must first be scanned/mapped using LiDAR and/or depth cameras. This map is then further processed and enriched with descriptions of these objects, for example with the help of MLLMs. This enables, for example, visual questions and answers about specific objects.     
-[...]
+Due to the steadily increasing availability and improvements of Foundation Models, there has been a significant shift from class limited object recognition to universal segmentation models (e.g.,  SAM/SAM 2) and open-vocabulary encoders (e.g., CLIP) that provide pixel-accurate masks and semantic embeddings, respectively. This allows modern MLLMs and Vision Language Models (VLM, multimodal models that can handle text and visual input) to recognize not only object classes but also their semantic states and complex relationships. Frameworks like ConceptGraphs and 3DGraphLLM use this information to construct scene graphs that are interpretable for LLMs and ground these objects in 3D space by integrating geometric metadata from sensors such as LiDAR or depth cameras. Approaches such as VLMaps and Graph2Nav focus on directly translating these spatial relations into executable navigation commands. 
+Some of the frameworks presented require prior mapping or 3D reconstruction \cite{3dgraphllm}, \cite{hovsg}, \cite{openin}, \cite{interaction}, while others are designed for use in unknown environments and create a map in real time to navigate \cite{conceptgraphs}, \cite{graph2nav},\cite{sgnav},\cite{lgx}, \cite{vlmaps}. However, these require powerful hardware, various sensors and further processing by various systems. In most cases, an entire room or floor must first be scanned/mapped using LiDAR and/or depth cameras. This map is then further processed and enriched with descriptions of these objects, for example with the help of MLLMs. This enables, for example, Visual Question Answering (VAQ) about specific objects. In contrast, our approach is designed to be as resource-efficient and cost-effective as possible. It simply creates a scene graph of the current image (a snapshot) and does so only when required, e.g., when the current scene needs to be described. Therefore, it is dynamic and does not require time-consuming mapping beforehand.
 
 
 
@@ -249,7 +249,6 @@ The GUI acts as a visualization and control center for the user. All data stream
   \item{Navigation control overview to select a recognized object to navigate to and/or to follow}
   \item{In addition, internal robot data such as motor temperatures can be queried via voice input and are displayed in the GUI}
 \end{itemize}
-
 All data and information displayed on the interface, as well as user (voice) input, can be saved locally in common file formats via the GUI, facilitating any necessary fine-tuning or training of the models (YOLO and MLLM) in the future.
 
 \subsection{Setup and Applications}
@@ -276,8 +275,8 @@ Efficient YOLO-based object detection serves three purposes in the system. First
 Third, it is used to navigate and follow a recognized object. To this end, the distance from each detected object to the camera and the pairwise inter-object distances within a frame are computed using the 3D Euclidean distance. The selection of the target object is initiated through its unique identification (ID), which is facilitated by either vocal input or interface selection. 
 
 
-In pAIrSEEption, the objects \( \mathcal{O} = \{o_1, \ldots, o_n\} \) in the scene are schematically defined as follows (for example, a recognized person standing still):
-
+In pAIrSEEption, the objects in the scene are schematically defined as follows (for example, a recognized person standing still):
+%\( \mathcal{O} = \{o_1, \ldots, o_n\} \)
 %\[
 %o_1 = \Bigl(\text{person}, \ 
 %\left\{
@@ -311,23 +310,21 @@ In pAIrSEEption, the objects \( \mathcal{O} = \{o_1, \ldots, o_n\} \) in the sce
 \end{equation}
 
 
-Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero. Thus, \textit{static} is an attribute derived from velocity, and the attribute set \textit{A} (see (\ref{eq:o_i})) is expanded with this additional information. The object data is expressed in the depth camera reference frame, i.e., the estimated 3D position ($x$, $y$, $z$) and the velocity ($v_x$, $v_y$, $v_z$) are relative to the camera.
-The GUI offers various selections of MLLMs. These can be divided into two categories: 
+%Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero. Thus, \textit{static} is an attribute derived from velocity, and the attribute set \textit{A} (see (\ref{eq:o_i})) is expanded with this additional information. 
+Where the object $o_1$ receives the attributes ID, confidence value, 3D positions, 3D velocity, and the classification \textit{static} if the velocity is zero.
+The object data is expressed in the depth camera reference frame, i.e., the estimated 3D position ($x$, $y$, $z$) and the velocity ($v_x$, $v_y$, $v_z$) are relative to the camera.The GUI offers various selections of MLLMs. In the application, a distinction is made between local MLLMs and cloud-based MLLMs accessed via OpenRouter.
+Local and offline models (e.g. via Ollama) such as Gemma 3 or Qwen 2.5 VL can be hosted on consumer PCs and edge devices such as the Jetson Orin, depending on the size of the models.
+Gemma 3 supports multimodal input with a very large context window and offers features that can improve attention to small details in images. Qwen 2.5 VL is often preferred for accurate, consistent captions, especially when there is text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This option offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and since they run locally, internet connection is not required. The second option is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
+Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs). The experiments, in section \ref{sec:experiments}, demonstrate both MLLMs hosted on the local network (on high-performance PCs in the lab) and a MLLM running on the Jetson AGX Orin 32 GB. The Jetson AGX Orin aditionally serves as an onboard computer for the mobile robot, enabling a comparison between onboard MLLMs and fixed MLLMs  running on advanced hardware. For demonstration purposes, the GUI is also installed on the Jetson and on a standard laptop. A client-server architecture (Rest API) was implemented, in which individual images along with the merged object data are sent as a prompt to the server (MLLM host pc) via the GUI. Note that the server receives a single image/frame with speed data to signal to the MLLM whether objects are moving or stationary. Without this information, it would be impossible to determine from a single image whether objects are moving or not. By analyzing a single image instead of multiple frames, resources are efficiently used and do not overload the MLLM with too many requests. The following text-prompt then instructs the MLLM on processing data. The goal is to enable safe navigation for a visually impaired person: 
+%Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer laptops can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
 
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[width=2.5in]{images/jetson_client_cropped.pdf}
+%	\caption{Client-server architecture between application device and Ollama server.}
+%	\label{client_server}
+%\end{figure}
 
-The first category is local and offline models from Ollama such as Gemma 3 or Qwen 2.5 VL, hosted on consumer PCs 
-in the laboratory or on an edge device like the Jetson AGX Orin attached to the mobile Husky Robot. Gemma 3 supports multimodale input with a very large context window and offers features that can improve attention to small details in images. Qwen 2.5 VL is often preferred for accurate, consistent captions—especially when there is text in the image (OCR). Both run locally with many quantization options and are capable of multiple languages \cite{gemma3} \cite{qwen25vl}. This solution offers the advantages of control, versioning, and data protection, but requires suitable hardware. Quantized and specialized or trainable models can be used for weaker hardware and a stable internet connection is not necessary. The second category is online, cloud hosted models via the OpenRouter API. With a single API key, it can connect to many different models from OpenAI, Google, Meta, Anthropic, etc. Most of these are subject to a fee per query and have a request limit. 
-Nevertheless, inference takes place on the servers of the respective providers, meaning that significantly less powerful hardware (e.g., GPU) is required. In this case, factors such as server availability and data security are beyond the user's control. In potentially unstructured areas, connection problems may occur. For these reasons, both variants were implemented, which can be selected as needed and depending on internet availability and costs (resource costs and monetary costs).
-[REWORK]The experiments (in section \ref{sec:experiments}) entail the implementation of accessible MLLMs on a local network server and the incorporation of the Jetson AGX Orin (32 GB version) into the mobile robot. The Jetson AGX Orin serves as the onboard PC, facilitating the comparison of onboard LLMs with fixed LLM models operating on more advanced hardware. Fig. \ref{client_server} depicts the implemented data pipeline, where the Jetson acts  as the client. The Jetson is used here as a representative PC on which the GUI application runs. However, we also show that even consumer notebooks can be used as a client. Due to the computing capacity of the Jetson Orin (32 GB or 64 GB), it is also possible to use it as a server for smaller local MLLMs.
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=2.5in]{images/jetson_client_cropped.pdf}
-	\caption{Client-server architecture between application device and Ollama server.}
-	\label{client_server}
-\end{figure}
-
-If a request for a description of the scene is initiated, the Jetson or laptop transmits an image of the current scene to the Ollama server—or, depending on the selection, also to OpenRouter—with the previously merged object data as a prompt to the server for interpretation and evaluation.
-The following text-prompt instructs the MLLM on processing data. The goal is to enable safe navigation for a visually impaired person: 
 
 
 %\begin{figure}[!htpb]
@@ -378,13 +375,13 @@ The following text-prompt instructs the MLLM on processing data. The goal is to 
 \end{center}
 %\vspace{1em} 
 
-The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{transformation_template} presents a schematic representation of the result of this transformation using the template. By combining the image data with the readable object data using the MLLM, an understandable 3D scene is described, which is accessible to humans.
-The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function. This could be used, for example, to help a blind or visually impaired person navigate. The result of this semantic scene interpretation is shown in section \ref{subsec:sceneunderstanding}. 
+The object data, defined as \textit{object\_description} is provided in the prompt and has been translated into concise bullet points during the preprocessing stage. Initially, a template for the raw data was employed. Fig. \ref{transformation_template} presents a schematic representation of the result of this transformation using the template. By combining the image data with the readable object data using the MLLM, an understandable 3D scene is described, which is accessible to humans. A scene graph is also constructed by enriching  the existing object data with descriptions from the MLLM, which are both saved in CSV and text files, which then serves as local structured memory for the model. The model can therefore e.g. ask for clarification regarding navigation if ambiguities arise, such as when the user wants to navigate to a specific car but there are multiple cars in the scene. The result of the scene interpretation is displayed as text in the output window of the GUI and can optionally be played back via an audio file generated by activating the text-to-speech function. 
+This could be used, for example, to help a blind or visually impaired person navigate. The result of this semantic scene interpretation is shown in section \ref{subsec:sceneunderstanding}. 
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\columnwidth]{images/transformation_template.png}
-	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input.[add detailed description:]}
+	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input.}
 	\label{transformation_template}
 \end{figure}
 
@@ -402,10 +399,10 @@ The result of the scene interpretation is displayed as text in the output window
 This section presents hardware test results and benchmarks from experiments with YOLO models within pAIrSEEption and various inference times with MLLMs such as Gemma 3 and Qwen 2.5 VL until a scene description is generated. The second experiment shows results from a usability evaluation of the framework with a focus on human robot interaction and object following.
 
 \subsection{Performance Analysis of YOLO Models}
-Fig. \ref{fig:yolo_comparison} shows the average FPS and GPU usage of a variety of popular YOLO models of different sizes that are integrated into pAIrSEEption, respectively. The FPS value is an important measure for evaluating the perception module in the overall system and affects the response time, safety, precision of navigation, and tracking. The framework offers easy integration into the system by storing a pytorch (\textit{.pt}), \textit{.onnx}, or \textit{.engine} (TensoRT) YOLO model in the same folder as the pAIrSEEption application. These models also include engine models that have been optimized with TensorRT (to 16-Bit Floating Point for testing purposes) on a consumer laptop (Nvidia RTX A2000 graphics card with 8 GB VRAM, 32 GB RAM and i7-13800H processor) to demonstrate accessibility.
-A confidence threshold of 40\% was selected on the GUI. Data collection took place in a laboratory setting. The hardware performance data of the different YOLO models was recorded on the GUI over a set number of frames of around 700 to 1750 frames with varying activity within the scene (static and moving objects, while moving objects are counted as active). 
-The data recording is part of the GUI, and the diagrams were created from this data. The results show that the yolo11n (nano) model achieves the best value in the average FPS evaluation with just under 40 FPS, which was to be expected as this model is the smallest in this test series.
-The large yolo11l\_tensorRT is at a similar level and shows that optimization with TensorRT achieves a significant improvement of approximately 5 FPS on average compared to the standard yolo11l.pt model. When comparing the two optimized TensorRT models in the overall system, the YOLO 11 version is ahead of version 8 by around 5 FPS on average and with a  negligibly higher GPU consumption of 2\% to 3\%. As expected, segmentation models (with  suffix \textit{seg} in the diagram) typically achieve lower FPS compared to their object detection counterpart models. In future work, this could be used for avoidance of objects, where this pixel mask is used to avoid objects more precisely.
+Fig. \ref{fig:yolo_comparison} shows the average FPS and GPU usage of a variety of popular YOLO models of different sizes that are integrated into pAIrSEEption, respectively. The FPS value is an important measure for evaluating the perception module in the overall system and affects the response time, safety, precision of navigation, and tracking. The framework offers integration into the system of pytorch (\textit{.pt}), \textit{.onnx}, or \textit{.engine} (TensoRT) YOLO model. The \textit{.engine} models that have been optimized with TensorRT (to 16-Bit Floating Point for testing purposes) on a laptop computer (Nvidia RTX A2000 graphics card with 8 GB VRAM, 32 GB RAM and i7-13800H processor) show promising results regarding FPS and GPU usage and demonstrate that the framework runs well even on ordinary consumer laptops.
+A confidence threshold of 40\% was selected on the GUI. Data collection took place in a laboratory setting. The hardware performance data of the different YOLO models was recorded on the GUI over 1750 frames with varying activity within the scene (static and moving objects, while moving objects are counted as active). 
+The data recording is part of the GUI, and the diagrams were created from this data. The results show that the \textit{yolo11n} (nano) model achieves the best value in the average FPS evaluation with just under 40 FPS, which was to be expected as this model is the smallest in this test series.
+The large \textit{yolo11l\_tensorRT} is at a similar level and shows that optimization with TensorRT achieves a significant improvement of approximately 5 FPS on average compared to the standard \textit{yolo11l.pt} model. When comparing the two optimized TensorRT models in the overall system, the YOLO 11 version is ahead of version 8 by around 5 FPS on average and with a negligibly higher GPU consumption of 2\% to 3\%. As expected, segmentation models (with  suffix \textit{seg} in the diagram) typically achieve lower FPS compared to their object detection counterpart models. In future work, this could be used for avoidance of objects, where this pixel mask is used to avoid objects more precisely.
 
 \begin{figure*}[!ht]
 	\centering
@@ -457,7 +454,11 @@ The large yolo11l\_tensorRT is at a similar level and shows that optimization wi
 \subsection{Performance of MLLMs and Showcase of Scene Understanding}
 \label{subsec:sceneunderstanding}
 Fig. \ref{timing_breakdown} shows the duration of various Gemma 3 and Qwen 2.5 VL models to generate and describe a current scene with object data. Ollama is used to determine this  metric and record it in measurement logs. These logs consist of several parts. They contain metadata such as timestamps, an ID (for unique assignment of images and audio files to an analysis log), and the model used for scene interpretation. In addition, the number of input and output tokens is determined. In this test, the same scene was always tested with different models. 
-The duration from when the user initiates a request for the scene description to the output of the response is broken down into three parts: the model load time, the input processing (both on the server as shown in Fig. \ref{client_server}) and the output generation sent from the server to the consumer laptop where pAIrSEEption runs. [...]
+The duration from when the user initiates a request for the scene description to the output of the response is broken down into three parts: the model load time, the input processing and the output generation sent from the server to the consumer laptop running pAIrSEEption. The runtime analysis shows that model size is the decisive factor in the system’s responsiveness. Extremely large models such as the Qwen 2.5 VL 32B, with a processing time of over 60 seconds, are not suitable for assistive systems due to the hardware limitations of the server (i9-13900KF processor, RTX A 5000 graphics card and 128 GB RAM). Smaller variants such as the Husky Qwen 2.5 VL 7B and the Gemma 3 12B, with total durations of less than 6 seconds, offer a good basis for real-time applications. However, when hosted directly on the Jetson platform (see G3 12B q4 Jetson), the initial model load time (model\_load\_time) is the bottleneck and accounts for the majority of the latency. The measurements show that the application-specific Husky customizations via modelfiles do not generate any measurable performance overhead. For operational use, a lightweight 7B or 12B model is generally preferred. In case of the Jetson, to reduce the loading delay between requests, the model can be kept in the RAM. 
+Fig. \ref{mllm_scene_lab} shows a scene in the lab described by Gemma 3 12B. The generated output demonstrates a high degree of spatial awareness and semantic coherence. The fusing of YOLO-based object detection with ZED-derived depth data, shows that the model is able to effectively translate metric coordinates into a natural language representation. It chronologically orders the obstacles based on distance (from 1.8 m to 5.0 m) without specific prior instructions. The model identifies detected static objects as potential obstacles, which showcase the successful reasoning within the task-related layer of the scene graph. The remark about the floor level indicate ability to interpret global scene properties from the visual frame beyond the YOLO preprocessing.
+It demonstrates a human-centered approach in which immediate safety and situational awareness of the user are prioritized.
+The primary focus here is on local and self-hosted models. It should be noted, that this test was also conducted for larger cloud-based MLLMs via OpenRouter, such as Llama4 Scout/Maverick or Gemini 2, which also provided excellent descriptions of the scene based on the object data.
+
 
 
 
@@ -477,7 +478,7 @@ The duration from when the user initiates a request for the scene description to
 %	}
 %\end{center}
 %*The response from the Gemma 3 12 B model was originally generated in German.
-[...]
+
 
 
 
@@ -530,7 +531,7 @@ The duration from when the user initiates a request for the scene description to
 %\end{table}
 
 \subsubsection{Experimental Setup}
-Participants (N = 10) from various technical/engineering backgrounds were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the participants. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the participants were asked to anonymously evaluate their overall impression in a survey.
+Participants (N = 9) from various technical/engineering backgrounds were asked to interact  with the mobile Husky robot (indoors) using voice commands in German (e.g., "Folge Person 1" - "Follow Person 1") after a brief introduction of the GUI and the system. After voice input, the robot should then pursue the corresponding target over a random distance determined by the participants. Voice control can also be used to stop or start a different navigation. The robot should provide audio feedback to the user about its actions. After the interaction, the participants were asked to anonymously evaluate their overall impression in a survey.
 
 \subsubsection{Study Design}
 To evaluate the usability of mainly the voice control and object tracking (following an object with the mobile robot), a survey consisting of nine Likert-scale items (with scores of 1 to 5) and three open questions was conducted. The items were structured as follows:
@@ -565,26 +566,10 @@ To evaluate the usability of mainly the voice control and object tracking (follo
 	\end{enumerate}
 \end{itemize}
 
-The questions were rated by participants (P1 to P9) on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis. For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 8 was used to calculate mean and standard derivation for this particular question.
+The questions were rated by participants (P1 to P9) on a scale of 1 to 5, with 1 being the lowest/worst rating and 5 being the highest/best rating. For questions Q3 and Q6, negative items were reverse-coded for statistical analysis (1 = lowest/best, 5 = highest/worst). For every question (Q1 to Q9) a mean $\bar{x}$ and a sample standard deviation (SD) $s$ was computed to make a quantitative statement. Since participant P5 skipped question Q3, n = 8 was used to calculate mean and standard derivation for this particular question.
 
 \subsubsection{Results and Discussion}
-
-
-The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the perceived safety during robot operation (mean: $\bar{x}_{Q1, Q8} = 4.67$ and standard derivation (SD): $s_{Q1, Q8} = 0.50$ respectively), the subsequent correct object identification by the system was rated the highest with an average rating of $\bar{x}_{Q4} = 4.78$ and the lowest SD with $s_{Q4} = 0.44$. 
-Furthermore, very high ratings for the recognition reliability, the system response time and the overall ease of use ($\bar{x}_{Q2, Q5, Q7} = 4.56$) indicate that the tracking behavior was perceived as predictable and non-threatening. 
-The participants are also willing to use such a system in real-world applications ($\bar{x}_{Q9}$ = 4.22). While the low ratings for necessity of (voice) repetitions ($\bar{x}_{Q3)} = 1.75$) and the frequency of losing the tracked target ($\bar{x}_{Q6)} = 1.56$) show that the implementation of voice control and object detection works very well.  
-The low SD $s$ across most items indicates a high consensus among participants.
-It should be noted, however, that the participants all come from the field of engineering, so that a high level of technical affinity and an intrinsic interest in robotics must be assumed. Therefore, the acceptance to use the system in real-world applications as well as the perceived ease of use might be lower for lay users. The study is also limited by the small sample size ($N=9$), which serves as a pilot evaluation.  
-For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase.
-Given their technical background, participants provided sophisticated qualitative feedback (Q10 to Q12) that highlights both operational performance and technical scalability. They positively emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
-Potential for improvement was seen primarily in the robot driving around corners (slow turns) and a broader language support. While the current architecture leverages faster-whisper for automatic language recognition for the voice command inputs, the STT output currently is limited to German. However, the MLLMs used in the system natively support multilingual interaction and it remains a high priority task for future iterations to further foster inclusion. 
-Beyond the interaction, interoperability with web-based and industry standards, in particular the Internet of Things and Industrial Internet of Things ecosystems, was also proposed.
-Further suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
-Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm as well as inter-robot communication. 
-Furthermore, participants suggested implementing fallback mechanisms to handle (voice) signal loss and exploring additional communication modalities to ensure reliable operation.
-Overall, the results suggest that our system can effectively lower the entry barrier for robot interaction and shows great potential for service robotics in domestic and industrial settings.
-
-\begin{table}[!t]
+\begin{table}[!htbp]
 	\centering
 	\caption{Quantitative Results of the Usability Evaluation ($N=9$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
 		*Negative questions: lower values indicate better performance.}
@@ -608,8 +593,24 @@ Overall, the results suggest that our system can effectively lower the entry bar
 	\vspace{1ex}
 \end{table}
 
+The quantitative results in Table \ref{tab:user_study_results} indicate a high level of user satisfaction across all categories. Particular emphasis was placed on the ease of use of voice commands, the perceived safety during robot operation (mean: $\bar{x}_{Q1, Q8} = 4.67$ and standard derivation (SD): $s_{Q1, Q8} = 0.50$ respectively), the subsequent correct object identification by the system was rated the highest with an average rating of $\bar{x}_{Q4} = 4.78$ and the lowest SD with $s_{Q4} = 0.44$. 
+Furthermore, very high ratings for the recognition reliability, the system response time and the overall ease of use ($\bar{x}_{Q2, Q5, Q7} = 4.56$) indicate that the tracking behavior was perceived as predictable and non-threatening. 
+The participants are also willing to use such a system in real-world applications ($\bar{x}_{Q9}$ = 4.22). While the low ratings for necessity of (voice) repetitions ($\bar{x}_{Q3)} = 1.75$) and the frequency of losing the tracked target ($\bar{x}_{Q6)} = 1.56$) show that the implementation of voice control and object detection works very well.  
+The low SD $s$ across most items indicates a high consensus among participants.
+It should be noted, however, that the participants all come from the field of engineering, so that a high level of technical affinity and an intrinsic interest in robotics must be assumed. Therefore, the acceptance to use the system in real-world applications as well as the perceived ease of use might be lower for lay users. The study is also limited by the small sample size ($N=9$), which serves as a pilot evaluation.  
+For further investigations, visually impaired individuals should be consulted, for example, to evaluate the system's scene description (Fig. \ref{mllm_scene_lab}) and determine in what ways it can be helpful for independent navigation. In addition, while the current object tracking performance was rated highly, future work should investigate more cluttered/unstructured environments where the probability of losing the target (Q6) might increase.
+Given their technical background, participants provided sophisticated qualitative feedback (Q10 to Q12) that highlights both operational performance and technical scalability. They positively emphasized the precision and fast response time of the system. They also praised the easy-to-understand and clear interface and the constant distance maintenance.
+Potential for improvement was seen primarily in the robot driving around corners (slow turns) and a broader language support. While the current architecture leverages faster-whisper \cite{fasterwhisper} for automatic language recognition for the voice command inputs, the STT output currently is limited to German. However, the MLLMs used in the system natively support multilingual interaction and it remains a high priority task for future iterations to further foster inclusion. 
+Beyond the interaction, interoperability with web-based and industry standards, in particular the Internet of Things and Industrial Internet of Things ecosystems, was also proposed.
+Further suggestions were also made for optimizing re-identification (Re-ID) of the object, improving obstacle detection, and providing more detailed instructions for voice commands.
+Additional functions suggested included a reverse gear, a voice command for a 180° turn, and the integration of an additional robot arm as well as inter-robot communication. 
+Furthermore, participants suggested implementing fallback mechanisms to handle (voice) signal loss and exploring additional communication modalities to ensure reliable operation.
+Overall, the results suggest that our system can effectively lower the entry barrier for robot interaction and shows great potential for service robotics in domestic and industrial settings.
+
+
 \section{Conclusion}
-The conclusion goes here.
+This work presents a hybrid approach to generating scene graphs that combines precise 3D sensor data with the semantic intelligence of multimodal LLMs that controls a mobile robot. By transforming metric object data into natural language description, the environment becomes not only comprehensible to, for example, visiually impaired individuals but also directly navigable through the assessment of obstacles. The results show that AI responses remain factually accurate when provided with sensor data. The user survey confirms that the framework is reliable and appealing from the user's perspective. The system makes a contribution to inclusive human-robot interaction by translating complex computer vision data into human-centered, helpful assistance.
+
 
 
 \section*{Acknowledgments}
@@ -691,6 +692,9 @@ We would like to thank Mr. S. Azizpour for his support in conducting the usabili
 
 \bibitem{su2024adopting}Su, P. \& Chen, D. Adopting graph neural networks to analyze human–object interactions for inferring activities of daily living. {\em Sensors}. \textbf{24}, 2567 (2024)
 
+\bibitem{hli2024sgg}
+H. Li et al., "Scene Graph Generation: A comprehensive survey,"Neurocomputing, Volume 566, 2024, 127052, ISSN 0925-2312, https://doi.org/10.1016/j.neucom.2023.127052.
+
 \bibitem{husky}"Husky A200 User Manual," Clearpath, https://docs.clearpathrobotics.com/docs\_robots/outdoor\_robots/husky/\\a200/user\_manual\_husky (accessed Feb. 18, 2026).
 
 	\bibitem{conceptgraphs}
@@ -735,6 +739,8 @@ We would like to thank Mr. S. Azizpour for his support in conducting the usabili
 	[Online]. Available: 
 	https://doi.org/10.48550/arXiv.2502.13923
 	
+	\bibitem{fasterwhisper}
+	Systransoft, "faster-whisper", 2023, [Online]. Available: https://github.com/SYSTRAN/faster-whisper
 	
 \end{thebibliography}
 
