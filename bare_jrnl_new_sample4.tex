@@ -274,12 +274,10 @@ To accommodate both scenarios, the system implements a client--server architectu
 \end{center}
 
 The object data, defined as \textit{object\_description}, are included in the prompt and converted into concise bullet points during preprocessing. Initially, a template was used to structure the raw data. Fig.~\ref{transformation_template} illustrates the result of this deterministic transformation.
-
 By combining image input with the structured object data, the MLLM generates a human-readable description of the 3D scene. In addition, a scene graph (SG) is constructed by enriching the detected object data with semantic descriptions produced by the MLLM. These outputs are stored as CSV and text files, forming a local structured memory for the system. This enables the model to request clarification in ambiguous situations, for example when multiple objects of the same class (e.g., cars) appear in the scene.
-
 The generated scene interpretation is displayed in the GUI output window and can optionally be played back using the text-to-speech (TTS) system. Such functionality can assist blind or visually impaired users during navigation. An example of this semantic scene interpretation is presented in Section~\ref{subsec:sceneunderstanding}.
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 	\centering
 	\includegraphics[width=\columnwidth]{images/transformation_template.png}
 	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input.}
@@ -289,18 +287,14 @@ The generated scene interpretation is displayed in the GUI output window and can
 \section{Evaluation and Results}
 \label{sec:experiments}
 
-This section presents hardware test results and benchmarks obtained with YOLO models integrated in \textit{pAIrSEEption}, as well as inference times of MLLMs such as Gemma~3 and Qwen~2.5~VL for generating scene descriptions. The second experiment reports results from a usability evaluation focusing on human–robot interaction and object-following tasks.
+This section presents hardware test results and benchmarks obtained with YOLO models integrated in \textit{pAIrSEEption}, as well as inference times of MLLMs such as Gemma~3 and Qwen~2.5~VL for generating scene descriptions. The second experiment reports results from two usability evaluations focusing on human–robot interaction and object-following tasks.
 
 \subsection{Performance Analysis of YOLO Models}
 
 The average frames per second (FPS) and GPU utilization for several YOLO models of different sizes integrated into \textit{pAIrSEEption} are shown in Fig.~\ref{fig:yolo_comparison}. FPS is a key metric for evaluating the perception module because it directly affects system responsiveness, navigation accuracy, tracking performance, and overall operational safety.
-
 The framework supports YOLO models in PyTorch (\textit{.pt}), \textit{.onnx}, and TensorRT (\textit{.engine}) formats. The TensorRT-optimized models (16-bit floating point) were evaluated on a laptop equipped with an Nvidia RTX A2000 GPU (8\,GB VRAM), 32\,GB RAM, and an Intel i7-13800H processor. The results demonstrate that the framework achieves strong performance even on consumer-grade hardware.
-
 A confidence threshold of 40\% was set in the GUI during the experiments. Data were collected in a laboratory environment over 1750 frames containing both static and moving objects (moving objects were considered active). Performance metrics were recorded directly through the GUI and later used to generate the evaluation plots.
-
 The results indicate that the \textit{yolo11n} (nano) model achieves the highest average FPS (just under 40 FPS), which is expected due to its small model size. The larger \textit{yolo11l\_TensorRT} model achieves comparable performance, demonstrating that TensorRT optimization improves throughput by approximately 5 FPS compared with the standard \textit{yolo11l.pt} model. 
-
 Comparing the optimized TensorRT models, YOLOv11 outperforms YOLOv8 by roughly 5 FPS while increasing GPU utilization by only 2–3\%. As expected, segmentation models (indicated by the suffix \textit{seg} in Fig.~\ref{fig:yolo_comparison}) generally achieve lower FPS than their object-detection counterparts. However, segmentation masks could be beneficial for more precise obstacle avoidance in future work.
 \begin{figure*}[!ht]
 	\centering
@@ -309,7 +303,7 @@ Comparing the optimized TensorRT models, YOLOv11 outperforms YOLOv8 by roughly 5
 	\label{fig:yolo_comparison}
 \end{figure*}
 
-\begin{figure}[!htpb]
+\begin{figure}[!t]
 	\centering
 	\includegraphics[width=8.7cm]{images/timing_breakdown.png}
 	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfile parameters and adapted to our application. Abbreviations: "G3" = Gemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
@@ -338,21 +332,16 @@ Comparing the optimized TensorRT models, YOLOv11 outperforms YOLOv8 by roughly 5
 \subsection{Performance of MLLMs and Showcase of Scene Understanding}
 \label{subsec:sceneunderstanding}
 
-Fig.~\ref{timing_breakdown} presents the inference time of several Gemma~3 and Qwen~2.5~VL models for generating scene descriptions from object data. The measurements were recorded using Ollama logs, which contain metadata such as timestamps, unique identifiers (linking images and audio files to analysis logs), the model used for scene interpretation, and the number of input and output tokens. In all experiments, the same scene was evaluated across different models.
+Fig.~\ref{timing_breakdown} presents the inference time of several Gemma~3 and Qwen~2.5~VL models for generating scene descriptions from object data. The measurements were recorded using Ollama logs, which contain metadata such as timestamps, unique identifiers (linking images and audio files to analysis logs), the model used for scene interpretation, and the number of input and output tokens. In all experiments, the same scene was evaluated across different models. The total response time-from the user request to the generated scene description-was divided into three components: model loading time, input processing time, and output generation time transmitted from the server to the client device running \textit{pAIrSEEption}. The runtime analysis shows that model size is the primary factor influencing system responsiveness. Very large models such as Qwen~2.5~VL~32B require more than 60~seconds to process a request and are therefore unsuitable for assistive applications given the server hardware constraints (Intel i9-13900KF CPU, RTX~A5000 GPU, and 128\,GB RAM). Smaller models such as Husky Qwen~2.5~VL~7B and Gemma~3~12B produce responses in under 6~seconds, making them suitable for near real-time operation. When running directly on the Jetson platform (e.g., G3~12B~Q4 Jetson), the initial model loading time (\textit{model\_load\_time}) becomes the main latency bottleneck. The results also show that application-specific Husky customizations implemented via modelfiles introduce no measurable performance overhead. In practice, lightweight models with 7B or 12B parameters provide the best balance between performance and responsiveness. On Jetson systems, keeping the model resident in memory can further reduce loading delays. Fig.~\ref{mllm_scene_lab} illustrates a laboratory scene described by the Gemma~3~12B model. The generated output demonstrates strong spatial awareness and semantic coherence. By combining YOLO-based detections with ZED-derived depth information, the model effectively translates metric coordinates into natural language descriptions. The obstacles are ordered chronologically by distance (1.8\,m to 5.0\,m) without explicit instruction. Detected static objects are correctly identified as potential obstacles, indicating effective reasoning within the task-related layer of the scene graph. Additionally, the model remarks on global scene properties such as the floor condition, demonstrating interpretation beyond the YOLO preprocessing stage. This behavior supports a human-centered design that prioritizes user safety and situational awareness. Although the focus of this study is on locally hosted models,  experiments were also conducted with larger cloud-based MLLMs via OpenRouter (e.g., Llama~4~Scout/Maverick and Gemini~2), which produced similarly accurate scene descriptions.
 
-The total response time-from the user request to the generated scene description-was divided into three components: model loading time, input processing time, and output generation time transmitted from the server to the client device running \textit{pAIrSEEption}. The runtime analysis shows that model size is the primary factor influencing system responsiveness. Very large models such as Qwen~2.5~VL~32B require more than 60~seconds to process a request and are therefore unsuitable for assistive applications given the server hardware constraints (Intel i9-13900KF CPU, RTX~A5000 GPU, and 128\,GB RAM).
+\subsection{Usability Studies}
+We conducted a total of two usability studies:
+In the first phase, we conducted a usability study with a group of end users of the implemented framework, who tested the robot system on-site in a practical setting. To complement this, we also included a video-based evaluation with participants located across Africa, Asia and Europe in the second phase. Because of geographical distance and limited remote access, hands-on testing was not feasible for these participants. However, their input allowed us to capture perspectives shaped by different cultural contexts and local needs. While not equivalent to direct interaction with the robotized system, this second video-based approach revealed additional insight into how the system is perceived across contexts.
+%The following section first presents and analyzes the on-site field study. The design and analysis of the second video-based study follows thereafter.
 
-Smaller models such as Husky Qwen~2.5~VL~7B and Gemma~3~12B produce responses in under 6~seconds, making them suitable for near real-time operation. When running directly on the Jetson platform (e.g., G3~12B~Q4 Jetson), the initial model loading time (\textit{model\_load\_time}) becomes the main latency bottleneck. The results also show that application-specific Husky customizations implemented via modelfiles introduce no measurable performance overhead. In practice, lightweight models with 7B or 12B parameters provide the best balance between performance and responsiveness. On Jetson systems, keeping the model resident in memory can further reduce loading delays.
+\subsubsection{Phase I: On-site \textcolor{red}{(Expert?)} Evaluation, Setup and  Design}
 
-Fig.~\ref{mllm_scene_lab} illustrates a laboratory scene described by the Gemma~3~12B model. The generated output demonstrates strong spatial awareness and semantic coherence. By combining YOLO-based detections with ZED-derived depth information, the model effectively translates metric coordinates into natural language descriptions. The obstacles are ordered chronologically by distance (1.8\,m to 5.0\,m) without explicit instruction. Detected static objects are correctly identified as potential obstacles, indicating effective reasoning within the task-related layer of the scene graph. Additionally, the model remarks on global scene properties such as the floor condition, demonstrating interpretation beyond the YOLO preprocessing stage. This behavior supports a human-centered design that prioritizes user safety and situational awareness. Although the focus of this study is on locally hosted models,  experiments were also conducted with larger cloud-based MLLMs via OpenRouter (e.g., Llama~4~Scout/Maverick and Gemini~2), which produced similarly accurate scene descriptions.
-
-\subsection{Usability Study}
-
-\subsubsection{Experimental Setup}
-
-Participants ($N = 9$) with technical or engineering backgrounds interacted with the Husky mobile robot indoors using German voice commands (e.g., ``Folge Person~1'' = ``Follow person~1''). After a brief introduction to the GUI and system functionality, participants instructed the robot to follow selected targets over distances chosen by themselves. Voice commands could also be used to stop navigation or switch to a different target. During operation, the robot provided audio feedback describing its actions. After completing the interaction, participants anonymously evaluated their experience through a survey.
-
-\subsubsection{Study Design}
+For the on-site testing, participants ($N = 9$) with technical or engineering backgrounds (\textcolor{red}{approx. age range, genders?}) interacted with the Husky mobile robot indoors using German voice commands (e.g., ``Folge Person~1'' = ``Follow person~1''). After a brief introduction to the GUI and system functionality, participants instructed the robot to follow selected targets over distances chosen by themselves. Voice commands could also be used to stop navigation or switch to a different target. During operation, the robot provided audio feedback describing its actions. After completing the interaction, participants anonymously evaluated their experience through a survey.
 To evaluate the usability of the system, particularly voice control and object tracking (following a target with the mobile robot), a survey was conducted consisting of nine Likert-scale items (rated from 1 to 5) and three open-ended questions. The items were structured as follows:
 
 \begin{itemize}[leftmargin=*]
@@ -387,8 +376,8 @@ To evaluate the usability of the system, particularly voice control and object t
 
 The questions $Q_{i,\, i \in \{1,\dots,9\}}$ were rated by participants (P1--P9) on a five-point scale, where 1 indicates the lowest/worst rating and 5 the highest/best rating. For questions Q3 and Q6 (negative items), responses were reverse-coded for statistical analysis (1 = best, 5 = worst). For each quantitative question (Q1--Q9), the mean $\bar{x}$ and the sample standard deviation (SD) $s$ were calculated. Since participant P5 skipped question Q3, $n = 8$ was used to compute the mean and standard deviation for that item.
 
-\subsubsection{Results and Discussion}
-\begin{table}[!htbp]
+\subsubsection{Results and Discussion of Phase I}
+\begin{table}[!b]
 	\centering
 	\caption{Quantitative Results of the Usability Evaluation ($N=9$) featuring Mean Score $\bar{x}$ and Sample Standard Deviation $s$. Scoring: 5 = highest/best, 1 = lowest/worst.
 		*Negative questions: lower values indicate better performance.}
@@ -425,6 +414,10 @@ Participants also provided qualitative feedback (Q10--Q12) highlighting both ope
 Additional recommendations included improving object re-identification (Re-ID), enhancing obstacle detection, and providing clearer guidance for voice commands. Participants also suggested new functions such as a reverse driving mode, a 180$^\circ$ turn command, the integration of a robotic arm, and inter-robot communication. Furthermore, fallback mechanisms for handling voice-signal loss and additional communication modalities were proposed to improve robustness.
 
 Overall, the results suggest that the proposed system can lower the barrier to human–robot interaction and shows strong potential for service robotics applications in domestic and industrial environments.
+
+\subsubsection{Phase II: Global \textcolor{red}{(Layperson?)} Perception Study \textcolor{red}{(Video-based?)}}
+The second group ($N=10$) comprised participants/\textcolor{red}{laypersons} with no prior background in robotics, representing a broad demographic spectrum (ages 8–74 with mean $\bar{x}_{age} = 43.9$, five male and five female participants) across Africa, Asia and Europe. In this second study, participants were asked to give their opinion based on a video of the verbal interaction, as well as the navigation and object tracking of the robot. The qualitative assessment was structured around three key dimensions similar to phase I, but compressed: 
+Interaction quality, (navigational/system) trust and practical utility. The qualitative results reveal a similar high acceptance as in phase I. The majority participants described and praised the interaction as natural. The trust in navigation was also perceived high, however, skepticism remains regarding technical reliability in dynamic or structurally challenging environments, particularly when it comes to a wheeled mobile robot. Practical potential was identified in the sectors of logistics, agriculture, retail, and elderly care. The feedback further emphasizes the need for multi-language support to ensure accessibility.
 
 
 \section{Conclusion}\label{conclusion}
