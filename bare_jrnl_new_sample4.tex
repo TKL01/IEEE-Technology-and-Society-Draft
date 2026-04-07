@@ -22,7 +22,7 @@
 
 \begin{document}
 	
-	\title{Toward Extended Robot Intelligence: Task-Grounded Scene Graphs via Multimodal LLMs for Inclusive Human-Robot Teaming}
+	\title{Toward Extended Robot Intelligence: Task-Grounded, Memory-Augmented Scene Graphs for Context-Aware and Inclusive Human-Robot Teaming with Multimodal LLMs}
 	
 	\author{Trung Kien La and Eric Guiffo Kaigom
 		% <-this % stops a space
@@ -40,8 +40,7 @@
 	\maketitle
 	
 	\begin{abstract}
-A future robotized society will be characterized by effective and meaningful human-robot interactions, in which robots support human self-determination and well-being. However, it remains challenging to instruct a robot to retrieve objects or to follow a human teammate whose goals evolve dynamically. Moreover, robots rarely communicate their internal reasoning, making it difficult for users to calibrate their expectations. To address these limitations, we propose a hybrid, task-grounded, and human-centered intelligence framework for inclusive human-robot teaming. The system combines semantic object detection and segmentation with deterministic, rule- and constraint-based filtering to produce a structured representation of the scene, together with the kinematics and dynamics of the robot. We then process this enriched representation using Multimodal Large Language Models (MLLMs) for high-level semantic reasoning over verbal instructions, producing a task-grounded, human-interpretable, and actionable scene graph, which serves as a unified interface between perception, reasoning, and interaction. Unlike purely end-to-end or perception-only approaches, our framework explicitly integrates structured environmental and robot-state awareness with multimodal reasoning, enabling both interpretability and robust adaptability to novel tasks. The framework supports navigation, assistance, and guidance through natural language interaction, enabling users to collaborate with the robot intuitively regardless of technical expertise. Experimental results show that the proposed MLLM-enhanced scene graph improves perceived communication reliability, reasoning about previously unseen objects, and user guidance, while fostering a strong willingness to adopt the system for real-world applications.
-
+A future robotized society requires meaningful, context-aware human-robot interactions in which robots actively support human self-determination and well-being. Current  systems, however, struggle to follow dynamic human intent, generalize to unseen objects, or communicate their internal reasoning, limiting trust and adoption. To address these challenges, we propose a task-grounded, memory-augmented, human-centered scene graph framework that integrates structured perception, robot-state awareness, and multimodal reasoning via large language models (LLMs). The approach combines semantic object detection with rule- and constraint-based filtering to generate a structured representation of the environment and robot state, enriched with task-specific knowledge and historical interactions through LLM reasoning. This memory-augmented scene graph allows the robot to maintain a persistent context over time, anticipate human needs, and request clarification in ambiguous situations, providing robustness and adaptability to novel tasks. Acting as a human-interpretable interface connecting perception, reasoning, and interaction, the framework supports navigation, assistance, and guidance through natural language, enabling users to collaborate intuitively without programming expertise. Scene interpretations can also be delivered via text-to-speech, expanding accessibility and facilitating inclusive human-robot teaming. Participants consistently praised the robot’s natural, reliable communication, precise tracking, and intuitive, easy-to-use interface, its ability to maintain task context and handle previously unseen objects. These results demonstrate the framework’s potential to extend robot intelligence beyond vendor-defined skills toward systems that empower human autonomy.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -52,8 +51,8 @@ A future robotized society will be characterized by effective and meaningful hum
 	
 	\begin{figure}[!t]
 		\centering
-		\includegraphics[width=\columnwidth]{pic/movingbox.png}
-		\caption{Healthy, comfortable, and inclusive payload transportation is enabled through a mobile robot with extended, task-grounded intelligence. The robot builds and shares an SG-based mental model to reason about its environment, avoid collisions, and follow a human teammate to a dynamically defined destination while providing contextualized real-time feedback. This interaction is achieved without requiring any programming effort from the user.}
+		\includegraphics[width=0.9\columnwidth]{pic/movingbox.png}
+		\caption{A mobile robot with extended intelligence beyond native, vendor-defined skills. It builds and shares a task-grounded, memory-augmented scene graph as a mental model to reason about dynamic environments, ensure performance-aware safe navigation, follow verbal human intent, and provide real-time spoken feedback, thereby enabling intuitive,  comfortable, programming-free, and thus inclusive payload transportation.}
 		\label{intro}
 	\end{figure}
 	
@@ -67,12 +66,7 @@ Our main contributions are as follows:
 
 
 	
-	\begin{figure}[!t]
-		\centering
-		\includegraphics[width=\columnwidth]{pic/mental.png}
-		\caption{Semantic perception of objects for structured description of the \textit{indoor} environment by the mobile robot as SG-based mental model. The robot reasons over this graph using  MLLM and makes the decision to track the moving chair according the verbal instruction of its human-teammate.}
-		\label{mental1}
-	\end{figure}
+
 	
 	
 
@@ -87,50 +81,14 @@ Our main contributions are as follows:
 \end{itemize}
 
 
-The remainder of the paper is  as follows. Related work is presented in \cref{relatedwork}. The development of the SG is outlined in \cref{scenegraph}. The proposed methods and their implementation are described in \cref{methodology}. The experimental  results are presented in \cref{sec:experiments}. Finally, \cref{conclusion} concludes the paper.
+The remainder of the paper is  as follows. Related work is presented in \cref{relatedwork}.  Proposed methods and their implementation are described in \cref{methodology}. The experimental  results are presented in \cref{sec:experiments}. Finally, \cref{conclusion} concludes the paper.
 
 
 
-
-
-
-
-\section{Related Work}\label{relatedwork}
-
-Societal applications typically take place in unstructured environments, such as home settings, where scenes exhibit  spatial, temporal, and contextual dynamics. These changes arise from routine human activities, uncertain human intentions, appearance and disappearance of entities with  properties and affordances in the 3D scene \cite{yalcinkaya2024towards}. SGs provide a structured and multimodal representation of the sensed environment, allowing robots to reason about their operational space as well as determine and generalize appropriate actions. Neural-network-based approaches have therefore been proposed for object detection and scene graph generation (SGG) and interpretation in mobile robotics. The following subsections review relevant methods and outline their connections to our approach.
-
-\subsection{Layered Architecture for Scene Graph}
-
-Mobile robots can  reason over contextualized and structured information in order to plan and achieve goals. Recently, SGs have been adapted for mobile robotics, and multiple layers of abstraction of the real-world scene have been introduced for this purpose. These include the spatial layer (locations within the scene), the semantic layer (the meaning of entities, including their state, affordances, predicates, and other attributes), the topological layer (connectivity between locations), and the task-related layer (robot goals) \cite{rana2023sayplan,im2024egtr}. Entities  in the scene populate these layers, which differ in several respects. One such distinction is the update rate of entity attributes \cite{rana2023sayplan,im2024egtr}. For example, the robot initial and final positions may be known in advance and can therefore be treated as fixed, whereas task completion may be required within a short time window, prompting the robot to execute motions more quickly. In contrast, in entity-following applications, the robot desired position changes over time, indicating a dependence of the scene perception on the task and robot dynamics  often omitted.
-
-	\begin{figure}[!t]
-	\centering
-	\includegraphics[width=\columnwidth]{pic/mental2.png}
-	\caption{The robot semantically understands the \textit{outdoor} environment. It follows its human teammate \textit{from behind} while providing real-time, natural-language insights into the usefulness of surrounding objects, facilitating, e.g., smart mobility. These include obstacles (e.g., cars) and items relevant for active transportation (e.g., bicycles). By reasoning over relative pose, velocity, and object affordances, the robot assesses reachability and guides its teammate toward cycling. This supports a vision of future societies in which robots seamlessly assist daily  activities and foster the self-determination of humans.}
-	\label{mental2}
-\end{figure}
-
-In this work, to ensure task relevance and physical feasibility, we employ a hybrid rule- and constraint-based filtering layer coupled with MLLM reasoning . Rule-based components encode spatial, semantic, and task-specific knowledge (e.g., distance thresholds, motion classification, and target selection), while constraint-based components enforce feasibility conditions such as safety, kinematics, and perception confidence. The resulting structured and task-grounded representation is used to construct a prompt for the MLLM, which performs high-level semantic reasoning. This allows the model to infer task-relevant relationships, resolve ambiguities, and generate human-interpretable scene descriptions. By combining rule-based preprocessing, constraint enforcement, and MLLM reasoning, the system produces a dynamic scene graph that is both semantically meaningful and operationally valid for real-world robotic tasks. Unlike purely rule-based SGs, our hybrid (rules, constraints, and MLLM) SG matures through  conversations with teammates and task-related experiences captured by the MLLM. This can empower citizens by simplifying their access to robotized assistance for self-determination in the society.
-  \begin{table}[!t]
-	\centering
-	\caption{Techniques for SGG and  characteristics.}
-	\label{tab:features}
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		\textbf{Source} & \textbf{Feature representation} & \textbf{Method for relation inference} \\
-		\hline \hline
-		\cite{kim2025semantic,su2024adopting} & Box-based &  MPNN, CNN    \\
-		\hline
-		\cite{im2024egtr,hao2025bctr} & Query-based &  Attention mechanism  \\
-		\hline
-		\cite{liu2021fully,newell2017pixels} & Point-based &  CNN \\
-		\hline
-	\end{tabular}
-\end{table}
 
 \begin{table*}[!hb]
 	\centering
-	\caption{Technical Overview of Frameworks for 3D Scene Graph Generation, Perception, Navigation and Interfacing in Robotics}
+	\caption{Technical Overview of Tools and Models for 3D Scene Graph Generation, Perception, Navigation and Interfacing in Robotics}
 	\label{tab:scenegraph_technologies}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{|l|l|l|l|l|}
@@ -145,37 +103,72 @@ In this work, to ensure task relevance and physical feasibility, we employ a hyb
 			\textbf{Interaction Updates}\cite{interaction} & Existing 3D SG (e.g., Hydra) & Visual Transformer (ViT) & GPT-4, BLIP-2 & DBSCAN (Denoising) \\ \hline
 			\textbf{VisionGPT}\cite{visiongpt} & YOLO-World & Proportional 2D Coordinates & GPT-3.5 Turbo, GPT-4 & H-Pattern Splitter \\ \hline
 			\textbf{LGX}\cite{lgx} & GLIP, YOLO & BLIP (Captions) & GPT-3 & OWL-ViT, Detectron2 \\ \hline
-			\textbf{VLMaps}\cite{vlmaps} & LSeg & CLIP & Codex (Code-writing LLM) & RTAB-Map \\ \hline
+			\textbf{VLMaps}\cite{gupta2023vlmaps} & LSeg & CLIP & Codex (Code-writing LLM) & RTAB-Map \\ \hline
 		\end{tabular}%
 	}
 \end{table*}
 
-\subsection{Algorithms for the generation of scene graphs}
-Three main classes of algorithms have emerged for the design of SGs, as summarized in \cref{tab:features}. Edge-dual scene graph generation captures multi-object relationships for SGG \cite{kim2025semantic}. The approach combines object detection based on a fast Region-based Convolutional Neural Network (R-CNN), an edge-dual scene graph, and an object-relation-centric Message Passing Neural Network (MPNN). The MPNN aggregates information from neighboring entities to learn object- and relation-centric features, enabling iterative updates of entity representations and producing a feature vector for the entire graph \cite{kim2025semantic,su2024adopting}. Recent SGG approaches also exploit attention mechanisms by connecting objects with significant attention weights derived from the self-attention layers of a pre-trained DEtection TRansformer (DETR) \cite{im2024egtr}. A third strategy is Convolutional Scene Graph Generation (CSGG), where objects are encoded as bounding-box center points and relationships are represented as 2D vector fields pointing from subject to object \cite{liu2021fully}. Key characteristics of these approaches are summarized in \cite{liu2024repsgg} and reported in \cref{tab:features}.  We use a box-based approach (YOLO (You Only Look Once), CNN) and extend it with an MLLM to determine relations between objects. To this end, we combine a deterministic preprocessing (see Fig. \ref{transformation_template}), natural language, and logical inference to facilitate  societal human guidance through robot reasoning about the environment.% about the% for safe and intuitive navigation.
+
+\section{Related Work}\label{relatedwork}
+
+Societal applications typically take place in unstructured environments, such as home settings, where  multiple objects exhibit  spatial, temporal, and contextual dynamics. These changes can arise from uncertain human activities as well as appearance and disappearance of entities with  properties and affordances in the 3D scene \cite{yalcinkaya2024towards}. SGs provide a structured and multimodal representation of the sensed environment, allowing robots to reason about their operational space  and generalize appropriate actions. Neural-network-based approaches have therefore been proposed for object detection, scene graph generation (SGG), and interpretation in mobile robotics. The following subsections review relevant methods for SGG and outline their connections to our approach.
+
+\subsection{Scene Graph}\label{scenegraph}
+
+An SG represents a scene in a structured form by encoding objects, their attributes, and relationships. SGG can be derived from images, text, or videos. An SG is a hierarchical graph consisting of nodes $O$ and edges $E$. Nodes represent objects such as humans or items (e.g., bicycle, car), as well as parts of objects (e.g., a person's arm). Each node may include attributes describing the object's state, such as color, size, or pose. Edges often represent relationships between object pairs, describing actions (e.g., man holds cup) or spatial relations (e.g., man stands in front of bench). These relationships are typically expressed as triples 
+$\langle \text{subject} - \text{predicate} - \text{object} \rangle$ \cite{li2024scene}.
+\subsection{Tools for Scene Graph Generation}
+\noindent Various models and technologies are used for SGG across robotics, computer vision, autonomous navigation, and human--machine interaction (see Table~\ref{tab:scenegraph_technologies}). Recent advances in Foundation Models have shifted the field from class-limited object recognition toward universal segmentation models (e.g., Segment Anything Model (SAM/SAM2)~\cite{jiaxing2025sam2}) and open-vocabulary encoders such as Contrastive Language–Image Pretraining (CLIP)~\cite{chen2024clip}, which provide pixel-accurate masks and semantic embeddings. These capabilities allow modern MLLMs and Vision-Language Models (VLMs) to recognize not only object classes but also semantic states and complex relationships. Frameworks such as ConceptGraphs~\cite{gu2024conceptgraphs} and 3DGraphLLM~\cite{zemskova20253dgraphllm} leverage this information to construct SGs interpretable for LLMs while grounding objects in 3D space using geometric data from sensors such as Light Detection and Ranging (LiDAR) or depth cameras. 
+
+Other approaches, including VLMaps~\cite{huang2023visual} and Graph2Nav~\cite{shan2025graph2nav}, translate these spatial relations directly into navigation commands. Many existing frameworks require prior mapping or 3D reconstruction \cite{3dgraphllm,hovsg,openin,interaction}, while others construct maps online in previously unknown environments \cite{conceptgraphs,graph2nav,sgnav,lgx,gupta2023vlmaps}. However, such approaches typically depend on powerful hardware, multiple sensors, and extensive preprocessing, often involving LiDAR or depth-based scanning of entire environments. The resulting maps are then enriched with semantic descriptions, for instance through MLLMs, enabling tasks such as visual question answering about specific objects. In contrast, our approach aims to be resource-efficient and cost-effective. It generates a scene graph directly from the current image only when needed (e.g., to describe the scene), avoiding time-consuming mapping and enabling dynamic operation.
+
+\subsection{Layered Architecture for Scene Graph}
+
+Mobile robots can  reason over contextualized and structured information in order to plan and achieve goals. Recently, SGs have been adapted for mobile robotics, and multiple layers of abstraction of the real-world scene have been introduced for this purpose. These include the spatial layer (locations within the scene), the semantic layer (the meaning of entities, including their state, affordances, predicates, and other attributes), the topological layer (connectivity between locations), and the task-related layer (robot goals) \cite{rana2023sayplan,im2024egtr}. Entities  in the scene populate these layers, which differ in several respects. One such distinction is the update rate of entity attributes \cite{rana2023sayplan,im2024egtr}. For example, the robot initial and final positions may be known in advance and can therefore be treated as fixed, whereas task completion may be required within a short time window, prompting the robot to execute motions more quickly. In contrast, in entity-following applications, the robot desired position changes over time, indicating a dependence of the scene perception on the task and robot dynamics  often omitted.
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=2.5in]{images/husky_zed.jpg}
+	\caption{Husky Robot as a mounting platform for the ZED 2i camera.}
+	\label{husky_robot}
+\end{figure}
+
+In this work, to ensure task relevance and physical feasibility, we employ a hybrid rule- and constraint-based filtering layer coupled with MLLM reasoning . Rule-based components encode spatial, semantic, and task-specific knowledge (e.g., distance thresholds, motion classification, and target selection), while constraint-based components enforce feasibility conditions such as safety, kinematics, and perception confidence. The resulting structured and task-grounded representation is used to construct a prompt for the MLLM, which performs high-level semantic reasoning. This allows the model to infer task-relevant relationships, resolve ambiguities, and generate human-interpretable scene descriptions. By combining rule-based pre-processing, constraint enforcement, and MLLM reasoning, the system produces a dynamic scene graph that is both semantically meaningful and operationally valid for real-world robotic tasks. Unlike purely rule-based scene graphs, our hybrid approach enriches the scene graph with conversation history and task-related experiences, resulting in a memory-augmented representation. Using the profile history to anticipate object affordance and actions enhances  user experience.
+
+\begin{comment}
+
+  \begin{table}[!t]
+	\centering
+	\caption{Classification of  Algorithms and Inference Concepts for SGG.}
+	\label{tab:features}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Source} & \textbf{Feature representation} & \textbf{Method for relation inference} \\
+		\hline \hline
+		\cite{kim2025semantic,su2024adopting} & Box-based &  MPNN, CNN    \\
+		\hline
+		\cite{im2024egtr,hao2025bctr} & Query-based &  Attention mechanism  \\
+		\hline
+		\cite{liu2021fully,newell2017pixels} & Point-based &  CNN \\
+		\hline
+	\end{tabular}
+\end{table}
+
+	Inhalt...
+\end{comment}
+
+%\subsection{Algorithms for the generation of scene graphs}
+%Three main classes of feature representation and  relation inference have emerged in SGG (see \cref{tab:features}). Semantic SGG has recently shifted the focus from object- to relation-centric to handle multi-object relationships in real scenes \cite{kim2025semantic}. The approach combines object detection based on a fast Region-based Convolutional Neural Network (R-CNN), an edge-dual scene graph, and an object-relation-centric Message Passing Neural Network (MPNN). The MPNN aggregates information from neighboring entities to learn object- and relation-centric features, enabling iterative updates of entity representations and producing a feature vector for the entire graph \cite{kim2025semantic,su2024adopting}. Recent SGG approaches also exploit attention mechanisms by connecting objects with significant attention weights derived from the self-attention layers of a pre-trained DEtection TRansformer (DETR) \cite{im2024egtr}. A third strategy is Convolutional Scene Graph Generation (CSGG), where objects are encoded as bounding-box center points and relationships are represented as 2D vector fields pointing from subject to object \cite{liu2021fully}. Key characteristics of these approaches are summarized in \cite{liu2024repsgg} and reported in \cref{tab:features}.  We use a box-based approach (YOLO (You Only Look Once), CNN) and extend it with an MLLM to determine relations between objects. To this end, we combine a deterministic preprocessing (see Fig. \ref{transformation_template}), natural language, and logical inference to enable societal robot reasoning.
 
 
-\subsection{Tools for the genereration of scene graphs}
+%\subsection{Tools for the genereration of scene graphs}
 
-Different tools have been developed to perform the intermediate operations required for SGG from sensed data. An overview of these tools is presented in \cref{tab:scenegraph_technologies}. For example, YOLO and SAM (Segment Anything Model) play key roles in object detection and segmentation tasks. SAM is a general-purpose model capable of performing pixel-level segmentation, whereas YOLO primarily provides bounding-box detection. YOLO is specifically optimized for low latency, making it suitable for real-time scenarios in dynamic, human-centered environments where rapid collision avoidance is critical. This enables faster collision handling while the system follows human motion paths within our framework. CLIP is widely used for extracting semantic features due to its open-vocabulary capabilities. It supports multimodal classification at both the pixel and bounding-box levels. The shared semantic embedding space provided by CLIP enables a seamless transition from image-based perception to language-driven understanding, for example through GPT-based prompting.
+%Different tools have been developed to perform the intermediate operations required for SGG from sensed data. An overview of these tools is presented in \cref{tab:scenegraph_technologies}. For example, YOLO and SAM (Segment Anything Model) play key roles in object detection and segmentation tasks. SAM is a general-purpose model capable of performing pixel-level segmentation, whereas YOLO primarily provides bounding-box detection. YOLO is specifically optimized for low latency, making it suitable for real-time scenarios in dynamic, human-centered environments where rapid collision avoidance is critical. This enables faster collision handling while the system follows human motion paths within our framework. CLIP is widely used for extracting semantic features due to its open-vocabulary capabilities. It supports multimodal classification at both the pixel and bounding-box levels. The shared semantic embedding space provided by CLIP enables a seamless transition from image-based perception to language-driven understanding, for example through GPT-based prompting.
 
 
-\subsection{Operationalization  of scene graphs}
+\subsection{Operationalization  of Scene Graphs}
 Scene graphs have been used in  societal applications, such as finding seating in indoor environments \cite{ravichandran2025safety}, assisting with cooking \cite{kwon2025large}, and supporting city-scale inspection missions \cite{viswanathan2024xflie,amiri2022reasoning}. However, most SGs are constructed from single images, whereas human activities typically span longer time horizons. To address long-term goals, \cite{ravichandran2025safety} federates local SGs from successive images into a global SG. In contrast, our approach leverages an MLLM that exploits reasoning history and generalization capabilities for long-term reasoning. Similar contextual grounding is explored in \cite{kwon2025large} using the generative capabilities of an LLM. We extend this scene-centered contextualization by considering internal robotic processes, including sensed kinematic behavior, motion dynamics, and predicted energy consumption. Our framework thereby unifies scene awareness,  motion planning, and feasibility assessment.
-By leveraging Artificial Intelligence (\textit{AI})-based SG and MLLM, the robot achieves wide visual and semantic awareness of the environment, even of areas un\textit{see}n by  human teammates. We refer to this novel  functionality that bridges semantic \textit{perception} and semantic awareness via MLLM reasoning to immerse humans into even unseen scenes via language as \textit{pAIrSEEption}. Its key components are highlighted in 	\cref{overview_framework}. 
-\section{Scene graph}\label{scenegraph}
-
-A scene graph (SG) represents a scene in a structured form by encoding objects, their attributes, and relationships. Scene graph generation (SGG) can be derived from images, text, or videos. An SG is a hierarchical graph consisting of nodes $O$ and edges $E$. Nodes represent objects such as people, animals, places, or items (e.g., bicycle, car), as well as parts of objects (e.g., a person's arm). Each node may include attributes describing the object's state, such as color, size, or pose. Edges represent relationships between object pairs, describing actions (e.g., man holds cup) or spatial relations (e.g., man stands in front of bench). These relationships are typically expressed as triples 
-$\langle \text{subject} - \text{predicate} - \text{object} \rangle$ \cite{hli2024sgg}.
-
-\noindent Various models and technologies are used for SGG across robotics, computer vision, autonomous navigation, and human--machine interaction (see Table~\ref{tab:scenegraph_technologies}). Recent advances in Foundation Models have shifted the field from class-limited object recognition toward universal segmentation models (e.g., SAM/SAM2) and open-vocabulary encoders such as CLIP, which provide pixel-accurate masks and semantic embeddings. These capabilities allow modern MLLMs and vision--language models (VLMs) to recognize not only object classes but also semantic states and complex relationships. Frameworks such as ConceptGraphs and 3DGraphLLM leverage this information to construct SGs interpretable for LLMs while grounding objects in 3D space using geometric data from sensors such as LiDAR or depth cameras. Other approaches, including VLMaps and Graph2Nav, translate these spatial relations directly into navigation commands. Many existing frameworks require prior mapping or 3D reconstruction \cite{3dgraphllm,hovsg,openin,interaction}, while others construct maps online in previously unknown environments \cite{conceptgraphs,graph2nav,sgnav,lgx,vlmaps}. However, such approaches typically depend on powerful hardware, multiple sensors, and extensive preprocessing, often involving LiDAR or depth-based scanning of entire environments. The resulting maps are then enriched with semantic descriptions, for instance through MLLMs, enabling tasks such as visual question answering about specific objects. In contrast, our approach aims to be resource-efficient and cost-effective. It generates a scene graph directly from the current image only when needed (e.g., to describe the scene), avoiding time-consuming mapping and enabling dynamic operation.
-\section{Methodology}\label{methodology}
-This section presents the developed methods and their implementation. 
-
-\subsection{Overview of Features and Components}
-
-Our robot functionality, termed \textit{pAIrSEEption}, is a multimodal natural language-driven system for environmental perception and navigation. It provides a responsive asynchronous graphical user interface (GUI) implemented with PySide6 (see Fig.~\ref{framework_architecture}), which serves as the interaction layer between the user and the system. Fig.~\ref{overview_framework} illustrates the main interface features. 
-
-The GUI is platform-independent and can be deployed on different devices, such as the Jetson AGX Orin (32\,GB) edge platform or a standard laptop with an integrated Nvidia GPU. A ZED~2i stereo camera can be connected to these devices for perception. The PID-controlled mobile Husky UGV robot~\cite{husky} serves as the mounting platform for the hardware components (see Fig.~\ref{husky_robot}). The GUI serves as the visualization and control center of the system, where all component data streams are integrated. The interface displays the following information:
+By leveraging Artificial Intelligence (\textit{AI})-based SG and MLLM, the robot achieves enhanced visual and semantic awareness of the environment, including areas not directly perceived by human teammates. We define this novel capability  bridging  scene-level \textit{perception} and system-level introspection through MLLM reasoning as \textit{pAIrSEEption}, which enables the robot to assist and guide humans in real-world applications via natural spoken language. Its key components are illustrated in~\cref{overview_framework}.
 
 \begin{figure}[!t]
 	\centering
@@ -184,40 +177,35 @@ The GUI is platform-independent and can be deployed on different devices, such a
 	\label{overview_framework}
 \end{figure}
 
-\begin{figure}[!b]
-\centering
-\includegraphics[width=2.5in]{images/husky_zed.jpg}
-\caption{Husky Robot as a mounting platform for the ZED 2i camera.}
-\label{husky_robot}
-\end{figure}
+\section{Methodology}\label{methodology}
+%This section presents  developed methods and their implementation. 
+
+\subsection{Overview of Features and Components}
+
+\textit{pAIrSEEption}  provides a multi-modal access to the  perception, reasoning, and introspection of the robotic system, aligned with human perceptual modalities such as vision, hearing, and speech through AI-driven integration. At its core, it leverages a memory-augmented SG that integrates structured environmental and robot-state information with past interactions and task experience. This enables natural, context-aware human-robot teaming for assistance and guidance without requiring users to write code. Live audio feedback, visual awareness of the environment, and monitoring of the robot’s intentions and predicted performance can be dynamically customized through the responsive GUI in Fig.~\ref{framework_architecture}. By grounding interactions in the SG’s memory via MLLM reasoning, \textit{pAIrSEEption}  provides continuity, adaptability, and robustness to perception uncertainty and evolving task contexts.
+
+The GUI is platform-independent. It can be deployed on different devices, such as the  Jetson AGX Orin (32\,GB) edge platform onboard or a standard laptop with  integrated Nvidia GPU. A ZED~2i stereo camera is connected to these devices for perception. It wide $110^\circ\text{(H)}\times70^\circ \text{(V)}\times120^\circ \text{(D)}$  field of view is used to capture context-relevant details beyond the user’s line of sight, while providing robust performance under varying lighting and texture conditions. The PID-controlled mobile Husky UGV robot~\cite{husky} is the mounting platform for  hardware components (see Fig.~\ref{husky_robot}). The GUI serves as  visualization and control center of the system, where all  data streams are integrated. The interface displays  following information:
+
+
+
+
 
 
 
 \begin{itemize}
-	\item A live annotated stereo-camera video stream from the perception pipeline.
-	\item System performance statistics, including frames per second (FPS) and utilization of the CPU, GPU, VRAM, and RAM.
+	\item A live annotated stereo-camera video stream from the perception pipeline. 
+	\item System performance statistics, such as frames per second (FPS) and utilization of  CPU, GPU, VRAM, and RAM.
 	\item Status and system messages indicating active or inactive processes.
-	\item Transcribed user voice commands.
+	\item Transcribed user voice commands for quality check.
 	\item Scene descriptions and conversational responses generated by the LLM based on object data and current images.
-	\item Navigation controls for selecting detected objects to follow or approach.
+	\item Navigation control for selecting detected objects to follow or approach, simplifying target selection even remotely.
 	\item Internal robot diagnostics (e.g., motor temperatures) queried via voice commands and displayed in the GUI.
 \end{itemize}
 
-All displayed data, along with user voice inputs, can be stored locally in common file formats through the GUI. This enables dataset collection for potential future fine-tuning or training of the YOLO and MLLM models.
+Displayed data, along with user voice inputs, can be stored locally in common file formats through the GUI. This enables dataset collection for potential future fine-tuning or training of the YOLO (You Only Look Once) and MLLM models.
 
-\subsection{Setup and Applications}
 
-The interface provides multiple versions and sizes of YOLO and YOLOE (open-vocabulary) models for object detection and segmentation, as well as MLLMs for scene interpretation. These options can be extended as needed. The GUI also allows configuration of YOLO parameters, including the display of bounding boxes, classification labels, and confidence values. A confidence slider enables filtering of detections below a selected threshold.
 
-The system data flow is organized into five layers (see Fig.~\ref{framework_architecture}):
-
-\begin{enumerate}
-	\item Voice (speech-to-text, STT) or text input via the GUI (e.g., scene description, navigation goal, robot status, or casual conversation).
-	\item Object detection with distance estimation. This step is skipped when a purely conversational interaction with the MLLM is requested.
-	\item Preprocessing through a rule-based intent analyzer that determines the requested task. Although this component could be replaced by a lightweight LLM orchestrator, the rule-based approach offers lower latency and greater resource efficiency, which is important in time-critical scenarios.
-	\item Response generation via either the MLLM or predefined rule-based messages. All responses are communicated through the text-to-speech (TTS) system. Scene descriptions and conversations are handled by the MLLM, while robot status queries and navigation commands (e.g., following or approaching an object) are processed through rule-based logic.
-	\item When navigation or system status is requested, the system publishes or subscribes to ROS2 topics to control the robot or retrieve status information.
-\end{enumerate}
 
 \begin{figure*}[!t]
 	\centering
@@ -226,9 +214,30 @@ The system data flow is organized into five layers (see Fig.~\ref{framework_arch
 	\label{framework_architecture}
 \end{figure*}
 
+\subsection{Data Processing Pipeline}
+
+The interface provides multiple versions and sizes of YOLO and YOLOE (open-vocabulary) models for object detection and segmentation, as well as MLLMs for scene interpretation. These options can be extended as needed. The GUI also allows configuration of YOLO parameters, including the display of bounding boxes, classification labels, and confidence values. A confidence slider enables filtering of detections below a selected threshold.
+
+The  data flow throughout the system is organized into five layers (see Fig.~\ref{framework_architecture}, reading from left to right):
+
+
+\begin{enumerate}
+	\item Voice (speech-to-text, STT) or text input via the GUI (e.g., scene description, navigation goal, robot status, or casual conversation).
+	\item Object detection with distance estimation. This step is skipped when a purely conversational interaction with the MLLM is requested.
+	\item Preprocessing through a rule-based intent analyzer that determines the requested task. Although this component could be replaced by a lightweight LLM orchestrator, the rule-based approach offers lower latency and greater resource efficiency, which is important in time-critical scenarios.
+	\item Hybrid response generation via either the MLLM or predefined rule-based messages. All responses are communicated through the text-to-speech (TTS) system. Scene descriptions and conversations are handled by the MLLM, while robot status queries and navigation commands (e.g., following or approaching an object) are processed through rule-based logic.
+	\item When navigation or system status is requested, the system publishes or subscribes to ROS2 topics to control the robot or retrieve status information.
+\end{enumerate}
+
+
+\subsection{Task-Grounding and Memory-Augmentation}
 Efficient YOLO-based object detection serves three purposes in the system. First, YOLO provides real-time 2D detections that are fused with ZED~2i depth measurements via the ZED SDK to estimate spatial object information (e.g., distance and 3D position; see Fig.~\ref{framework_architecture}). These data are then formatted (Fig.~\ref{transformation_template}) and passed to the MLLM as part of the grounded input prompt. Second, although modern MLLMs/VLMs can generate 2D bounding boxes, YOLO is employed as a lightweight preliminary detection layer to reduce the computational load on the MLLM and minimize inference latency. Third, the detections enable navigation and object-following. For this purpose, the distance between each detected object and the camera, as well as pairwise inter-object distances within a frame, are computed using the 3D Euclidean metric. The target object is selected through its unique identifier (ID), which can be specified either by voice input or via the graphical interface.
 
 In \textit{pAIrSEEption}, scene objects (e.g., a detected stationary person) are represented schematically as follows:
+
+
+
+
 
 \begin{equation}
 	\begin{aligned}
@@ -249,7 +258,7 @@ In \textit{pAIrSEEption}, scene objects (e.g., a detected stationary person) are
 The object $o_1$ is assigned  attributes ID, confidence score, 3D position, 3D velocity, and the classification \textit{static} if the velocity is zero. The object data are expressed in the depth-camera reference frame; thus, the estimated 3D position ($x,y,z$) and velocity ($v_x,v_y,v_z$) are defined relative to the camera.
 
 The GUI supports different MLLMs and distinguishes between locally hosted and cloud-based models accessed via OpenRouter. Local models (e.g., through Ollama), such as Gemma~3 or Qwen~2.5~VL, can run on consumer PCs or edge devices like the Jetson Orin, depending on model size. Gemma~3 supports multimodal input with a large context window and improved attention to small visual details, while Qwen~2.5~VL is often preferred for accurate captions, particularly when text appears in images (OCR). Both models support multilingual interaction and offer multiple quantization options~\cite{gemma3,qwen25vl}. Running models locally provides advantages such as data privacy, version control, and offline operation, but requires suitable hardware. Quantized or specialized models can also be deployed on weaker hardware. Alternatively, cloud-hosted models can be accessed through the OpenRouter API, which enables connections to various models from providers such as OpenAI, Google, Meta, and Anthropic. While these models typically require payment per request and depend on server availability, they reduce local hardware requirements because inference runs on external servers.
-To accommodate both scenarios, the system implements a client--server architecture (REST API). Images and merged object data are transmitted from the GUI to the MLLM server as part of the prompt. The server processes a single image together with object speed information, allowing the MLLM to infer whether objects are moving or stationary. Without this additional information, motion cannot be determined from a single frame. Processing single images instead of multiple frames reduces computational load and prevents excessive requests to the MLLM. The following prompt instructs the MLLM to analyze the data and generate a scene description for safe navigation of visually impaired users:
+To accommodate both scenarios, the system implements a client--server architecture (REST API). Images and merged object data are transmitted from the GUI to the MLLM server as part of the prompt. The server processes a single image together with object speed information, allowing the MLLM to infer whether objects are moving or stationary. Without this additional information, motion cannot be determined from a single frame. Processing single images instead of multiple frames reduces computational load and prevents excessive requests to the MLLM. For instance, the following prompt instructs the MLLM to analyze the data and generate a scene description for safe navigation of visually impaired users:
 \noindent
 \begin{center} 
 	\fcolorbox{black}{black!5}{%
@@ -268,21 +277,28 @@ To accommodate both scenarios, the system implements a client--server architectu
 	}
 \end{center}
 
-The object data, defined as \textit{object\_description}, are included in the prompt and converted into concise bullet points during preprocessing. Initially, a template was used to structure the raw data. Fig.~\ref{transformation_template} illustrates the result of this deterministic transformation.
-By combining image input with the structured object data, the MLLM generates a human-readable description of the 3D scene. In addition, a scene graph (SG) is constructed by enriching the detected object data with semantic descriptions produced by the MLLM. These outputs are stored as CSV and text files, forming a local structured memory for the system. This enables the model to request clarification in ambiguous situations, for example when multiple objects of the same class (e.g., cars) appear in the scene.
-The generated scene interpretation is displayed in the GUI output window and can optionally be played back using the text-to-speech (TTS) system. Such functionality can assist blind or visually impaired users during navigation. An example of this semantic scene interpretation is presented in Section~\ref{subsec:sceneunderstanding}.
-
-\begin{figure}[!t]
+\begin{figure}[!b]
 	\centering
 	\includegraphics[width=\columnwidth]{images/transformation_template.png}
 	\caption{Data preprocessing: Transformation of object data into a readable description for prompt input.}
 	\label{transformation_template}
 \end{figure}
 
+The object data, defined as \textit{object\_description}, are included in the prompt and converted into concise bullet points during preprocessing. Initially, a template was employed to structure the raw data. Fig.~\ref{transformation_template} illustrates the result of this deterministic transformation. By combining structured object data with image inputs, the MLLM generates a human-readable description of the 3D scene, as demonstrated in Fig.~\ref{transformation_template}. Unlike traditional perception-only pipelines, the  SG is constructed by enriching and fusing  detected and structured object data along with robot-state information with MLLM-generated semantic and task-grounded properties, forming a memory-augmented SG. These outputs are stored as CSV and text files, creating a local structured memory that allows the system to maintain context over time and request clarification in ambiguous situations. An  example is when multiple objects of the same class (e.g., cars) appear in the scene. Integrating structured perception, memory, and reasoning enables context-aware, human-guided interaction, marking a significant advancement over conventional SG approaches.
+
+
+
+
+The generated scene interpretation is displayed in the GUI output window and can optionally be played back using the text-to-speech (TTS) system. This integration of a memory-augmented scene graph with MLLM reasoning and multi-modal interaction yields several advantages with far-reaching societal impact. For example, such functionality can assist blind or visually impaired users during navigation, providing context-aware guidance that adapts to dynamic environments. Beyond accessibility, this extended robot intelligence enables intuitive human-robot collaboration by allowing users to understand, monitor, and interact with the robot’s internal reasoning in real time. Symbiotic and robust human-robot teaming emerges as the robot leverages task-grounded, memory-augmented reasoning to anticipate human needs and adapt to uncertain or ambiguous situations, while the human continuously shapes the robot’s behavior through real-time interaction. An example of  semantic scene interpretation is presented in Section~\ref{subsec:sceneunderstanding}.
+
+
+
+
+
 \section{Evaluation and Results}
 \label{sec:experiments}
 
-This section presents hardware test results and benchmarks obtained with YOLO models integrated in \textit{pAIrSEEption}, as well as inference times of MLLMs such as Gemma~3 and Qwen~2.5~VL for generating scene descriptions. The second experiment reports results from two usability evaluations focusing on human–robot interaction and object-following tasks.
+This section presents hardware test results and benchmarks obtained with YOLO models integrated in \textit{pAIrSEEption}, as well as inference times of MLLMs such as Gemma~3 and Qwen~2.5~VL for generating scene descriptions. The second experiment reports results from two usability evaluations focusing on human-robot interaction and object-following tasks.
 
 \subsection{Performance Analysis of YOLO Models}
 
@@ -291,6 +307,8 @@ The framework supports YOLO models in PyTorch (\textit{.pt}), \textit{.onnx}, an
 A confidence threshold of 40\% was set in the GUI during the experiments. Data were collected in a laboratory environment over 1750 frames containing both static and moving objects (moving objects were considered active). Performance metrics were recorded directly through the GUI and later used to generate the evaluation plots.
 The results indicate that the \textit{yolo11n} (nano) model achieves the highest average FPS (just under 40 FPS), which is expected due to its small model size. The larger \textit{yolo11l\_TensorRT} model achieves comparable performance, demonstrating that TensorRT optimization improves throughput by approximately 5 FPS compared with the standard \textit{yolo11l.pt} model. 
 Comparing the optimized TensorRT models, YOLOv11 outperforms YOLOv8 by roughly 5 FPS while increasing GPU utilization by only 2–3\%. As expected, segmentation models (indicated by the suffix \textit{seg} in Fig.~\ref{fig:yolo_comparison}) generally achieve lower FPS than their object-detection counterparts. However, segmentation masks could be beneficial for more precise obstacle avoidance in future work.
+
+
 \begin{figure*}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{images/yolo_comparison.png}
@@ -300,7 +318,7 @@ Comparing the optimized TensorRT models, YOLOv11 outperforms YOLOv8 by roughly 5
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=8.7cm]{images/timing_breakdown.png}
+	\includegraphics[width=8.5cm]{images/timing_breakdown.png}
 	\caption{Timing breakdown of Gemma 3 and Qwen 2.5 VL models based on size. The suffix "Husky" indicates that the model has been modified using modelfile parameters and adapted to our application. Abbreviations: "G3" = Gemma 3, "it qat" = instruction-tuned and Quantization-Aware Training, "Q4" = 4-Bit quantization.}
 	\label{timing_breakdown}
 \end{figure}
@@ -324,34 +342,43 @@ Comparing the optimized TensorRT models, YOLOv11 outperforms YOLOv8 by roughly 5
 	\label{mllm_scene_lab}
 \end{figure}
 
-\subsection{Performance of MLLMs and Showcase of Scene Understanding}
+\subsection{Performance of MLLMs and  Scene Understanding}
 \label{subsec:sceneunderstanding}
 
 Fig.~\ref{timing_breakdown} presents the inference time of several Gemma~3 and Qwen~2.5~VL models for generating scene descriptions from object data. The measurements were recorded using Ollama logs, which contain metadata such as timestamps, unique identifiers (linking images and audio files to analysis logs), the model used for scene interpretation, and the number of input and output tokens. In all experiments, the same scene was evaluated across different models. The total response time-from the user request to the generated scene description-was divided into three components: model loading time, input processing time, and output generation time transmitted from the server to the client device running \textit{pAIrSEEption}. The runtime analysis shows that model size is the primary factor influencing system responsiveness. Very large models such as Qwen~2.5~VL~32B require more than 60~seconds to process a request and are therefore unsuitable for assistive applications given the server hardware constraints (Intel i9-13900KF CPU, RTX~A5000 GPU, and 128\,GB RAM). Smaller models such as Husky Qwen~2.5~VL~7B and Gemma~3~12B produce responses in under 6~seconds, making them suitable for near real-time operation. When running directly on the Jetson platform (e.g., G3~12B~Q4 Jetson), the initial model loading time (\textit{model\_load\_time}) becomes the main latency bottleneck. The results also show that application-specific Husky customizations implemented via modelfiles introduce no measurable performance overhead. In practice, lightweight models with 7B or 12B parameters provide the best balance between performance and responsiveness. On Jetson systems, keeping the model resident in memory can further reduce loading delays. Fig.~\ref{mllm_scene_lab} illustrates a laboratory scene described by the Gemma~3~12B model. The generated output demonstrates strong spatial awareness and semantic coherence. By combining YOLO-based detections with ZED-derived depth information, the model effectively translates metric coordinates into natural language descriptions. The obstacles are ordered chronologically by distance (1.8\,m to 5.0\,m) without explicit instruction. Detected static objects are correctly identified as potential obstacles, indicating effective reasoning within the task-related layer of the scene graph. Additionally, the model remarks on global scene properties such as the floor condition, demonstrating interpretation beyond the YOLO preprocessing stage. This behavior supports a human-centered design that prioritizes user safety and situational awareness. Although the focus of this study is on locally hosted models,  experiments were also conducted with larger cloud-based MLLMs via OpenRouter (e.g., Llama~4~Scout/Maverick and Gemini~2), which produced similarly accurate scene descriptions.
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\columnwidth]{pic/mental.png}
+	\caption{\textit{Indoor} scene from the viewpoint of the robot mounted camera. Semantic perception of objects for structured description of the {indoor} environment by the mobile robot as SG-based mental model. The robot reasons over this graph using  MLLM and makes the decision to track the moving chair according the verbal instruction of its human-teammate.}
+	\label{mental1}
+\end{figure}
+
+
+
 \subsection{Usability Studies}
 We conducted a total of two usability studies:
-In the first phase, we conducted a usability study with a group of end users of the implemented framework, who tested the robot system on-site in a practical setting. To complement this, we also included a video-based evaluation with participants from and located across Africa, Asia and Europe in the second phase. Because of geographical distance and limited remote access, hands-on testing was not feasible for these participants. However, their input allowed us to capture perspectives shaped by different cultural contexts and local needs. While not equivalent to direct interaction with the robotized system, this second video-based approach revealed additional insight into how the system is perceived across contexts.
+In the first phase, we conducted a usability study with a group of end users of the implemented framework, who tested the robot system on-site in a practical setting. To complement this, we also included a video-based assessment of recorded interactions with participants from or based in Africa, Asia and Europe in the second phase. Because of geographical distance and limited remote access, hands-on testing was not feasible for these participants. However, their input allowed us to capture perspectives shaped by different cultural contexts and local needs. While not equivalent to direct interaction with the  system, the video-based approach revealed additional insight into how the system is perceived across contexts.
 %The following section first presents and analyzes the on-site field study. The design and analysis of the second video-based study follows thereafter.
 
-\subsubsection{Phase 1: On-site \textcolor{red}{(Expert?)} Evaluation, Setup and  Design}
+\subsubsection{Phase 1: On-site Setup Expert Evaluation}
 
-For the on-site testing, participants ($N = 9$) with technical or engineering backgrounds (\textcolor{red}{approx. age range, genders?}) interacted with the Husky mobile robot indoors using German voice commands (e.g., ``Folge Person~1'' = ``Follow person~1''). After a brief introduction to the GUI and system functionality, participants instructed the robot to follow selected targets over distances chosen by themselves. Voice commands could also be used to stop navigation or switch to a different target. During operation, the robot provided audio feedback describing its actions. After completing the interaction, participants anonymously evaluated their experience through a survey.
+For the on-site testing, nine participants  with  engineering backgrounds (undergraduate bachelor students, two females and seven males) interacted with the Husky mobile robot indoors (see \cref{mental1}) and outdoors (see \cref{mental2}) using German voice commands (e.g., ``Folge Stuhl'' = ``Follow chair'', ``Folge Person~1'' = ``Follow person~1''). After a brief introduction to the GUI and system functionality, participants verbally instructed the robot to follow selected targets over distances chosen by themselves. Voice commands could also be used to stop navigation or switch to a different target. During operation, the robot provided audio feedback describing its objectives, state, and actions. After completing the interaction, participants anonymously evaluated their experience through a survey.
 To evaluate the usability of the system, particularly voice control and object tracking (following a target with the mobile robot), a survey was conducted consisting of nine Likert-scale items (rated from 1 to 5) and three open-ended questions. The items were structured as follows:
 
 \begin{itemize}[leftmargin=*]
 	\item \textbf{Voice Control:} 
 	\begin{enumerate}[label=Q\arabic*:, series=survey, widest=Q12, leftmargin=*]
-		\item Ease of issuing commands. 
-		\item Reliability of command recognition. 
+		\item Ease of issuing instructions.
+		\item Reliability of command recognition  and execution despite evolving tasks.
 		\item Necessity of repetitions (negative item*). 
 	\end{enumerate}
 	
-	\item \textbf{Object Tracking:} 
+	\item \textbf{Context-Aware Object Tracking:} 
 	\begin{enumerate}[label=Q\arabic*:, resume=survey, widest=Q12, leftmargin=*]
-		\item Accuracy of object identification.
-		\item System response time to navigation commands. 
-		\item Frequency of losing the target (negative item*). 
+		\item Accuracy of object identification  in various contexts.
+		\item System response time to navigation instructions. 
+		\item Frequency of losing the target in evolving tasks (negative item*). 
 	\end{enumerate}
 	
 	\item \textbf{User Experience:} 
@@ -364,12 +391,20 @@ To evaluate the usability of the system, particularly voice control and object t
 	\item \textbf{Qualitative Feedback (Open-ended):} 
 	\begin{enumerate}[label=Q\arabic*:, resume=survey, widest=Q12, leftmargin=*]
 		\item Positive aspects of system operation. 
-		\item Suggestions for improving user experience or comfort.
+		\item Suggestions for improving user experience$\slash$comfort.
 		\item Proposed additional functions or commands. 
 	\end{enumerate}
 \end{itemize}
 
-The questions $Q_{i,\, i \in \{1,\dots,9\}}$ were rated by participants (P1--P9) on a five-point scale, where 1 indicates the lowest/worst rating and 5 the highest/best rating. For questions Q3 and Q6 (negative items), responses were reverse-coded for statistical analysis (1 = best, 5 = worst). For each quantitative question (Q1--Q9), the mean $\bar{x}$ and the sample standard deviation (SD) $s$ were calculated. Since participant P5 skipped question Q3, $n = 8$ was used to compute the mean and standard deviation for that item.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\columnwidth]{pic/mental2.png}
+	\caption{\textit{Outdoor} scene from the viewpoint of the robot mounted camera. The robot semantically understands the {outdoor} environment. It follows its human teammate {from behind} while providing real-time, natural-language insights into the usefulness of surrounding objects, facilitating, e.g., smart mobility. These include obstacles (e.g., cars) and items relevant for active transportation (e.g., bicycles). By reasoning over relative pose, object affordances, and user needs, the robot assesses reachability and can guide its teammate toward cycling. This supports a vision of future societies in which robots seamlessly assist daily  activities and support the self-determination of humans.}
+	\label{mental2}
+\end{figure}
+
+
+The questions $Q_{i,\, i \in \{1,\dots,9\}}$ were rated by participants (P1--P9) on a five-point scale, where 1 indicates the lowest/worst rating and 5 the highest/best rating. For questions Q3 and Q6 (negative items), responses were reverse-coded for statistical analysis (1 = best, 5 = worst). For each quantitative question (Q1--Q9), the mean $\bar{x}$ and the sample standard deviation (SD) $s$ were calculated. %Since participant P5 skipped question Q3, $n = 8$ was used to compute the mean and standard deviation for that item.
 
 \subsubsection{Results and Discussion of Phase I}
 \begin{table}[!b]
@@ -398,24 +433,26 @@ The questions $Q_{i,\, i \in \{1,\dots,9\}}$ were rated by participants (P1--P9)
 
 The quantitative results in Table~\ref{tab:user_study_results} indicate a high level of user satisfaction across all evaluated categories. In particular, the ease of issuing voice commands and the perceived safety during robot operation received high ratings ($\bar{x}_{Q1,Q8} = 4.67$, $s_{Q1,Q8} = 0.50$). The accuracy of object identification achieved the highest mean score ($\bar{x}_{Q4} = 4.78$) with the lowest standard deviation ($s_{Q4} = 0.44$), indicating both strong performance and high agreement among participants.
 
-High ratings were also observed for command recognition reliability, system response time, and overall usability ($\bar{x}_{Q2,Q5,Q7} = 4.56$), suggesting that the tracking behavior was perceived as predictable and safe. Participants also expressed a strong willingness to use such a system in real-world applications ($\bar{x}_{Q9} = 4.22$). Conversely, the low scores for the necessity of command repetition ($\bar{x}_{Q3} = 1.75$) and the frequency of losing the tracked target ($\bar{x}_{Q6} = 1.56$) further indicate that both the voice control and object tracking performed reliably. The generally low standard deviations across items suggest a strong consensus among participants.
+High ratings were also observed for command recognition reliability, system response time, and overall usability ($\bar{x}_{Q2,Q5,Q7} = 4.56$), suggesting that the tracking behavior was perceived as predictable and safe. Participants also expressed a strong willingness to use such a system in real-world applications ($\bar{x}_{Q9} = 4.22$). Conversely, the low scores for the necessity of command repetition ($\bar{x}_{Q3} = 1.75$) and the frequency of losing  tracked,   previously unseen targets and task contexts ($\bar{x}_{Q6} = 1.56$) further indicate that both the voice control and object tracking performed reliably. The generally low standard deviations across items suggest a strong consensus among participants of the study.
 
-However, several limitations should be noted. All participants had engineering backgrounds and were undergraduate- or graduate-level students, implying a considerable  technical familiarity and intrinsic interest in robotics. Consequently, perceived usability and acceptance may differ for non-expert users. In addition, the  sample size ($N=9$) limits the generalizability of the findings and therefore represents only a pilot evaluation.
+However, this study has several limitations. All participants had engineering backgrounds and were undergraduate or graduate students, reflecting a relatively high level of technical familiarity and intrinsic interest in robotics. As such, usability and acceptance are likely to differ for non-expert users, particularly in real-world societal contexts. Furthermore, the small sample size ($N=9$) limits generalization and positions this study as a pilot evaluation. Despite these limitations, the findings demonstrate the framework’s potential to enable context-aware, intuitive, and task-grounded human–robot interaction.
 
 Future studies should involve visually impaired users to evaluate the practical usefulness of the generated scene descriptions (Fig.~\ref{mllm_scene_lab}) for independent navigation. Moreover, although object tracking performance was rated highly in the current controlled environment, future work should investigate more cluttered or unstructured settings where the probability of losing the target (Q6) may increase.
 
-Participants also provided qualitative feedback (Q10--Q12) highlighting both operational performance and potential system improvements. Positive remarks emphasized the precision and responsiveness of the system, the clarity of the interface, and the stable distance maintenance during following tasks. Suggested improvements included smoother turning behavior when navigating around corners and broader language support. While the current architecture uses \textit{faster-whisper}~\cite{fasterwhisper} for automatic language recognition of voice commands, the STT output is currently limited to German. Since the integrated MLLMs support multilingual interaction, extending language support remains an important direction for future development.
+Qualitative feedback (Q10-Q12) revealed both strengths in operational performance and areas for improvement. The system’s precision, responsiveness, interface clarity, and stable distance maintenance during following tasks were consistently highlighted, while smoother turning behavior and broader language support were identified as key areas for enhancement. Although the current architecture employs \textit{faster-whisper}~\cite{fasterwhisper} for automatic language recognition, the speech-to-text (STT) output remains limited to German. Given the multilingual capabilities of the integrated MLLMs, extending language support is a key direction for future development.
 
-Additional recommendations included improving object re-identification (Re-ID), enhancing obstacle detection, and providing clearer guidance for voice commands. Participants also suggested new functions such as a reverse driving mode, a 180$^\circ$ turn command, the integration of a robotic arm, and inter-robot communication. Furthermore, fallback mechanisms for handling voice-signal loss and additional communication modalities were proposed to improve robustness. Overall, the results suggest that the proposed system can lower the barrier to human–robot interaction and shows strong potential for service robotics applications in domestic and industrial environments.
+Further recommendations included improvements in object re-identification (Re-ID), obstacle detection, and voice command guidance, as well as additional functionalities such as reverse driving, 180$^\circ$ turning, robotic arm integration, and inter-robot communication. The need for fallback mechanisms to handle voice-signal loss and for additional communication modalities to enhance robustness was also highlighted. Overall, these findings indicate that the proposed system lowers the barrier to human-robot interaction and demonstrates strong potential for service robotics in domestic and industrial environments.
 
-\subsubsection{Phase 2: Global  Perception Study}
-The second group comprised 10 additional participants without prior robotics experience, representing a broad demographic spectrum (ages 8–74 years, mean $\bar{x}_{age} = 43.9$, five male and five female) across Africa, Asia, and Europe. In this second study, participants were asked to provide their opinions based on two videos: one showing verbal interactions between humans and the robot, and another demonstrating the robot navigation and object-tracking capabilities. The qualitative assessment was structured around three compressed questions, similar to Phase I: interaction quality, (navigational/system) trust, and practical utility. The qualitative results indicate a comparable level of perceived usefulness to that observed in Phase I. Nine participants praised the interaction as natural, reflecting generally positive perceptions, while one participant did not provide a response. Participants reported high trust in the navigation and conversational capabilities, with particularly strong confidence among younger Europeans. However, two participants based in Africa emphasize the need to strengthen technical reliability in dynamic or structurally challenging environments (e.g., demanding road infrastructures, flooded  areas). These insights point to the need to  enhance the SG-based semantic  understanding of seasonal contexts, reasoning, and navigation of the robotic system. Practical potential was identified in logistics, agriculture, retail. A notable surprise was the high acceptance of the inclusive robotized system among remote participants, particularly for elderly care and daily life assistance  in Africa. Access to relevant data and model may be the Feedback from Africa and Asia further highlights the importance of supporting local languages to foster a more global accessibility and experience. Overall, the second-phase study indicates that social acceptance was generally high and positively perceived, even among laypersons.
+\subsubsection{Phase 2: Remote and Global  Video-based Study}
+The second group comprised 10 additional participants without prior robotics experience, representing a broad demographic spectrum (ages 8–74 years, mean $\bar{x}_{age} = 43.9$, five male and five female) across Africa, Asia, and Europe. In this phase, participants evaluated the system based on two videos: one showing verbal human-robot interaction and demonstrating navigation and object-tracking capabilities in an indoor environment, and the other demonstrating human-following with assistance and guidance in an outdoor environment. The qualitative assessment was structured around three condensed questions, consistent with Phase I: interaction quality, trust in navigation and system behavior, and practical utility.
 
+The results indicate a comparable level of perceived usefulness to that observed in Phase I. Nine participants described the interaction as natural, reflecting overall positive perceptions, while one participant did not respond. High levels of trust were reported in both navigation and conversational capabilities, with particularly strong confidence among younger European participants. However, two participants from Africa emphasized the need to improve technical reliability in dynamic or structurally challenging environments (e.g., complex road conditions or flooded areas).
+
+These findings highlight the importance of evaluating SG-based semantic understanding under diverse environmental and seasonal conditions to further assess the robustness of the system’s reasoning and navigation. Participants also identified practical applications in logistics, agriculture, and retail. Notably, the system received high acceptance among  participants, particularly in the context of elderly care and daily assistance in African settings. Feedback from Africa and Asia further underscores the importance of supporting local languages to facilitate adoption, improve global accessibility and user experience. Overall, the second-phase study indicates a high potential for social acceptance, even among non-expert users.
 
 \section{Conclusion}\label{conclusion}
 
-This work introduced a hybrid, task-grounded framework for scene graph generation that integrates precise 3D sensor data and the semantic reasoning capabilities of MLLMs for mobile robotics. By transforming structured metric object data into natural language representations, the proposed approach bridges perception and semantic awareness, enabling both human interpretability and actionable understanding of the environment. The resulting scene graphs support intuitive navigation, assistance, and guidance, making robotic behavior more transparent and accessible, particularly for users with limited visual perception. Experimental results demonstrate that grounding MLLM reasoning in sensor data leads to factually consistent scene interpretations, while the user studies confirms high perceived reliability, safety, and (social) acceptance. Overall, this work advances toward extended, human-centered robot intelligence, where robots can reason about their environment and communicate this understanding at high level to support inclusive and meaningful human-robot collaboration. Our framework empowers users to better understand, guide, and collaborate with robotic systems in real-world environments, paving the ground for future robotized society.
-
+This work introduced a framework for scene graph generation that integrates precise 3D sensor data with the semantic reasoning capabilities of MLLMs for mobile robotics. By transforming structured metric object data into natural language representations, the proposed approach bridges perception and semantic understanding, enabling both human interpretability and actionable awareness of the environment. The resulting scene graphs support intuitive navigation, assistance, and guidance, making robotic behavior more transparent and accessible, particularly for users with limited visual perception. Experimental results demonstrate that grounding MLLM reasoning in sensor data leads to factually consistent scene interpretations, while user studies confirm high perceived reliability, safety, and social acceptance. Overall, this work advances toward extended, human-centered robot intelligence, in which robots can reason about their environment and communicate this understanding at a high level to support inclusive and meaningful human–robot collaboration. The proposed framework empowers users to better understand, guide, and collaborate with robotic systems in real-world environments, paving the way for a more inclusive and capable robotized society. Toward this vision, we move closer to robots that are task-grounded, memory-augmented, and capable of introspection. These robots not only act in the world, but understand it and share that understanding with humans.
 
 
 
@@ -423,169 +460,11 @@ This work introduced a hybrid, task-grounded framework for scene graph generatio
 We would like to thank Mr. S. Azizpour for his support in conducting the usability study and Mr. A. Koennecke for his support with robot control. We would also like to thank all participants for their time and feedback.
 
 During the preparation of this manuscript, the author(s) used the GPT-5.3 model to improve the language and readability. After using this tool, the authors reviewed and edited the content as necessary. 
-\begin{thebibliography}{1}
-	\bibliographystyle{IEEEtran}
-%\bibitem{obrenovic2025generative}Obrenovic, B., Gu, X., Wang, G., Godinic, D. \& Jakhongirov, I. Generative AI and human–robot interaction: implications and future agenda for business, society and ethics. {\em AI \& Society}. \textbf{40}, 677-690 (2025)
-
-%\bibitem{kaigom2023metarobotics}Kaigom, E. Metarobotics for industry and society: Vision, technologies, and opportunities. {\em IEEE Transactions On Industrial Informatics}. \textbf{20}, 5725-5736 (2023)
-
-%	\bibitem{singh2024pushing}	Singh, C. and Jayadas, A. Pushing Shopping Cart: An Intentional Exercise for Older Adults. {\em Activities, Adaptation \& Aging}. \textbf{48}, 670-689 (2024)
-
-	\bibitem{gona2024intelligent}Gona, S. \& Harish, C. Intelligent mobility planning for a cost-effective object follower mobile robotic system with obstacle avoidance using robot vision and deep learning. {\em Evolutionary Intelligence}. \textbf{17}, 1279-1293 (2024)
-	
-	\bibitem{kaigom2023metarobotics}Guiffo Kaigom, E. Metarobotics for industry and society: Vision, technologies, and opportunities. {\em IEEE Transactions On Industrial Informatics}. \textbf{20}, 5725-5736 (2023)
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 
-	
-	\bibitem{konnecke2024}
-	A.~E.~K{\"o}nnecke, R.~Harmann, and E.~Guiffo Kaigom,
-	``Human-Follower Mobile Robot With High Payload for Cross-Domain Assistance Using Shared Autonomy,''
-	in \textit{Proc. Conference of the International Society for Gerontechnology}, 2024, pp.~1--1.
-	
-	\bibitem{la2024toward}
-	T.~K.~La and E.~Guiffo Kaigom,
-	``Toward Human--Robot Teaming for Robot Navigation Using Shared Control, Digital Twin, and Self-Supervised Traversability Prediction,''
-	in \textit{Proc. IEEE Conference on Telepresence}, 2024, pp.~179--182.
-
-
-\bibitem{kruger2019programming}
-J.~Kr{\"u}ger, T.~K.~Lau, and A.~Verl,
-``Programming Flexible Robot Systems: Challenges and Opportunities,''
-\textit{Procedia CIRP}, vol.~81,  2019.
-
-\bibitem{ajoudani2018progress}
-A.~Ajoudani, A.~Billard, P.~Kormushev, et al.,
-``Progress and Prospects of the Human–Robot Collaboration,''
-\textit{Autonomous Robots}, vol.~42, no.~5, pp.~957--975, 2018.
-
-\bibitem{beetz2018knowrob}
-M.~Beetz, D.~Be{\ss}ler, A.~Haidu, M.~Pomarlan, A.~Bozcuo{\u{g}}lu, and G.~Bartels,
-``KnowRob 2.0 --- A Knowledge Processing Framework for Cognition-Enabled Robotic Agents,''
-in \textit{Proc. IEEE Int. Conf. on Robotics and Automation (ICRA)}, 2018.
-
-\bibitem{pedersen2016robotics}
-M.~R.~Pedersen, S.~Fuglsang, K.~Kragh, et al.,
-``Robot Skills for Manufacturing: From Concept to Industrial Deployment,''
-\textit{Robotics and Computer-Integrated Manufacturing}, vol.~37, pp.~282--291, 2016.
-
-
-
-\bibitem{chen2020vision}
-Z.~Chen, Z.~Wang, and H.~Liu,
-``Vision-Based Human Following for Mobile Robots: A Survey,''
-\textit{IEEE Access}, vol.~8, 2020.
-
-\bibitem{wu2021person}
-C.~Wu et al.,
-``Person-Following Robot: A Survey and Future Directions,''
-\textit{IEEE Transactions on Human-Machine Systems}, 2021.
-
-\bibitem{li2022robust}
-J.~Li et al.,
-``Robust Human-Following Control for Mobile Robots in Dynamic Environments,''
-\textit{Robotics and Autonomous Systems}, 2022.
-
-%\bibitem{shah2023lmnav}D.~Shah, B.~Osiński, S.~Levine, and others,``LM-Nav: Robotic Navigation with Large Pre-Trained Models of Language, Vision, and Action,''\textit{arXiv preprint arXiv:2303.07376}, 2023.
-
-\bibitem{gupta2023vlmaps}
-S.~Gupta, V.~Tolani, S.~Levine, and others,
-``VLMaps: Building Object-Centric Visual Maps for Robot Navigation,''
-in \textit{Proc. IEEE International Conference on Robotics and Automation (ICRA)}, 2023.
-
-\bibitem{huang2023vlfm}
-W.~Huang, C.~Wang, Y.~Liang, et al.,
-``Visual Language Maps for Robot Navigation,''
-\textit{arXiv preprint arXiv:2303.10894}, 2023.
-
-\bibitem{konishi2023navgpt}
-K.~Konishi, S.~Huang, and others,
-``NavGPT: Explicit Reasoning in Vision-and-Language Navigation with Large Language Models,''
-\textit{arXiv preprint arXiv:2305.16986}, 2023.
-
-\bibitem{yalcinkaya2024towards}Yalcinkaya, B., Couceiro, M., Pina, L., Soares, S., Valente, A. \& Remondino, F. Towards Enhanced Human Activity Recognition for Real-World Human-Robot Collaboration. {\em 2024 IEEE International Conference On Robotics And Automation (ICRA)}. pp. 7909-7915 (2024)
-
-\bibitem{rana2023sayplan}Rana, K., Haviland, J., Garg, S., Abou-Chakra, J., Reid, I. \& Suenderhauf, N. Sayplan: Grounding large language models using 3d scene graphs for scalable robot task planning. {\em  Preprint ArXiv:2307.06135}. (2023)
-
-\bibitem{im2024egtr}Im, J., Nam, J., Park, N., Lee, H. \& Park, S. Egtr: Extracting graph from transformer for scene graph generation. {\em Proceedings Of The IEEE/CVF Conference On Computer Vision And Pattern Recognition}. (2024)
-
-\bibitem{hao2025bctr}Hao, P., Wang, W., Wang, X., Jiang, Y., Jia, H., Cui, S., Wei, J. \& Hao, X. BCTR: bidirectional conditioning transformer for scene graph generation. {\em Information Fusion}. pp. 103260 (2025)
-
-\bibitem{liu2021fully}Liu, H., Yan, N., Mortazavi, M. \& Bhanu, B. Fully convolutional scene graph generation. {\em Proceedings Of The IEEE/CVF Conference On Computer Vision And Pattern Recognition}. pp. 11546-11556 (2021)
-
-\bibitem{liu2024repsgg}Liu, H. \& Bhanu, B. Repsgg: Novel representations of entities and relationships for scene graph generation. {\em IEEE Transactions On Pattern Analysis And Machine Intelligence}. \textbf{46}, 8018-8035 (2024)
-
-\bibitem{newell2017pixels}Newell, A. \& Deng, J. Pixels to graphs by associative embedding. {\em Advances In Neural Information Processing Systems}. \textbf{30} (2017)
-
-\bibitem{amiri2022reasoning}Amiri, S., Chandan, K. \& Zhang, S. Reasoning with scene graphs for robot planning under partial observability. {\em IEEE Robotics And Automation Letters}. \textbf{7}, 5560-5567 (2022)
-
-\bibitem{ravichandran2025safety}Ravichandran, Z., Robey, A., Kumar, V., Pappas, G. \& Hassani, H. Safety Guardrails for LLM-Enabled Robots. {\em ArXiv Preprint ArXiv:2503.07885}. (2025)
-
-\bibitem{kwon2025large}Kwon, S., Park, J., Jang, H., Roh, C. \& Chang, D. Large Language Model Based Autonomous Task Planning for Abstract Commands. {\em 2025 IEEE International Conference On Robotics And Automation (ICRA)}. pp. 11010-11016 (2025)
-
-
-
-\bibitem{viswanathan2024xflie}Viswanathan, V., Saucedo, M., Satpute, S., Kanellakis, C. \& Nikolakopoulos, G. xFLIE: Leveraging Actionable Hierarchical Scene Representations for Autonomous Semantic-Aware Inspection Missions. {\em ArXiv Preprint ArXiv:2412.19571}. (2026)
-
-\bibitem{morales2025vqa}Morales, J., Gebregziabher, B., Cabañeros, A. \& Sanchez-Riera, J. VQA-Driven Event Maps for Assistive Navigation for People with Low Vision in Urban Environments. {\em 2025 IEEE International Conference On Robotics And Automation (ICRA)}. pp. 12458-12464 (2025)
-
-\bibitem{kim2025semantic}Kim, H. \& Ko, B. Semantic scene graph generation based on an edge dual scene graph and message passing neural network. {\em Image And Vision Computing}. pp. 105572 (2025)
-
-\bibitem{su2024adopting}Su, P. \& Chen, D. Adopting graph neural networks to analyze human–object interactions for inferring activities of daily living. {\em Sensors}. \textbf{24}, 2567 (2024)
-
-\bibitem{hli2024sgg}
-H. Li et al., "Scene Graph Generation: A comprehensive survey,"Neurocomputing, Volume 566, 2024, 127052, ISSN 0925-2312, https://doi.org/10.1016/j.neucom.2023.127052.
-
-\bibitem{husky}"Husky A200 User Manual," Clearpath, https://docs.clearpathrobotics.com/docs\_robots/outdoor\_robots/husky/\\a200/user\_manual\_husky (accessed Feb. 18, 2026).
-
-	\bibitem{conceptgraphs}
-	Q. Gu et al., "ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning," 2024 IEEE International Conference on Robotics and Automation (ICRA), Yokohama, Japan, 2024, pp. 5021-5028, doi: 10.1109/ICRA57147.2024.10610243.
-	
-	\bibitem{3dgraphllm}
-	Tatiana Zemskova and Dmitry Yudin, "3DGraphLLM: Combining Semantic Graphs and Large Language Models for 3D Scene Understanding," 2025, https://doi.org/10.48550/arXiv.2412.18450
-	
-	\bibitem{graph2nav}
-	T. Shan, A. Rajvanshi, N. Mithun and H. -P. Chiu, "Graph2Nav: 3D Object-Relation Graph Generation to Robot Navigation," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 1646-1652, doi: 10.1109/ICRA55743.2025.11128782. 
-	
-	\bibitem{hovsg}
-	Robotics: Science and Systems 2024, Delft, Netherlands, July 15-July 19, 2024, 
-	https://doi.org/10.15607/RSS.2024.XX.077
-	
-	\bibitem{openin}
-	Y. Tang et al., "OpenIN: Open-Vocabulary Instance-Oriented Navigation in Dynamic Domestic Environments," in IEEE Robotics and Automation Letters, vol. 10, no. 9, pp. 9256-9263, Sept. 2025, doi: 10.1109/LRA.2025.3592071.
-	
-	\bibitem{sgnav}
-	H. Yin et al., "SG-Nav: Online 3D Scene Graph Prompting for LLM-based Zero-shot Object Navigation,"
-	https://doi.org/10.48550/arXiv.2410.08189
-	
-	\bibitem{interaction}
-	Q. Li, X. Zhang, C. Chen, H. Zhao and J. Niu, "Interaction-Driven Updates: 3D Scene Graph Maintenance During Robot Task Execution," 2025 IEEE International Conference on Robotics and Automation (ICRA), Atlanta, GA, USA, 2025, pp. 11933-11939, doi: 10.1109/ICRA55743.2025.11128194.
-	
-	\bibitem{visiongpt}
-	H. Wang et al., "VisionGPT: LLM-Assisted Real-Time Anomaly Detection for Safe Visual Navigation,"
-	https://doi.org/10.48550/arXiv.2403.12415
-	
-	\bibitem{lgx}
-	V. S. Dorbala, J. F. Mullen and D. Manocha, "Can an Embodied Agent Find Your “Cat-shaped Mug”? LLM-Based Zero-Shot Object Navigation," in IEEE Robotics and Automation Letters, vol. 9, no. 5, pp. 4083-4090, May 2024, doi: 10.1109/LRA.2023.3346800.
-	
-	\bibitem{vlmaps}
-	C. Huang, O. Mees, A. Zeng and W. Burgard, "Visual Language Maps for Robot Navigation," 2023 IEEE International Conference on Robotics and Automation (ICRA), London, United Kingdom, 2023, pp. 10608-10615, doi: 10.1109/ICRA48891.2023.10160969.
-	
-	\bibitem{gemma3}
-	Gemma Team et al., "Gemma 3 Technical Report," arXiv:2503.19786, 2025.
-	[Online]. Available: https://doi.org/10.48550/arXiv.2503.19786
-	
-	\bibitem{qwen25vl}
-	S. Bai et al., “Qwen2.5-VL Technical Report,” arXiv:2502.13923, 2025.
-	[Online]. Available: 
-	https://doi.org/10.48550/arXiv.2502.13923
-	
-	\bibitem{fasterwhisper}
-	Systransoft, "faster-whisper", 2023, [Online]. Available: https://github.com/SYSTRAN/faster-whisper
-	
-\end{thebibliography}
-
-
-\newpage
+%\newpage
 
 \section{Biography Section}
 If you have an EPS/PDF photo (graphicx package needed), extra braces are
