@@ -44,7 +44,7 @@ A future robotized society requires meaningful, context-aware human-robot intera
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
-		  Mobile robotics, Multimodal LLM, YOLO, Scene Graph, Human-robot teaming, Inclusion, Society of the future, pAIrSEEption, 3D scene understanding, Audio interface
+		  Mobile robotics, Multimodal LLM, Gemma, YOLO, Scene Graph, Human-robot teaming, Inclusion, Society of the future, pAIrSEEption, 3D scene understanding
 	\end{IEEEkeywords}
 	
 	\section{Introduction}\label{introi}
@@ -60,7 +60,7 @@ Mobile robots are increasingly deployed in everyday societal applications, such 
 
 Traditional solutions often rely on Proportional-Integral-Derivative (PID) feedback control to track the Cartesian pose of detected entities using stereo vision \cite{chen2020vision,wu2021person,li2022robust}. While effective for simple tasks, such approaches lack semantic reasoning capabilities, limiting adaptability to complex task requirements, unseen situations, and generalization across scenarios.
 
-In this work, we extend this paradigm by combining scene graphs (SGs) for structured environmental representation with Multimodal Large Language Models (MLLMs) \cite{gupta2023vlmaps,huang2023vlfm,konishi2023navgpt} for high-level reasoning over hierarchical information. The proposed Extended Robot Intelligence (ERI) framework transforms descriptive situational awareness into actionable knowledge by incorporating context, objectives, and constraints into the representation. This enables intuitive human-robot interaction through natural language, removing the need for technical expertise and, therefore, promoting inclusion. Furthermore, using shared semantic representations improves the transparency of robot decision-making, allowing users to better understand, anticipate, and influence the robot behavior.
+In this work, we extend this paradigm by combining scene graphs (SGs) for structured environmental representation with Multimodal Large Language Models (MLLMs) \cite{gupta2023vlmaps,huang2023vlfm,konishi2023navgpt} for high-level reasoning over hierarchical information. The proposed Extended Robot Intelligence (ERI) framework transforms descriptive situational awareness into actionable knowledge by incorporating persistent context, objectives, and constraints into the representation. This enables intuitive human-robot interaction through natural language, removing the need for technical expertise and promoting inclusion. Furthermore, using shared semantic representations improves the transparency of robot decision-making, allowing users to better understand, anticipate, and influence the robot behavior.
 
 Our main contributions are as follows:
 
@@ -230,7 +230,7 @@ The  data flow throughout the system is organized into five layers (see Fig.~\re
 \end{enumerate}
 
 
-\subsection{Task-Grounding and Memory-Augmentation}
+\subsection{Task-Grounding and Memory-Augmentation} \label{SGmemory}
 Efficient YOLO-based object detection serves three purposes in the system. First, YOLO provides real-time 2D detections that are fused with ZED~2i depth measurements via the ZED SDK to estimate spatial object information (e.g., distance and 3D position; see Fig.~\ref{framework_architecture}). These data are then formatted (Fig.~\ref{transformation_template}) and passed to the MLLM as part of the grounded input prompt. Second, although modern MLLMs/VLMs can generate 2D bounding boxes, YOLO is employed as a lightweight preliminary detection layer to reduce the computational load on the MLLM and minimize inference latency. Third, the detections enable navigation and object-following. For this purpose, the distance between each detected object and the camera, as well as pairwise inter-object distances within a frame, are computed using the 3D Euclidean metric. The target object is selected through its unique identifier (ID), which can be specified either by voice input or via the graphical interface.
 
 In \textit{pAIrSEEption}, scene objects (e.g., a detected stationary person) are represented schematically as follows:
@@ -284,7 +284,7 @@ To accommodate both scenarios, the system implements a client--server architectu
 	\label{transformation_template}
 \end{figure}
 
-The object data, defined as \textit{object\_description}, are included in the prompt and converted into concise bullet points during preprocessing. Initially, a template was employed to structure the raw data. Fig.~\ref{transformation_template} illustrates the result of this deterministic transformation. By combining structured object data with image inputs, the MLLM generates a human-readable description of the 3D scene, as demonstrated in Fig.~\ref{transformation_template}. Unlike traditional perception-only pipelines, the  SG is constructed by enriching and fusing  detected and structured object data along with robot-state information with MLLM-generated semantic and task-grounded properties, forming a memory-augmented SG. These outputs are stored as CSV and text files, creating a local structured memory that allows the system to maintain context over time and request clarification in ambiguous situations. An  example is when multiple objects of the same class (e.g., cars) appear in the scene. Integrating structured perception, memory, and reasoning enables context-aware, human-guided interaction, marking a significant advancement over conventional SG approaches.
+The object data, defined as \textit{object\_description}, are included in the prompt and converted into concise bullet points during preprocessing. Initially, a template was employed to structure the raw data. Fig.~\ref{transformation_template} illustrates the result of this deterministic transformation. By combining structured object data with image inputs, the MLLM generates a human-readable description of the 3D scene, as demonstrated in Fig.~\ref{transformation_template}. \textcolor{green}{Unlike traditional perception-only pipelines, the  SG is constructed by enriching and fusing  detected and structured object data along with robot-state information with MLLM-generated semantic and task-grounded properties, forming a memory-augmented SG. These outputs are stored as CSV and text files, creating a local structured memory that allows the system to maintain context over time and request clarification in ambiguous situations. An  example is when multiple objects of the same class (e.g., cars) appear in the scene.} Integrating structured perception, memory, and reasoning enables context-aware, human-guided interaction, marking a significant advancement over conventional SG approaches.
 
 
 
@@ -363,8 +363,8 @@ Fig.~\ref{timing_breakdown} presents the inference time of several Gemma~3 and Q
 \begin{figure}[bh]
 	\centering
 	\includegraphics[width=0.9\columnwidth]{images/reentrance.png}
-	\caption{Memory recall.  SG correctly returns past and current chair attributes.}
-	\label{renentrance}
+	\caption{Memory recall analysis: User queries a chair that has left the scene, and the SG correctly retrieves its past and current attributes from memory.}
+	\label{renentrance} %\label{SGmemory}
 \end{figure}
 
 \subsection{Usability Studies}
@@ -410,7 +410,7 @@ To evaluate the usability of the system, particularly voice control and object t
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\columnwidth]{pic/mental2.png}
-	\caption{\textit{Outdoor} scene from the viewpoint of the robot mounted camera. The robot semantically understands the {outdoor} environment. It follows its human teammate {from behind} while providing real-time, natural-language insights into the usefulness of surrounding objects, facilitating, e.g., smart mobility. These include obstacles (e.g., cars) and items relevant for active transportation (e.g., bicycles). By reasoning over relative pose, object affordances, and user needs, the robot assesses reachability and can guide its teammate toward cycling. This supports a vision of future societies in which robots seamlessly assist daily  activities and support the self-determination of humans.}
+	\caption{\textit{Outdoor} scene from the viewpoint of the robot mounted camera. The robot semantically understands the {outdoor} environment. It follows its human teammate {from behind} while providing real-time, natural-language insights into the usefulness of surrounding objects, facilitating smart mobility. These include obstacles (e.g., cars) and items relevant for active transportation (e.g., bicycles). By reasoning over relative pose, object affordances, and user needs, the robot with a \textit{task-grounded SG} assesses reachability and can guide its teammate toward cycling. This supports a vision of future society where robots seamlessly assist daily  activities and empower human's self-determination.}
 	\label{mental2}
 \end{figure}
 
